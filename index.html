@@ -61,7 +61,8 @@ td.num{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;w
 .refresh svg{width:16px;height:16px}
 .refresh.spin svg{animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.updated{font-size:12px;color:var(--muted);margin-top:6px}
+.updated{font-size:12px;color:var(--muted);margin-top:6px;transition:color .4s}
+.updated.flash{color:var(--good);font-weight:600}
 .beanbar{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .beanbar::-webkit-scrollbar{display:none}
 .chip{flex:none;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:500 14px/1.2 "IBM Plex Sans",sans-serif;cursor:pointer;white-space:nowrap}
@@ -120,6 +121,7 @@ const $ = s => document.querySelector(s);
 const esc = v => String(v ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const dayName = d => { const t = new Date(d + "T12:00:00"); return t.toLocaleDateString("en-US",{weekday:"long",month:"short",day:"numeric"}); };
 
+function flash(){ const u = $("#updated"); u.classList.add("flash"); u.textContent = "Up to date · " + u.textContent.replace(/^Up to date · /,""); setTimeout(()=>u.classList.remove("flash"), 1500); }
 const short = b => String(b || "Unknown").replace(/^Hill of Beans\s+/i, "").replace(/\s*\(.*\)\s*$/, "");
 const tasteCls = t => { t = (t || "").toLowerCase(); return t.includes("balanced") ? "bal" : t.includes("sour") ? "sour" : (t.includes("bitter") || t.includes("worse")) ? "bitter" : "na"; };
 const ratioOf = s => s.dose && s.yield ? "1:" + (s.yield / s.dose).toFixed(1) : "—";
@@ -128,7 +130,7 @@ try { SEL = localStorage.getItem("shotlog.bean"); } catch(e) {}
 
 function render(shots){
   ALL = shots;
-  $("#updated").textContent = "Updated " + new Date().toLocaleTimeString([], {hour:"numeric", minute:"2-digit"});
+  $("#updated").textContent = "Checked " + new Date().toLocaleTimeString([], {hour:"numeric", minute:"2-digit", second:"2-digit"}) + " · " + shots.length + " shots";
   if(!shots.length){ $("#beanbar").innerHTML=""; $("#ref").innerHTML='<p class="rmeta">No shots logged yet.</p>'; $("#stats").innerHTML=""; $("#cards").innerHTML=""; $("#rows").innerHTML = '<tr><td colspan="10" class="state">No shots logged yet.</td></tr>'; return; }
   const byRecent = [...shots].sort((a,b)=>b.n-a.n);
   const beans = [...new Set(byRecent.map(s => s.bean))];
@@ -220,13 +222,15 @@ function renderList(view){
   $("#cards").innerHTML = cards;
 }
 
+let DB = null;
+let loaded = false;
 function loadShots(){
   const btn = $("#refresh"); btn.classList.add("spin");
   const old = document.getElementById("shots-data"); if(old) old.remove();
   const tag = document.createElement("script");
   tag.id = "shots-data";
   tag.src = "data/shots.js?v=" + Date.now();
-  tag.onload = () => { render([...(window.SHOTS || [])].sort((a,b)=>a.n-b.n)); btn.classList.remove("spin"); };
+  tag.onload = () => { render([...(window.SHOTS || [])].sort((a,b)=>a.n-b.n)); if(loaded) flash(); loaded = true; setTimeout(()=>btn.classList.remove("spin"), 400); };
   tag.onerror = () => { $("#updated").textContent = "Couldn't load shots. Check your connection."; btn.classList.remove("spin"); };
   document.body.appendChild(tag);
 }

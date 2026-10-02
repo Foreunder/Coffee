@@ -56,7 +56,8 @@ td.num{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;w
 .refresh svg{width:16px;height:16px}
 .refresh.spin svg{animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.updated{font-size:12px;color:var(--muted);margin-top:6px}
+.updated{font-size:12px;color:var(--muted);margin-top:6px;transition:color .4s}
+.updated.flash{color:var(--good);font-weight:600}
 .beanbar{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .beanbar::-webkit-scrollbar{display:none}
 .chip{flex:none;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:500 14px/1.2 "IBM Plex Sans",sans-serif;cursor:pointer;white-space:nowrap}
@@ -113,6 +114,7 @@ const $ = s => document.querySelector(s);
 const esc = v => String(v ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const dayName = d => { const t = new Date(d + "T12:00:00"); return t.toLocaleDateString("en-US",{weekday:"long",month:"short",day:"numeric"}); };
 
+function flash(){ const u = $("#updated"); u.classList.add("flash"); u.textContent = "Up to date · " + u.textContent.replace(/^Up to date · /,""); setTimeout(()=>u.classList.remove("flash"), 1500); }
 const short = b => String(b || "Unknown").replace(/^Hill of Beans\s+/i, "").replace(/\s*\(.*\)\s*$/, "");
 const tasteCls = t => { t = (t || "").toLowerCase(); return t.includes("balanced") ? "bal" : t.includes("sour") ? "sour" : (t.includes("bitter") || t.includes("worse")) ? "bitter" : "na"; };
 const ratioOf = s => s.dose && s.yield ? "1:" + (s.yield / s.dose).toFixed(1) : "—";
@@ -121,7 +123,7 @@ try { SEL = localStorage.getItem("shotlog.bean"); } catch(e) {}
 
 function render(shots){
   ALL = shots;
-  $("#updated").textContent = "Updated " + new Date().toLocaleTimeString([], {hour:"numeric", minute:"2-digit"});
+  $("#updated").textContent = "Checked " + new Date().toLocaleTimeString([], {hour:"numeric", minute:"2-digit", second:"2-digit"}) + " · " + shots.length + " shots";
   if(!shots.length){ $("#beanbar").innerHTML=""; $("#ref").innerHTML='<p class="rmeta">No shots logged yet.</p>'; $("#stats").innerHTML=""; $("#cards").innerHTML=""; $("#rows").innerHTML = '<tr><td colspan="10" class="state">No shots logged yet.</td></tr>'; return; }
   const byRecent = [...shots].sort((a,b)=>b.n-a.n);
   const beans = [...new Set(byRecent.map(s => s.bean))];
@@ -213,9 +215,16 @@ function renderList(view){
   $("#cards").innerHTML = cards;
 }
 
-$("#refresh").addEventListener("click", () => { $("#refresh").classList.add("spin"); location.reload(); });
+let DB = null;
+$("#refresh").addEventListener("click", async () => {
+  const btn = $("#refresh"); if(!DB || btn.classList.contains("spin")) return;
+  btn.classList.add("spin");
+  try { const snap = await DB.collection("shots").orderBy("n").get(); render(snap.docs.map(d => d.data())); flash(); }
+  catch(e) { $("#updated").textContent = "Couldn't refresh. Check your connection."; }
+  finally { setTimeout(()=>btn.classList.remove("spin"), 400); }
+});
 (async () => {
-  const db = await claude.use("db");
+  const db = await claude.use("db"); DB = db;
   if(!db){ $("#rows").innerHTML = '<tr><td colspan="10" class="state">The shot log can\'t load in this view. Open it from claude.ai while signed in.</td></tr>'; return; }
   db.collection("shots").orderBy("n").onSnapshot(
     snap => render(snap.docs.map(d => d.data())),

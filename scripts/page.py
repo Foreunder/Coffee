@@ -9,13 +9,14 @@ s = s.replace('<title>Gaggia Shot Log</title>', '<!doctype html>\n<html lang="en
 s = s.replace('</style>\n', '</style>\n</head>\n<body>\n', 1)
 s = s.replace('Every pull, logged automatically by Claude.', 'Every pull, logged automatically by Claude. GitHub mirror of the live log.')
 start = s.index('$("#refresh").addEventListener'); end = s.index('</script>', start)
-s = s[:start] + '''function loadShots(){
+s = s[:start] + '''let loaded = false;
+function loadShots(){
   const btn = $("#refresh"); btn.classList.add("spin");
   const old = document.getElementById("shots-data"); if(old) old.remove();
   const tag = document.createElement("script");
   tag.id = "shots-data";
   tag.src = "data/shots.js?v=" + Date.now();
-  tag.onload = () => { render([...(window.SHOTS || [])].sort((a,b)=>a.n-b.n)); btn.classList.remove("spin"); };
+  tag.onload = () => { render([...(window.SHOTS || [])].sort((a,b)=>a.n-b.n)); if(loaded) flash(); loaded = true; setTimeout(()=>btn.classList.remove("spin"), 400); };
   tag.onerror = () => { $("#updated").textContent = "Couldn't load shots. Check your connection."; btn.classList.remove("spin"); };
   document.body.appendChild(tag);
 }
