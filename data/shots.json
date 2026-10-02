@@ -264,6 +264,7 @@
     "grind": 12,
     "n": 19,
     "notes": "Grind 12 confirmed. First drip ~3s, ~1.5s slower than #18, near-identical curve. Back-to-back consistency: 0.1g and 1.5s apart. Ratio ~1:1.9, slightly short of 1:2. Pleasant straight: slightly creamier texture than 11.5, almost chocolate tones. Grind 12 set as Rockbrook dial-in; 12.5 test next.",
+    "ref": true,
     "session": "Evening · grind 12",
     "taste": "Balanced · creamy, near-chocolate",
     "time": 30.9,
