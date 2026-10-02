@@ -268,5 +268,33 @@
     "taste": "Balanced · creamy, near-chocolate",
     "time": 30.9,
     "yield": 34.8
+  },
+  {
+    "bean": "Hill of Beans Rockbrook Espresso",
+    "date": "2026-10-01",
+    "dose": 18,
+    "drink": "Not noted",
+    "estimated": false,
+    "grind": 12.5,
+    "n": 20,
+    "notes": "Side-by-side test, shot A. Grind 12.5 assumed per plan (confirm). Fastest Rockbrook pull yet: early flow spike ~2.5 g/s at first drip, avg 1.6 g/s. Yield on target (35.5g stop worked).",
+    "session": "After dinner · 12.5 vs 12 side-by-side",
+    "taste": "Not noted",
+    "time": 22.9,
+    "yield": 35.9
+  },
+  {
+    "bean": "Hill of Beans Rockbrook Espresso",
+    "date": "2026-10-01",
+    "dose": 18,
+    "drink": "Not noted",
+    "estimated": false,
+    "grind": 12,
+    "n": 21,
+    "notes": "Side-by-side test, shot B. Grind 12 assumed per plan (confirm). 2.7s slower than shot A, smoother early flow, avg 1.4 g/s. ~4s faster than the 18:25 grind-12 pulls (29.4/30.9s).",
+    "session": "After dinner · 12.5 vs 12 side-by-side",
+    "taste": "Not noted",
+    "time": 25.6,
+    "yield": 36.5
   }
 ]
