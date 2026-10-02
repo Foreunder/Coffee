@@ -16,7 +16,7 @@ function loadShots(){
   const tag = document.createElement("script");
   tag.id = "shots-data";
   tag.src = "data/shots.js?v=" + Date.now();
-  tag.onload = () => { render([...(window.SHOTS || [])].sort((a,b)=>a.n-b.n)); if(loaded) flash(); loaded = true; setTimeout(()=>btn.classList.remove("spin"), 400); };
+  tag.onload = () => { setBeans(window.BEANS || []); render([...(window.SHOTS || [])].sort((a,b)=>a.n-b.n)); if(loaded) flash(); loaded = true; setTimeout(()=>btn.classList.remove("spin"), 400); };
   tag.onerror = () => { $("#updated").textContent = "Couldn't load shots. Check your connection."; btn.classList.remove("spin"); };
   document.body.appendChild(tag);
 }

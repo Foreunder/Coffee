@@ -76,6 +76,15 @@ td.num{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;w
 .ref .rtaste{font-size:14px}
 .ref .rmeta{font-size:13px;color:var(--muted)}
 @media (max-width:420px){.recipe b{font-size:17px}}
+.meta{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;color:var(--muted)}
+.meta b{color:var(--ink);font-weight:500}
+.prac{font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:1px 6px;margin-left:6px;font-family:"IBM Plex Sans",sans-serif;font-weight:500}
+details.method{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:4px 16px}
+details.method summary{cursor:pointer;padding:12px 0;font-weight:600}
+details.method dl{display:grid;grid-template-columns:max-content 1fr;gap:8px 16px;margin:4px 0 16px;font-size:14px}
+details.method dt{color:var(--muted)}
+details.method dd{margin:0}
+@media (max-width:520px){details.method dl{grid-template-columns:1fr}details.method dt{margin-top:6px}}
 </style>
 
 <div class="wrap">
@@ -93,6 +102,22 @@ td.num{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;w
   <section class="ref" id="ref" aria-label="Dial-in reference"></section>
 
   <section class="stats" id="stats" aria-label="Summary"></section>
+
+  <details class="method" id="method">
+    <summary>How I test</summary>
+    <dl>
+      <dt>Machine</dt><dd>Gaggia Classic Evo Pro, stock (GaggiMate Pro temperature and pressure control being installed)</dd>
+      <dt>Grinder</dt><dd>DF64 II, stepless, single-dosed; settings are this grinder's dial numbers</dd>
+      <dt>Basket</dt><dd>Creamore 18g, single wall</dd>
+      <dt>Water</dt><dd>Refrigerator carbon-filtered water (NSF-42; minerals not stripped)</dd>
+      <dt>Recipe</dt><dd>18g in, 36g out (1:2), target 27–32 seconds; scale stopped about 0.5g early for drips</dd>
+      <dt>Puck prep</dt><dd>RDT spritz, WDT, distribution tool, calibrated tamper</dd>
+      <dt>Measuring</dt><dd>BOOKOO scale: weight, flow and time on every pull</dd>
+      <dt>Tasting</dt><dd>Straight sip before milk. A coffee is judged on straight shots only; milk drinks are noted, not scored</dd>
+      <dt>Practice shots</dt><dd>Early pulls without timing are labelled Practice and left out of each coffee's stats</dd>
+      <dt>Independence</dt><dd>Every coffee bought at retail with my own money. No samples, no sponsors</dd>
+    </dl>
+  </details>
 
   <section>
     <h2 id="pullsh">Pulls · newest first</h2>
@@ -115,10 +140,13 @@ const esc = v => String(v ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;
 const dayName = d => { const t = new Date(d + "T12:00:00"); return t.toLocaleDateString("en-US",{weekday:"long",month:"short",day:"numeric"}); };
 
 function flash(){ const u = $("#updated"); u.classList.add("flash"); u.textContent = "Up to date · " + u.textContent.replace(/^Up to date · /,""); setTimeout(()=>u.classList.remove("flash"), 1500); }
-const short = b => String(b || "Unknown").replace(/^Hill of Beans\s+/i, "").replace(/\s*\(.*\)\s*$/, "");
+const short = b => BEANS[b] ? BEANS[b].name : String(b || "Unknown").replace(/^Hill of Beans\s+/i, "").replace(/\s*\(.*\)\s*$/, "");
 const tasteCls = t => { t = (t || "").toLowerCase(); return t.includes("balanced") ? "bal" : t.includes("sour") ? "sour" : (t.includes("bitter") || t.includes("worse")) ? "bitter" : "na"; };
 const ratioOf = s => s.dose && s.yield ? "1:" + (s.yield / s.dose).toFixed(1) : "—";
-let ALL = [], SEL = null;
+let ALL = [], SEL = null, BEANS = {};
+const setBeans = list => { BEANS = {}; (list||[]).forEach(b => { if(b && b.key) BEANS[b.key] = b; }); };
+const daysOff = (bean, date) => { const b = BEANS[bean]; if(!b || !b.roastDate || !date) return null; return Math.round((new Date(date+'T12:00:00') - new Date(b.roastDate+'T12:00:00'))/86400000); };
+const fmtD = d => new Date(d+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'});
 try { SEL = localStorage.getItem("shotlog.bean"); } catch(e) {}
 
 function render(shots){
@@ -129,7 +157,7 @@ function render(shots){
   const beans = [...new Set(byRecent.map(s => s.bean))];
   if(SEL !== "__all" && !beans.includes(SEL)) SEL = byRecent[0].bean;
   const count = b => shots.filter(s => s.bean === b).length;
-  $("#beanbar").innerHTML = beans.map(b => `<button class="chip" type="button" data-bean="${esc(b)}" aria-pressed="${b===SEL}">${esc(short(b))}<small>${count(b)}</small></button>`).join("")
+  $("#beanbar").innerHTML = beans.map(b => `<button class="chip" type="button" data-bean="${esc(b)}" aria-pressed="${b===SEL}">${esc(short(b))}<small>${BEANS[b] ? esc(BEANS[b].roaster.replace(/^A /,"").replace(/ Coffee.*$/,"").replace(/ Co\.?$/,"")) + " · " : ""}${count(b)}</small></button>`).join("")
     + `<button class="chip" type="button" data-bean="__all" aria-pressed="${SEL==="__all"}">All beans<small>${shots.length}</small></button>`;
   $("#beanbar").querySelectorAll(".chip").forEach(c => c.addEventListener("click", () => {
     SEL = c.dataset.bean; try { localStorage.setItem("shotlog.bean", SEL); } catch(e) {}
@@ -154,28 +182,33 @@ function renderRef(view){
   const last = rev[0];
   const status = ref && ref.ref ? ["done","Dialed in"] : ref ? ["prog","In progress"] : ["none","Not dialed in"];
   const r = ref || last;
+  const bm = BEANS[SEL];
+  const roast = bm && bm.roastDate ? `Roasted ${fmtD(bm.roastDate)}` : "Roast date not recorded";
+  const off = ref ? daysOff(SEL, ref.date) : null;
+  const meta = bm ? `<div class="meta"><span><b>${esc(bm.roaster)}</b></span>${bm.origin ? `<span>${esc(bm.origin)}</span>` : ""}${bm.process ? `<span>${esc(bm.process)}</span>` : ""}${bm.roastLevel ? `<span>${esc(bm.roastLevel)} roast</span>` : ""}<span>${roast}</span>${bm.price && bm.bagOz ? `<span>$${(bm.price/bm.bagOz).toFixed(2)}/oz</span>` : ""}</div>${bm.notesRoaster ? `<div class="meta">Roaster's notes: ${esc(bm.notesRoaster)}</div>` : ""}${bm.style ? `<div class="meta">${esc(bm.style)}</div>` : ""}` : "";
   $("#ref").innerHTML = `
-    <div class="rhead"><h3>${esc(short(SEL))}</h3><span class="badge ${status[0]}">${status[1]}</span></div>
+    <div class="rhead"><h3>${esc(short(SEL))}</h3><span class="badge ${status[0]}">${status[1]}</span></div>${meta}
     <div class="recipe">
       <div><b>${r.grind ?? "—"}</b><span>Grind</span></div>
       <div><b>${r.dose ? r.dose+"g" : "—"}</b><span>In</span></div>
       <div><b>${r.yield ? r.yield+"g" : "—"}</b><span>Out</span></div>
       <div><b>${r.time ? Math.round(r.time)+"s" : "—"}</b><span>Time</span></div>
     </div>
-    ${ref ? `<div class="rtaste"><span class="pill ${tasteCls(ref.taste)}">${esc(ref.taste || "Not noted")}</span> &nbsp;Reference: shot #${esc(ref.n)}, ${esc(dayName(ref.date))}</div>`
+    ${ref ? `<div class="rtaste"><span class="pill ${tasteCls(ref.taste)}">${esc(ref.taste || "Not noted")}</span> &nbsp;Reference: shot #${esc(ref.n)}, ${esc(dayName(ref.date))}${off !== null ? ` · ${off} days off roast` : ""}</div>`
           : `<div class="rtaste">No dial-in yet. Showing your last pull (#${esc(last.n)}) as the starting point.</div>`}
     ${latestDial ? `<div class="rmeta">${esc(latestDial.dialed)}</div>` : ""}
     ${last && ref && last.n !== ref.n ? `<div class="rmeta">Last pull: #${esc(last.n)} · grind ${last.grind ?? "—"} · ${last.time ? last.time+"s" : "untimed"} · ${esc(last.taste || "taste not noted")}</div>` : ""}`;
 }
 
 function renderStats(view){
+  view = view.filter(s => !s.practice);
   const measured = view.filter(s => !s.estimated && s.yield && s.dose);
   const timed = view.filter(s => s.time);
   const avgT = timed.length ? Math.round(timed.reduce((a,s)=>a+s.time,0)/timed.length) : null;
   const avgR = measured.length ? (measured.reduce((a,s)=>a+s.yield/s.dose,0)/measured.length).toFixed(2) : null;
   const first = view.length ? [...view].sort((a,b)=>a.n-b.n)[0].date : null;
   $("#stats").innerHTML = `
-    <div class="stat"><b>${view.length}</b><span>Pulls</span></div>
+    <div class="stat"><b>${view.length}</b><span>Measured pulls</span></div>
     <div class="stat"><b>${avgT ? avgT+"s" : "—"}</b><span>Avg time</span></div>
     <div class="stat"><b>${avgR ? "1:"+avgR : "—"}</b><span>Avg ratio</span></div>
     <div class="stat"><b>${first ? new Date(first+"T12:00:00").toLocaleDateString("en-US",{month:"short",day:"numeric"}) : "—"}</b><span>First pull</span></div>`;
@@ -192,9 +225,10 @@ function renderList(view){
     const e = s.estimated ? ' class="num est"' : ' class="num"';
     const est = s.estimated ? ' class="est"' : "";
     const cls = tasteCls(s.taste);
+    const pracTag = s.practice ? '<span class="prac">Practice</span>' : "";
     const refTag = s.ref ? ' <span class="badge done" style="font-size:10px;padding:1px 6px">Reference</span>' : "";
     html += `<tr>
-      <td class="num">${esc(s.n)}${refTag}</td>
+      <td class="num">${esc(s.n)}${refTag}${pracTag}</td>
       <td>${esc(s.bean)}</td>
       <td class="num">${s.grind ?? "—"}</td>
       <td class="num">${s.dose ? s.dose + "g" : "—"}</td>
@@ -205,9 +239,9 @@ function renderList(view){
       <td>${esc(s.drink)}</td>
       <td class="notes">${esc(s.notes)}</td></tr>`;
     cards += `<div class="card">
-      <div class="top"><b>#${esc(s.n)} · grind ${s.grind ?? "—"}${refTag}</b><span class="pill ${cls}">${esc(s.taste || "Not noted")}</span></div>
+      <div class="top"><b>#${esc(s.n)} · grind ${s.grind ?? "—"}${refTag}${pracTag}</b><span class="pill ${cls}">${esc(s.taste || "Not noted")}</span></div>
       <div class="bean">${esc(SEL === "__all" ? s.bean : "")}${SEL === "__all" && s.drink && s.drink !== "Not noted" ? " · " : ""}${s.drink && s.drink !== "Not noted" ? esc(s.drink) : ""}</div>
-      <div class="nums"><span><small>In</small>${s.dose ? s.dose+"g" : "—"}</span><span${est}><small>Out</small>${s.yield ? s.yield+"g" : "—"}</span><span${est}><small>Ratio</small>${ratioOf(s)}</span><span><small>Time</small>${s.time ? s.time+"s" : "—"}</span></div>
+      <div class="nums"><span><small>In</small>${s.dose ? s.dose+"g" : "—"}</span><span${est}><small>Out</small>${s.yield ? s.yield+"g" : "—"}</span><span${est}><small>Ratio</small>${ratioOf(s)}</span><span><small>Time</small>${s.time ? s.time+"s" : "—"}</span>${daysOff(s.bean,s.date)!==null ? `<span><small>Rest</small>${daysOff(s.bean,s.date)}d</span>` : ""}</div>
       ${s.notes ? `<div class="note">${esc(s.notes)}</div>` : ""}
     </div>`;
   }
@@ -219,13 +253,14 @@ let DB = null;
 $("#refresh").addEventListener("click", async () => {
   const btn = $("#refresh"); if(!DB || btn.classList.contains("spin")) return;
   btn.classList.add("spin");
-  try { const snap = await DB.collection("shots").orderBy("n").get(); render(snap.docs.map(d => d.data())); flash(); }
+  try { const bs = await DB.collection("beans").get(); setBeans(bs.docs.map(d => d.data())); const snap = await DB.collection("shots").orderBy("n").get(); render(snap.docs.map(d => d.data())); flash(); }
   catch(e) { $("#updated").textContent = "Couldn't refresh. Check your connection."; }
   finally { setTimeout(()=>btn.classList.remove("spin"), 400); }
 });
 (async () => {
   const db = await claude.use("db"); DB = db;
   if(!db){ $("#rows").innerHTML = '<tr><td colspan="10" class="state">The shot log can\'t load in this view. Open it from claude.ai while signed in.</td></tr>'; return; }
+  db.collection("beans").onSnapshot(snap => { setBeans(snap.docs.map(d => d.data())); if(ALL.length) render(ALL); }, () => {});
   db.collection("shots").orderBy("n").onSnapshot(
     snap => render(snap.docs.map(d => d.data())),
     () => { $("#rows").innerHTML = '<tr><td colspan="10" class="state">The shot log stopped updating. Reload the page.</td></tr>'; }
