@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gaggia Shot Log</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Young+Serif&display=swap">
+<style>
+:root{
+  --bg:#f3f4f7;--surface:#ffffff;--ink:#16202e;--muted:#5d6878;--line:#dfe3ea;
+  --accent:#1f4f8f;--crema:#b8762e;--good:#2f7a4f;--warn:#b1621b;--soft:#e9eef6;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f141c;--surface:#171e29;--ink:#e6eaf1;--muted:#96a1b2;--line:#2a3342;
+  --accent:#7ea8e6;--crema:#dba063;--good:#6cc193;--warn:#e3a066;--soft:#1d2635;color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#0f141c;--surface:#171e29;--ink:#e6eaf1;--muted:#96a1b2;--line:#2a3342;
+  --accent:#7ea8e6;--crema:#dba063;--good:#6cc193;--warn:#e3a066;--soft:#1d2635;color-scheme:dark;}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 "IBM Plex Sans",system-ui,sans-serif;padding-inline:16px;padding-block:28px 48px}
+.wrap{max-width:1040px;margin:0 auto;display:flex;flex-direction:column;gap:24px}
+h1{font:400 30px/1.15 "Young Serif",Georgia,serif;margin:0;text-wrap:balance}
+.sub{color:var(--muted);margin:4px 0 0}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.stat b{display:block;font:500 22px/1.2 "IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
+.stat span{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.dialed{border-left:4px solid var(--crema)}
+h2{font:600 13px/1 "IBM Plex Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+.tablebox{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;min-width:820px;font-size:14px}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);background:var(--soft)}
+tr:last-child td{border-bottom:0}
+td.num{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
+.day td{background:var(--soft);font-weight:600;font-size:13px;color:var(--accent)}
+.pill{display:inline-block;padding:1px 8px;border-radius:999px;font-size:12px;border:1px solid currentColor;white-space:nowrap}
+.bal{color:var(--good)}.sour,.bitter{color:var(--warn)}.na{color:var(--muted)}
+.est{color:var(--muted)}
+.notes{color:var(--muted);max-width:280px}
+.foot{font-size:13px;color:var(--muted)}
+.state{padding:20px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <h1>Gaggia Shot Log</h1>
+    <p class="sub">Classic Evo Pro · DF64 · BOOKOO scale. Every pull, logged automatically by Claude. GitHub mirror of the live log.</p>
+  </header>
+
+  <section class="stats" id="stats" aria-label="Summary"></section>
+
+  <section>
+    <h2>Pulls</h2>
+    <div class="tablebox">
+      <table>
+        <thead><tr>
+          <th>#</th><th>Bean</th><th>Grind</th><th>In</th><th>Out</th><th>Ratio</th><th>Time</th><th>Straight sip</th><th>Drink</th><th>Notes</th>
+        </tr></thead>
+        <tbody id="rows"><tr><td colspan="10" class="state">Loading shots…</td></tr></tbody>
+      </table>
+    </div>
+    <p class="foot">Grey values are the recipe target, not a measured result (early pulls before timing was recorded).</p>
+  </section>
+</div>
+
+<script src="data/shots.js"></script>
+<script>
+const $ = s => document.querySelector(s);
+const esc = v => String(v ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const dayName = d => { const t = new Date(d + "T12:00:00"); return t.toLocaleDateString("en-US",{weekday:"long",month:"short",day:"numeric"}); };
+
+function render(shots){
+  if(!shots.length){ $("#rows").innerHTML = '<tr><td colspan="10" class="state">No shots logged yet.</td></tr>'; $("#stats").innerHTML=""; return; }
+  let html = "", last = null;
+  for(const s of shots){
+    if(s.date !== last){ html += `<tr class="day"><td colspan="10">${esc(dayName(s.date))}${s.session?" · "+esc(s.session):""}</td></tr>`; last = s.date; }
+    const e = s.estimated ? ' class="num est"' : ' class="num"';
+    const ratio = s.dose && s.yield ? "1:" + (s.yield / s.dose).toFixed(1) : "—";
+    const t = (s.taste || "").toLowerCase();
+    const cls = t.includes("balanced") ? "bal" : t.includes("sour") ? "sour" : t.includes("bitter") ? "bitter" : "na";
+    html += `<tr>
+      <td class="num">${esc(s.n)}</td>
+      <td>${esc(s.bean)}</td>
+      <td class="num">${s.grind ?? "—"}</td>
+      <td class="num">${s.dose ? s.dose + "g" : "—"}</td>
+      <td${e}>${s.yield ? s.yield + "g" : "—"}</td>
+      <td${e}>${ratio}</td>
+      <td class="num">${s.time ? s.time + "s" : "—"}</td>
+      <td><span class="pill ${cls}">${esc(s.taste || "Not noted")}</span></td>
+      <td>${esc(s.drink)}</td>
+      <td class="notes">${esc(s.notes)}</td></tr>`;
+  }
+  $("#rows").innerHTML = html;
+
+  const measured = shots.filter(s => !s.estimated && s.yield && s.dose);
+  const recent = [...shots].reverse().find(s => s.dialed);
+  const beans = new Set(shots.map(s => s.bean).filter(Boolean));
+  const timed = shots.filter(s => s.time);
+  const avgT = timed.length ? Math.round(timed.reduce((a,s)=>a+s.time,0)/timed.length) : null;
+  const avgR = measured.length ? (measured.reduce((a,s)=>a+s.yield/s.dose,0)/measured.length).toFixed(2) : null;
+  $("#stats").innerHTML = `
+    <div class="stat"><b>${shots.length}</b><span>Total pulls</span></div>
+    <div class="stat"><b>${beans.size}</b><span>Beans used</span></div>
+    <div class="stat"><b>${avgR ? "1:"+avgR : "—"}</b><span>Avg measured ratio</span></div>
+    <div class="stat"><b>${avgT ? avgT+"s" : "—"}</b><span>Avg timed shot</span></div>
+    ${recent ? `<div class="stat dialed"><b>${esc(recent.dialed)}</b><span>Current dial-in · ${esc(recent.bean)}</span></div>` : ""}`;
+}
+
+render([...(window.SHOTS || [])].sort((a,b)=>a.n-b.n));
+</script>
+</body>
+</html>
