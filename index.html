@@ -41,6 +41,18 @@ td.num{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;w
 .notes{color:var(--muted);max-width:280px}
 .foot{font-size:13px;color:var(--muted)}
 .state{padding:20px;color:var(--muted)}
+.cards{display:none;flex-direction:column;gap:10px}
+.cards .dayh{font-weight:600;font-size:13px;color:var(--accent);margin:10px 2px 0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.card .top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px 8px}
+.card .top b{white-space:nowrap}
+.card .top b{font:500 15px/1.3 "IBM Plex Mono",monospace}
+.card .bean{color:var(--muted);font-size:13px}
+.card .nums{display:flex;flex-wrap:wrap;gap:4px 14px;font:400 14px/1.4 "IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
+.card .nums span{white-space:nowrap}
+.card .nums small{color:var(--muted);font-family:"IBM Plex Sans",sans-serif;font-size:11px;letter-spacing:.05em;text-transform:uppercase;margin-right:4px}
+.card .note{color:var(--muted);font-size:13px}
+@media (max-width:720px){.tablebox{display:none}.cards{display:flex}}
 </style>
 </head>
 <body>
@@ -63,6 +75,7 @@ td.num{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;w
         <tbody id="rows"><tr><td colspan="10" class="state">Loading shots…</td></tr></tbody>
       </table>
     </div>
+    <div class="cards" id="cards"></div>
     <p class="foot">Grey values are the recipe target, not a measured result (early pulls before timing was recorded).</p>
   </section>
 </div>
@@ -74,7 +87,7 @@ const esc = v => String(v ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;
 const dayName = d => { const t = new Date(d + "T12:00:00"); return t.toLocaleDateString("en-US",{weekday:"long",month:"short",day:"numeric"}); };
 
 function render(shots){
-  if(!shots.length){ $("#rows").innerHTML = '<tr><td colspan="10" class="state">No shots logged yet.</td></tr>'; $("#stats").innerHTML=""; return; }
+  if(!shots.length){ $("#cards").innerHTML=""; $("#rows").innerHTML = '<tr><td colspan="10" class="state">No shots logged yet.</td></tr>'; $("#stats").innerHTML=""; return; }
   let html = "", last = null;
   for(const s of shots){
     if(s.date !== last){ html += `<tr class="day"><td colspan="10">${esc(dayName(s.date))}${s.session?" · "+esc(s.session):""}</td></tr>`; last = s.date; }
@@ -95,6 +108,22 @@ function render(shots){
       <td class="notes">${esc(s.notes)}</td></tr>`;
   }
   $("#rows").innerHTML = html;
+
+  let cards = "", lastC = null;
+  for(const s of shots){
+    if(s.date !== lastC){ cards += `<div class="dayh">${esc(dayName(s.date))}${s.session?" · "+esc(s.session):""}</div>`; lastC = s.date; }
+    const t = (s.taste || "").toLowerCase();
+    const cls = t.includes("balanced") ? "bal" : t.includes("sour") ? "sour" : t.includes("bitter") ? "bitter" : "na";
+    const ratio = s.dose && s.yield ? "1:" + (s.yield / s.dose).toFixed(1) : "—";
+    const est = s.estimated ? ' class="est"' : "";
+    cards += `<div class="card">
+      <div class="top"><b>#${esc(s.n)} · grind ${s.grind ?? "—"}</b><span class="pill ${cls}">${esc(s.taste || "Not noted")}</span></div>
+      <div class="bean">${esc(s.bean)}${s.drink && s.drink !== "Not noted" ? " · " + esc(s.drink) : ""}</div>
+      <div class="nums"><span><small>In</small>${s.dose ? s.dose+"g" : "—"}</span><span${est}><small>Out</small>${s.yield ? s.yield+"g" : "—"}</span><span${est}><small>Ratio</small>${ratio}</span><span><small>Time</small>${s.time ? s.time+"s" : "—"}</span></div>
+      ${s.notes ? `<div class="note">${esc(s.notes)}</div>` : ""}
+    </div>`;
+  }
+  $("#cards").innerHTML = cards;
 
   const measured = shots.filter(s => !s.estimated && s.yield && s.dose);
   const recent = [...shots].reverse().find(s => s.dialed);
