@@ -26,7 +26,8 @@ h1{font:400 30px/1.15 "Young Serif",Georgia,serif;margin:0;text-wrap:balance}
 .stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
 .stat b{display:block;font:500 22px/1.2 "IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
 .stat span{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-.dialed{border-left:4px solid var(--crema)}
+.dialed{border-left:4px solid var(--crema);grid-column:1/-1}
+.dialed b{font-size:17px;line-height:1.35}
 h2{font:600 13px/1 "IBM Plex Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
 .tablebox{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
 table{border-collapse:collapse;width:100%;min-width:820px;font-size:14px}
@@ -53,14 +54,25 @@ td.num{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;w
 .card .nums small{color:var(--muted);font-family:"IBM Plex Sans",sans-serif;font-size:11px;letter-spacing:.05em;text-transform:uppercase;margin-right:4px}
 .card .note{color:var(--muted);font-size:13px}
 @media (max-width:720px){.tablebox{display:none}.cards{display:flex}}
+.head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.refresh{flex:none;display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:500 14px/1 "IBM Plex Sans",sans-serif;cursor:pointer}
+.refresh:active{background:var(--soft)}
+.refresh svg{width:16px;height:16px}
+.refresh.spin svg{animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.updated{font-size:12px;color:var(--muted);margin-top:6px}
 </style>
 </head>
 <body>
 
 <div class="wrap">
-  <header>
+  <header class="head">
+    <div>
     <h1>Gaggia Shot Log</h1>
     <p class="sub">Classic Evo Pro · DF64 · BOOKOO scale. Every pull, logged automatically by Claude. GitHub mirror of the live log.</p>
+    <p class="updated" id="updated"></p>
+    </div>
+    <button class="refresh" id="refresh" type="button" aria-label="Refresh shot log"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>Refresh</button>
   </header>
 
   <section class="stats" id="stats" aria-label="Summary"></section>
@@ -80,7 +92,6 @@ td.num{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;w
   </section>
 </div>
 
-<script src="data/shots.js"></script>
 <script>
 const $ = s => document.querySelector(s);
 const esc = v => String(v ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -124,6 +135,7 @@ function render(shots){
     </div>`;
   }
   $("#cards").innerHTML = cards;
+  $("#updated").textContent = "Updated " + new Date().toLocaleTimeString([], {hour:"numeric", minute:"2-digit"});
 
   const measured = shots.filter(s => !s.estimated && s.yield && s.dose);
   const recent = [...shots].reverse().find(s => s.dialed);
@@ -139,7 +151,18 @@ function render(shots){
     ${recent ? `<div class="stat dialed"><b>${esc(recent.dialed)}</b><span>Current dial-in · ${esc(recent.bean)}</span></div>` : ""}`;
 }
 
-render([...(window.SHOTS || [])].sort((a,b)=>a.n-b.n));
+function loadShots(){
+  const btn = $("#refresh"); btn.classList.add("spin");
+  const old = document.getElementById("shots-data"); if(old) old.remove();
+  const tag = document.createElement("script");
+  tag.id = "shots-data";
+  tag.src = "data/shots.js?v=" + Date.now();
+  tag.onload = () => { render([...(window.SHOTS || [])].sort((a,b)=>a.n-b.n)); btn.classList.remove("spin"); };
+  tag.onerror = () => { $("#updated").textContent = "Couldn't load shots. Check your connection."; btn.classList.remove("spin"); };
+  document.body.appendChild(tag);
+}
+$("#refresh").addEventListener("click", loadShots);
+loadShots();
 </script>
 </body>
 </html>
