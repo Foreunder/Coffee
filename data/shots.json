@@ -279,21 +279,22 @@
     "n": 20,
     "notes": "Grind 12.5 confirmed (both evening-2 shots at 12.5, one each for Jamey and Kayla). Fastest Rockbrook pull yet: early flow spike ~2.5 g/s at first drip, avg 1.6 g/s. Yield on target (35.5g stop worked).",
     "session": "After dinner · grind 12.5",
-    "taste": "Not noted",
+    "taste": "Worse than 12 · chocolate notes gone",
     "time": 22.9,
     "yield": 35.9
   },
   {
     "bean": "Hill of Beans Rockbrook Espresso",
     "date": "2026-10-01",
+    "dialed": "Rockbrook: 18g → 36g · grind 12 · 29 to 31s (confirmed vs 12.5)",
     "dose": 18,
     "drink": "Not noted",
     "estimated": false,
     "grind": 12.5,
     "n": 21,
-    "notes": "Grind 12.5 confirmed. 2.7s slower than #20, smoother early flow, avg 1.4 g/s. 12.5 averages ~24s vs ~30s at 12: half a step = ~6s, so 12.5 runs below the 27-32s window.",
+    "notes": "Grind 12.5 confirmed. 2.7s slower than #20, smoother early flow, avg 1.4 g/s. 12.5 averages ~24s vs ~30s at 12: half a step = ~6s, below the 27-32s window. Tasted worse than 12, lost the chocolate notes. Verdict: grind 12 is the Rockbrook setting; 12.5 retired.",
     "session": "After dinner · grind 12.5",
-    "taste": "Not noted",
+    "taste": "Worse than 12 · chocolate notes gone",
     "time": 25.6,
     "yield": 36.5
   }
