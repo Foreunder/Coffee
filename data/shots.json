@@ -307,5 +307,33 @@
     "taste": "Worse than 12 · chocolate notes gone",
     "time": 25.6,
     "yield": 36.5
+  },
+  {
+    "bean": "Hill of Beans Rockbrook Espresso",
+    "date": "2026-10-02",
+    "dose": 18,
+    "drink": "Not noted",
+    "estimated": false,
+    "grind": 11.9,
+    "n": 22,
+    "notes": "First pull at ~11.9 (arrow just fine of 12). Flow ended ~29s; app timer ran to 47.8s because Start/Stop was left running, so time logged from the curve. Early spike ~2.8 g/s at first drip, then steady ~1.7 g/s. 0.7g over target.",
+    "session": "Evening · grind ~11.9",
+    "taste": "Not noted",
+    "time": 29,
+    "yield": 36.7
+  },
+  {
+    "bean": "Hill of Beans Rockbrook Espresso",
+    "date": "2026-10-02",
+    "dose": 18,
+    "drink": "Not noted",
+    "estimated": false,
+    "grind": 11.9,
+    "n": 23,
+    "notes": "Smooth ramp, first drip ~4s, avg 1.1 g/s, peaks ~2.2 g/s late. 3s slower than #22, top of the 27-32s window. ~11.9 vs 12 (29-31s): same range, within normal variation.",
+    "session": "Evening · grind ~11.9",
+    "taste": "Not noted",
+    "time": 32.1,
+    "yield": 35.6
   }
 ]
