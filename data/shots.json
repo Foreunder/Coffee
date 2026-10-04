@@ -393,5 +393,19 @@
     "drink": "Flat white (whole milk)",
     "dialed": "Stories Espresso Blend: 18g → 36g · grind 13 · 27 to 29s",
     "notes": "Pulled back to back with #26. Same curve shape: ~5 g/s spike at first drip, steady ~1.8 g/s. 1.2s faster and 0.9g heavier than #26 (normal variation). Grind 13 confirmed for Stories."
+  },
+  {
+    "n": 28,
+    "date": "2026-10-04",
+    "session": "Afternoon · grind 13",
+    "bean": "Stories Espresso Blend",
+    "grind": 13,
+    "dose": 18,
+    "yield": 36.4,
+    "time": 36.9,
+    "estimated": false,
+    "taste": "Not noted",
+    "drink": "Not noted",
+    "notes": "Same grind as #26-27 (27-29s) but ran 36.9s. Smaller first-drip spike (~2.5 g/s) and slower steady flow (~1.2 g/s vs ~1.8). One slow shot at an unchanged setting usually points to puck prep or dose, not grind; if the next one is also over 32s, move to 13.5."
   }
 ]
