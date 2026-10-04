@@ -404,7 +404,7 @@
     "yield": 36.4,
     "time": 36.9,
     "estimated": false,
-    "taste": "Not noted",
+    "taste": "Poor pull (wasted; brew temperature problem)",
     "drink": "Steamed heavy cream",
     "notes": "Not a normal pull. Two earlier attempts at 18.0g ran straight through with room-temperature water (brew side not heating). Heated the boiler on steam, purged, switched back to brew and pulled this when the light came on, so brew temperature was abnormal. Ran 36.9s at grind 13 (vs 27-29s on #26-27) with a slower steady flow (~1.2 g/s). Group purge after steaming read ~170°F. Grind not changed: result reflects the temperature problem, not the grind."
   }
