@@ -336,5 +336,33 @@
     "taste": "Similar to 12",
     "time": 32.1,
     "yield": 35.6
+  },
+  {
+    "bean": "Stories Espresso Blend",
+    "date": "2026-10-03",
+    "dose": 18,
+    "drink": "Flat white (whole milk)",
+    "estimated": false,
+    "grind": 11.9,
+    "n": 24,
+    "notes": "First flat white. First drip ~3s with a 2.8 g/s spike, then steady ~0.8 g/s. Ran 42s, far past the 27-32s window: 11.9 is too fine for Stories Espresso Blend (Rockbrook's setting does not carry over).",
+    "session": "Evening · grind ~11.9",
+    "taste": "Not noted",
+    "time": 42,
+    "yield": 35.6
+  },
+  {
+    "bean": "Stories Espresso Blend",
+    "date": "2026-10-03",
+    "dose": 18,
+    "drink": "Flat white (whole milk)",
+    "estimated": false,
+    "grind": 11.9,
+    "n": 25,
+    "notes": "Slow steady ramp from 0s, ~0.8 g/s average. 45s, even slower than #24. Grind coarser for this bean (start ~13). A 3.4s false start between pulls was ignored.",
+    "session": "Evening · grind ~11.9",
+    "taste": "Not noted",
+    "time": 45,
+    "yield": 36.1
   }
 ]
