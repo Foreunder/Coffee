@@ -406,6 +406,6 @@
     "estimated": false,
     "taste": "Not noted",
     "drink": "Steamed heavy cream",
-    "notes": "Same grind as #26-27 (27-29s) but ran 36.9s. Smaller first-drip spike (~2.5 g/s) and slower steady flow (~1.2 g/s vs ~1.8). One slow shot at an unchanged setting usually points to puck prep or dose, not grind; if the next one is also over 32s, move to 13.5."
+    "notes": "Not a normal pull. Two earlier attempts at 18.0g ran straight through with room-temperature water (brew side not heating). Heated the boiler on steam, purged, switched back to brew and pulled this when the light came on, so brew temperature was abnormal. Ran 36.9s at grind 13 (vs 27-29s on #26-27) with a slower steady flow (~1.2 g/s). Group purge after steaming read ~170°F. Grind not changed: result reflects the temperature problem, not the grind."
   }
 ]
