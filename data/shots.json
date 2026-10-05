@@ -415,10 +415,10 @@
     "grind": 13,
     "dose": 18,
     "estimated": false,
-    "taste": "Not noted",
+    "taste": "More bitter than normal",
     "n": 29,
     "time": 50.8,
-    "drink": "Flat white",
+    "drink": "Flat white (whole milk)",
     "notes": "Workaround shot, not a reference: brew thermostat failed, so water was heated on steam and the group flushed before pulling (shot, steam, shot routine). Ran 50.8s at grind 13, nearly double the 27-29s target; slow pressure ramp, avg flow 0.7 g/s. Crema looked normal.",
     "yield": 36.1
   },
@@ -429,10 +429,10 @@
     "grind": 13,
     "dose": 18,
     "estimated": false,
-    "taste": "Not noted",
+    "taste": "More bitter than normal",
     "n": 30,
     "time": 51.4,
-    "drink": "Flat white",
+    "drink": "Flat white (whole milk)",
     "notes": "Workaround shot, not a reference: second shot after steaming, same steam-heat method. 51.4s, avg flow 0.7 g/s, matching #29, so it's consistent rather than a prep fluke. Grind not changed; the slow time is tied to the workaround temperature and pressure behavior, not the grind.",
     "yield": 36.1
   }
