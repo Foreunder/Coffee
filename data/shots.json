@@ -407,5 +407,33 @@
     "taste": "Poor pull (wasted; brew temperature problem)",
     "drink": "Steamed heavy cream",
     "notes": "Not a normal pull. Two earlier attempts at 18.0g ran straight through with room-temperature water (brew side not heating). Heated the boiler on steam, purged, switched back to brew and pulled this when the light came on, so brew temperature was abnormal. Ran 36.9s at grind 13 (vs 27-29s on #26-27) with a slower steady flow (~1.2 g/s). Group purge after steaming read ~170°F. Grind not changed: result reflects the temperature problem, not the grind."
+  },
+  {
+    "date": "2026-10-04",
+    "session": "Evening · steam-heat workaround · grind 13",
+    "bean": "Stories Espresso Blend",
+    "grind": 13,
+    "dose": 18,
+    "estimated": false,
+    "taste": "Not noted",
+    "n": 29,
+    "time": 50.8,
+    "drink": "Flat white",
+    "notes": "Workaround shot, not a reference: brew thermostat failed, so water was heated on steam and the group flushed before pulling (shot, steam, shot routine). Ran 50.8s at grind 13, nearly double the 27-29s target; slow pressure ramp, avg flow 0.7 g/s. Crema looked normal.",
+    "yield": 36.1
+  },
+  {
+    "date": "2026-10-04",
+    "session": "Evening · steam-heat workaround · grind 13",
+    "bean": "Stories Espresso Blend",
+    "grind": 13,
+    "dose": 18,
+    "estimated": false,
+    "taste": "Not noted",
+    "n": 30,
+    "time": 51.4,
+    "drink": "Straight shot",
+    "notes": "Workaround shot, not a reference: second shot after steaming, same steam-heat method. 51.4s, avg flow 0.7 g/s, matching #29, so it's consistent rather than a prep fluke. Grind not changed; the slow time is tied to the workaround temperature and pressure behavior, not the grind.",
+    "yield": 36.1
   }
 ]
