@@ -435,5 +435,33 @@
     "drink": "Flat white (whole milk)",
     "notes": "Workaround shot, not a reference: second shot after steaming, same steam-heat method. 51.4s, avg flow 0.7 g/s, matching #29, so it's consistent rather than a prep fluke. Grind not changed; the slow time is tied to the workaround temperature and pressure behavior, not the grind.",
     "yield": 36.1
+  },
+  {
+    "date": "2026-10-06",
+    "session": "Evening · new Gaggia (stock, pre-GaggiMate)",
+    "bean": "Stories Espresso Blend",
+    "grind": 13,
+    "dose": 18,
+    "estimated": false,
+    "taste": "Not noted",
+    "drink": "Not noted",
+    "n": 31,
+    "time": 52.5,
+    "notes": "First pull on the replacement Gaggia, stock (no GaggiMate yet). Machine heated ~20 min; group water read ~170F into a room-temp steel pitcher. Very slow: 52.5s, avg flow 0.7 g/s. Bean/grind/dose assumed from last setup (Stories, grind 13, 18g). First shot on a new machine, likely affected by group temperature.",
+    "yield": 35.8
+  },
+  {
+    "date": "2026-10-06",
+    "session": "Evening · new Gaggia (stock, pre-GaggiMate)",
+    "bean": "Stories Espresso Blend",
+    "grind": 13,
+    "dose": 18,
+    "estimated": false,
+    "taste": "Not noted",
+    "drink": "Not noted",
+    "n": 32,
+    "time": 38.4,
+    "notes": "Second pull on the replacement Gaggia, stock. 38.4s, avg flow 0.9 g/s — faster than #31 as the group warmed, still slower than the 27-29s target from #26-27. Bean/grind/dose assumed from last setup. Stock baseline for comparison after GaggiMate install; not a dial-in reference.",
+    "yield": 36.2
   }
 ]
