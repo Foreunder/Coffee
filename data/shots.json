@@ -463,5 +463,33 @@
     "time": 38.4,
     "notes": "Second pull on the replacement Gaggia, stock. 38.4s, avg flow 0.9 g/s — faster than #31 as the group warmed, still slower than the 27-29s target from #26-27. Bean/grind/dose assumed from last setup. Stock baseline for comparison after GaggiMate install; not a dial-in reference.",
     "yield": 36.2
+  },
+  {
+    "date": "2026-10-08",
+    "session": "Evening · first GaggiMate pulls (JC Default profile, brew-by-weight)",
+    "bean": "Stories Espresso Blend",
+    "grind": 13,
+    "dose": 18,
+    "estimated": false,
+    "taste": "Not noted",
+    "drink": "Flat white",
+    "n": 33,
+    "time": 44.2,
+    "yield": 35.3,
+    "notes": "First logged pull on GaggiMate (machine shot #2). Target 93°C, avg boiler temp 92.0°C, peak 10.3 bar, avg pump flow 5.2 ml/s. Brewed by weight on BOOKOO. Still slow vs the 27-32s target: grind needs to go coarser. Bean/grind assumed from last setup (GaggiMate grind field showed 2.5)."
+  },
+  {
+    "date": "2026-10-08",
+    "session": "Evening · first GaggiMate pulls (JC Default profile, brew-by-weight)",
+    "bean": "Stories Espresso Blend",
+    "grind": 13,
+    "dose": 18,
+    "estimated": false,
+    "taste": "Not noted",
+    "drink": "Flat white (latte art pour)",
+    "n": 34,
+    "time": 54.0,
+    "yield": 35.4,
+    "notes": "Machine shot #3. Avg boiler temp 101.6°C vs 93°C target — boiler still hot, likely pulled after steaming; temp curve fell from ~105°C to ~95°C during the shot. Peak 10.1 bar, avg pump flow 5.3 ml/s. 54s: grind too fine. Pull shots before steaming. Bean/grind assumed from last setup."
   }
 ]
