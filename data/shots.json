@@ -491,5 +491,20 @@
     "time": 54.0,
     "yield": 35.4,
     "notes": "Machine shot #3. Avg boiler temp 101.6°C vs 93°C target — boiler still hot, likely pulled after steaming; temp curve fell from ~105°C to ~95°C during the shot. Peak 10.1 bar, avg pump flow 5.3 ml/s. 54s: grind too fine. Pull shots before steaming. Bean/grind assumed from last setup."
+  },
+  {
+    "date": "2026-10-09",
+    "session": "Evening · JC Default profile, brew-by-weight",
+    "bean": "Stories Espresso Blend",
+    "grind": null,
+    "dose": 18,
+    "estimated": false,
+    "taste": "5★ (GaggiMate rating)",
+    "drink": "Latte",
+    "n": 35,
+    "time": 25.0,
+    "yield": 35.1,
+    "dialed": "18g → 35g · ~25s · 93°C · JC Default (DF64 setting not recorded)",
+    "notes": "Machine shot #4. Avg temp 92.6°C vs 93°C target — pulled at temp, not after steaming. Peak 9.8 bar, avg pump flow 5.1 ml/s, 127.1 ml pumped. Ratio 1:1.95. In the 25–30s window. GaggiMate Dose Out shows 0.1 and grind field 2.5 (stale) — fix in app. Bean assumed."
   }
 ]
