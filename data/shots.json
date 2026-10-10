@@ -496,7 +496,7 @@
     "date": "2026-10-09",
     "session": "Evening · JC Default profile, brew-by-weight",
     "bean": "Stories Espresso Blend",
-    "grind": null,
+    "grind": 15,
     "dose": 18,
     "estimated": false,
     "taste": "5★ (GaggiMate rating)",
@@ -504,7 +504,7 @@
     "n": 35,
     "time": 25.0,
     "yield": 35.1,
-    "dialed": "18g → 35g · ~25s · 93°C · JC Default (DF64 setting not recorded)",
-    "notes": "Machine shot #4. Avg temp 92.6°C vs 93°C target — pulled at temp, not after steaming. Peak 9.8 bar, avg pump flow 5.1 ml/s, 127.1 ml pumped. Ratio 1:1.95. In the 25–30s window. GaggiMate Dose Out shows 0.1 and grind field 2.5 (stale) — fix in app. Bean assumed."
+    "dialed": "Stories: 18g → 35g · grind 15 · ~25s · 93°C · JC Default",
+    "notes": "Machine shot #4. Avg temp 92.6°C vs 93°C target — pulled at temp, not after steaming. Peak 9.8 bar, avg pump flow 5.1 ml/s, 127.1 ml pumped. Ratio 1:1.95. In the 25–30s window. GaggiMate Dose Out shows 0.1 — fix in app. Grind 15 per Jamey. Bean assumed."
   }
 ]
