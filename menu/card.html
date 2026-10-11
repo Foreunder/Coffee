@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Foreunder Table Card</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=IM+Fell+English:ital@1&family=Alegreya+Sans+SC:wght@500&display=swap">
+<style>
+/* A 4x6 inch portrait card for a walnut tabletop frame. Print at 100% scale. */
+:root{--paper:#f3ead6;--ink:#14231b;--brass:#8f6a24;--oxblood:#7a2430;color-scheme:light}
+@page{size:4in 6in;margin:0}
+*{box-sizing:border-box}
+html,body{margin:0;background:#d9d2c2}
+.card{width:4in;height:6in;margin:24px auto;background:var(--paper);color:var(--ink);padding:.32in .3in;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;border:1px solid #c9bea5;position:relative}
+.card::before{content:"";position:absolute;inset:.12in;border:1px solid var(--brass);pointer-events:none}
+.est{font:500 9pt/1 "Alegreya Sans SC",sans-serif;letter-spacing:.22em;color:var(--brass);text-transform:lowercase}
+h1{font:400 34pt/1 "IM Fell English SC",Georgia,serif;letter-spacing:.06em;margin:6px 0 2px}
+.house{font:italic 13pt/1.2 "IM Fell English",Georgia,serif;color:var(--oxblood)}
+.tartan{width:1.6in;height:6px;background:repeating-linear-gradient(90deg,var(--ink) 0 10px,var(--brass) 10px 12px,var(--ink) 12px 20px,var(--oxblood) 20px 24px);margin:10px auto 0}
+#qr{background:var(--paper);padding:6px}
+#qr svg{display:block;width:1.9in;height:1.9in}
+.scan{font:italic 12pt/1.35 "IM Fell English",Georgia,serif;max-width:2.8in}
+.url{font:500 7.5pt/1 "Alegreya Sans SC",sans-serif;letter-spacing:.08em;color:var(--brass);text-transform:lowercase}
+.tip{font:13px/1.4 Georgia,serif;text-align:center;color:#444;margin:0 16px 24px}
+@media print{html,body{background:var(--paper)}.card{margin:0;border:0}.tip{display:none}}
+</style>
+</head>
+<body>
+<p class="tip">Print at 100% (actual size) on 4×6 photo or card stock, then slide into the frame.</p>
+<div class="card">
+  <div>
+    <div class="est">est. 2026 · the private coffee bar</div>
+    <h1>Foreunder</h1>
+    <div class="house">The Coffee House</div>
+    <div class="tartan" aria-hidden="true"></div>
+  </div>
+  <div id="qr" aria-label="QR code for the coffee menu"></div>
+  <div style="display:flex;flex-direction:column;gap:8px;align-items:center">
+    <div class="scan">Scan to explore tonight's coffees and send your order to the bar.</div>
+    <div class="url">foreunder.github.io/coffee/menu</div>
+  </div>
+</div>
+<script src="qrcode.js"></script>
+<script src="data.js"></script>
+<script>
+var q = qrcode(0, "M"); q.addData(window.FOREUNDER.siteUrl); q.make();
+document.getElementById("qr").innerHTML = q.createSvgTag({cellSize: 8, margin: 0, scalable: true}).replace(/fill="white"/g, 'fill="#f3ead6"').replace(/fill="black"/g, 'fill="#14231b"');
+</script>
+</body>
+</html>

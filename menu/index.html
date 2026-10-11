@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f1c16">
+<title>Foreunder Coffee House</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=IM+Fell+English:ital@0;1&family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Alegreya+Sans+SC:wght@500;700&display=swap">
+<style>
+/* Layout: a links-clubhouse menu card. Phone = one column with sticky order bar; TV board = three columns; bar = order queue. Single dark look by design (a dim pub at night). */
+:root{
+  --ground:#0f1c16;      /* deep clubhouse green */
+  --panel:#16271f;
+  --panel-2:#1c3127;
+  --ink:#f0e7d3;         /* ivory card stock */
+  --muted:#b9ad90;
+  --brass:#c9a24f;
+  --brass-dim:#8f7436;
+  --oxblood:#8a2a35;
+  --rule:rgba(201,162,79,.28);
+  --ok:#86b98f;
+  --display:"IM Fell English SC","Iowan Old Style",Georgia,serif;
+  --italic:"IM Fell English","Iowan Old Style",Georgia,serif;
+  --body:"Alegreya","Iowan Old Style",Georgia,serif;
+  --label:"Alegreya Sans SC","Gill Sans","Trebuchet MS",sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--ground);color:var(--ink);font:17px/1.55 var(--body);padding-inline:16px;padding-block:0 120px;-webkit-font-smoothing:antialiased}
+a{color:var(--brass)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
+.wrap{max-width:720px;margin:0 auto}
+.tartan{height:10px;margin-inline:-16px;background:
+  repeating-linear-gradient(90deg,transparent 0 22px,rgba(201,162,79,.55) 22px 24px,transparent 24px 46px,rgba(138,42,53,.8) 46px 52px,transparent 52px 70px),
+  repeating-linear-gradient(0deg,var(--panel-2) 0 3px,var(--ground) 3px 6px)}
+.label{font:500 13px/1.2 var(--label);letter-spacing:.14em;text-transform:lowercase;color:var(--brass)}
+
+/* Crest */
+header.crest{text-align:center;padding-block:28px 20px;display:flex;flex-direction:column;gap:6px;align-items:center}
+.crest .est{font:500 12px/1 var(--label);letter-spacing:.24em;color:var(--muted);text-transform:lowercase}
+.crest h1{font:400 clamp(40px,11vw,64px)/1 var(--display);letter-spacing:.06em;margin:4px 0 0;color:var(--ink)}
+.crest .house{font:italic 400 20px/1.2 var(--italic);color:var(--brass)}
+.crest .rule{width:120px;height:1px;background:var(--rule);margin-top:10px}
+
+section{padding-block:22px}
+h2{font:400 26px/1.15 var(--display);letter-spacing:.04em;margin:0 0 4px;text-wrap:balance}
+.sub{color:var(--muted);margin:0 0 16px;font-style:italic}
+
+/* Drinks list: menu-card rows */
+.drinks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.drink{display:grid;grid-template-columns:1fr auto;gap:4px 14px;align-items:center;padding-block:14px;border-bottom:1px solid var(--rule)}
+.drink:first-child{border-top:1px solid var(--rule)}
+.drink .n{font:400 22px/1.2 var(--display);letter-spacing:.03em}
+.drink .l{font:500 13px/1.3 var(--label);letter-spacing:.08em;color:var(--brass);text-transform:lowercase}
+.drink .d{grid-column:1;color:var(--muted);font-size:15px;line-height:1.45;min-width:0}
+.drink button{grid-row:1/span 3;grid-column:2}
+.btn{border:1px solid var(--brass);background:transparent;color:var(--brass);font:700 14px/1 var(--label);letter-spacing:.12em;text-transform:lowercase;padding:11px 16px;border-radius:999px;cursor:pointer;min-height:44px}
+.btn:hover{background:rgba(201,162,79,.12)}
+.btn.solid{background:var(--brass);color:#1a1408}
+.btn.solid:hover{background:#d8b162}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.decaf{margin-top:14px;font-style:italic;color:var(--muted);font-size:15px}
+
+/* Bean library */
+.beans{display:flex;flex-direction:column;gap:14px}
+.bean{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:18px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.bean.out{opacity:.62}
+.bean .top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
+.bean h3{font:400 23px/1.15 var(--display);letter-spacing:.03em;margin:0}
+.bean .by{font-style:italic;color:var(--muted);font-size:15px}
+.pill{font:700 12px/1 var(--label);letter-spacing:.12em;text-transform:lowercase;padding:6px 10px;border-radius:999px;border:1px solid currentColor;white-space:nowrap}
+.pill.bar{color:var(--ok)}
+.pill.press{color:var(--brass)}
+.pill.out{color:var(--muted)}
+.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 16px;margin:0}
+.facts div{min-width:0}
+.facts dt{font:500 12px/1.2 var(--label);letter-spacing:.12em;color:var(--brass);text-transform:lowercase}
+.facts dd{margin:2px 0 0;font-size:15px}
+.fresh{font-variant-numeric:tabular-nums}
+.expect{margin:0;font-size:16px}
+.take{margin:0;font:italic 400 17px/1.45 var(--italic);color:var(--ink);border-left:2px solid var(--oxblood);padding-left:12px}
+.take .who{display:block;font:500 12px/1.4 var(--label);letter-spacing:.12em;color:var(--muted);font-style:normal;margin-top:2px}
+.scales{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.scale span{display:block;font:500 12px/1.2 var(--label);letter-spacing:.1em;color:var(--muted);text-transform:lowercase;margin-bottom:5px}
+.dots{display:flex;gap:4px}
+.dots i{width:100%;height:6px;border-radius:2px;background:rgba(240,231,211,.12)}
+.dots i.on{background:var(--brass)}
+details.more summary{cursor:pointer;color:var(--brass);font:500 13px/1.2 var(--label);letter-spacing:.12em;text-transform:lowercase;list-style:none;padding-block:4px}
+details.more summary::-webkit-details-marker{display:none}
+details.more[open] summary{margin-bottom:8px}
+details.more .inner{display:flex;flex-direction:column;gap:10px}
+
+/* Order form */
+.order{background:var(--panel);border:1px solid var(--brass-dim);border-radius:8px;padding:20px;display:flex;flex-direction:column;gap:18px}
+.field{display:flex;flex-direction:column;gap:8px;min-width:0}
+.field > label,.field > .legend{font:500 13px/1.2 var(--label);letter-spacing:.14em;color:var(--brass);text-transform:lowercase}
+input[type=text],textarea{background:var(--ground);border:1px solid var(--rule);border-radius:6px;padding:12px 14px;font-size:17px;width:100%}
+textarea{resize:vertical;min-height:64px}
+.choices{display:flex;flex-wrap:wrap;gap:8px}
+.choice{position:relative}
+.choice input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.choice span{display:inline-block;border:1px solid var(--rule);border-radius:999px;padding:10px 15px;font-size:16px;min-height:44px;line-height:22px;cursor:pointer}
+.choice input:checked + span{border-color:var(--brass);background:rgba(201,162,79,.16);color:var(--ink)}
+.choice input:focus-visible + span{outline:2px solid var(--brass);outline-offset:2px}
+.summary{border-top:1px solid var(--rule);padding-top:14px;display:flex;flex-direction:column;gap:4px}
+.summary .what{font:400 22px/1.2 var(--display)}
+.summary .how{color:var(--muted);font-size:15px}
+.err{color:#e8a0a6;font-size:15px;margin:0}
+
+.sent{background:var(--panel);border:1px solid var(--brass);border-radius:8px;padding:24px;text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center}
+.sent .big{font:400 30px/1.15 var(--display)}
+.status-step{font:700 14px/1 var(--label);letter-spacing:.14em;text-transform:lowercase;color:var(--brass)}
+.ticket{border:1px dashed var(--brass-dim);border-radius:6px;padding:14px 18px;width:100%;max-width:420px;text-align:left}
+.ticket .who{font:400 24px/1.2 var(--display)}
+
+/* Sticky order bar on the phone menu */
+.orderbar{position:fixed;left:0;right:0;bottom:0;padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));background:linear-gradient(to top,var(--ground) 70%,rgba(15,28,22,0));display:flex;justify-content:center}
+.orderbar .btn{width:100%;max-width:688px;min-height:52px;font-size:16px}
+
+footer{color:var(--muted);text-align:center;font-size:14px;padding-block:28px 8px;font-style:italic}
+
+/* ===== TV board ===== */
+body.board{padding-block:0;overflow:hidden;font-size:clamp(16px,1.35vw,26px);height:100vh}
+.board-grid{display:grid;grid-template-columns:1.25fr 1.25fr .9fr;gap:3vw;padding:2.5vw 3vw;height:calc(100vh - 10px)}
+.board-grid > div{min-width:0;display:flex;flex-direction:column;gap:1.2vw}
+.board h1{font:400 4.4vw/1 var(--display);letter-spacing:.06em;margin:0}
+.board .house{font:italic 400 1.6vw/1.2 var(--italic);color:var(--brass)}
+.board h2{font-size:1.9vw;color:var(--brass);margin:0}
+.board .drinks .n{font-size:1.75vw}
+.board .drinks .l{font-size:.95vw}
+.board .drinks .d{display:none}
+.board .drink{padding-block:.75vw}
+.bboard-bean{border-bottom:1px solid var(--rule);padding-bottom:1vw;display:flex;flex-direction:column;gap:.3vw}
+.bboard-bean h3{font:400 1.8vw/1.15 var(--display);margin:0}
+.bboard-bean .meta{font:500 .95vw/1.3 var(--label);letter-spacing:.1em;color:var(--brass);text-transform:lowercase}
+.bboard-bean p{margin:0;color:var(--muted);font-size:1.1vw}
+.qrbox{background:var(--ink);padding:1vw;border-radius:6px;align-self:flex-start}
+.qrbox svg{display:block;width:13vw;height:13vw}
+.scan{font:italic 400 1.5vw/1.3 var(--italic)}
+.queue{display:flex;flex-direction:column;gap:.6vw}
+.q{display:flex;justify-content:space-between;gap:1vw;border-bottom:1px solid var(--rule);padding-bottom:.5vw}
+.q .nm{font:400 1.5vw/1.2 var(--display)}
+.q .dr{color:var(--muted);font-size:1vw}
+.q .st{font:700 .9vw/1 var(--label);letter-spacing:.12em;text-transform:lowercase;align-self:center}
+.st.queued{color:var(--muted)}.st.making{color:var(--brass)}.st.ready{color:var(--ok)}
+.wait{font:500 1vw/1.3 var(--label);letter-spacing:.1em;color:var(--muted);text-transform:lowercase}
+
+/* ===== Bar view ===== */
+.barhead{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding-block:20px 8px}
+.barhead h1{font:400 32px/1 var(--display);margin:0}
+.conn{font:700 12px/1 var(--label);letter-spacing:.12em;text-transform:lowercase}
+.conn.on{color:var(--ok)}.conn.off{color:#e8a0a6}
+.tickets{display:flex;flex-direction:column;gap:12px}
+.bt{background:var(--panel);border:1px solid var(--rule);border-left:4px solid var(--muted);border-radius:6px;padding:16px;display:grid;grid-template-columns:1fr auto;gap:6px 14px;align-items:center}
+.bt.making{border-left-color:var(--brass)}
+.bt.ready{border-left-color:var(--ok);opacity:.7}
+.bt .who{font:400 26px/1.1 var(--display)}
+.bt .what{font-size:18px;min-width:0}
+.bt .note{color:var(--muted);font-style:italic;font-size:15px;min-width:0}
+.bt .ago{color:var(--muted);font:500 13px/1 var(--label);letter-spacing:.08em}
+.bt .acts{grid-column:2;grid-row:1/span 4;display:flex;flex-direction:column;gap:8px}
+.empty{color:var(--muted);font-style:italic;padding-block:30px;text-align:center}
+.help{color:var(--muted);font-size:15px;border-top:1px solid var(--rule);margin-top:24px;padding-top:16px}
+.help code{color:var(--ink);word-break:break-all}
+
+@media (min-width:760px){
+  .beans{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (prefers-reduced-motion:no-preference){
+  .sent{animation:rise .4s ease-out}
+  @keyframes rise{from{transform:translateY(6px);opacity:.4}to{transform:none;opacity:1}}
+}
+</style>
+</head>
+<body>
+<div class="tartan" aria-hidden="true"></div>
+<div id="app" class="wrap"></div>
+
+<script src="qrcode.js"></script>
+<script src="data.js"></script>
+<script>
+(function(){
+"use strict";
+const M = window.FOREUNDER;
+const NTFY = "https://ntfy.sh";
+const ORDERS = M.ntfyTopic;
+const STATUS = M.ntfyTopic + "-status";
+const app = document.getElementById("app");
+
+/* ---------- helpers ---------- */
+function el(tag, attrs, ...kids){
+  const n = document.createElement(tag);
+  if (attrs) for (const [k,v] of Object.entries(attrs)){
+    if (v == null || v === false) continue;
+    if (k === "class") n.className = v;
+    else if (k === "text") n.textContent = v;
+    else if (k.startsWith("on")) n.addEventListener(k.slice(2), v);
+    else n.setAttribute(k, v === true ? "" : v);
+  }
+  for (const k of kids.flat()){ if (k == null || k === false) continue; n.append(k.nodeType ? k : document.createTextNode(String(k))); }
+  return n;
+}
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+function fmtDate(iso){ if(!iso) return null; const [y,m,d] = iso.split("-").map(Number); return MONTHS[m-1] + " " + d; }
+function daysSince(iso){ if(!iso) return null; const [y,m,d] = iso.split("-").map(Number); const then = new Date(y,m-1,d); const now = new Date(); now.setHours(0,0,0,0); return Math.round((now - then)/86400000); }
+function store(k,v){ try{ if(v===undefined) return JSON.parse(localStorage.getItem(k)); localStorage.setItem(k, JSON.stringify(v)); }catch(e){ return null; } }
+function agoText(sec){ const m = Math.max(0, Math.round((Date.now()/1000 - sec)/60)); return m < 1 ? "just now" : m + " min ago"; }
+const STATUS_LABEL = { queued:"in the queue", making:"being made", ready:"ready at the bar" };
+
+const beanById = Object.fromEntries(M.beans.map(b => [b.id, b]));
+const onBar = M.beans.filter(b => b.status === "bar");
+const pressBeans = M.beans.filter(b => b.status === "press");
+function beansFor(drink){ return drink.uses === "espresso" ? onBar : drink.uses === "press" ? pressBeans : []; }
+
+function freshness(b){
+  if (b.roastDate){ const d = daysSince(b.roastDate); return "Roasted " + fmtDate(b.roastDate) + " · " + d + " days off roast"; }
+  if (b.opened) return "Bag opened " + fmtDate(b.opened) + " · roast date not on the bag";
+  return null;
+}
+function dots(n){ const w = el("div",{class:"dots","aria-hidden":"true"}); for(let i=1;i<=5;i++) w.append(el("i",{class: i<=n ? "on" : null})); return w; }
+
+/* ---------- live order stream (ntfy) ---------- */
+// One SSE connection carries both topics: orders and status changes. ntfy caches 12 hours.
+const orders = new Map();   // id -> {id,time,name,what,note}
+const states = new Map();   // id -> {state,time}
+let listeners = [];
+let es = null, connected = false;
+function emit(){ listeners.forEach(f => f()); }
+function ingest(m){
+  if (!m || m.event !== "message") return;
+  if (m.topic === ORDERS){
+    if (orders.has(m.id)) return;
+    const lines = String(m.message||"").split("\n");
+    orders.set(m.id, { id:m.id, time:m.time, name:m.title || "Guest", what:lines[0] || "", note:(lines.slice(1).join(" ").replace(/^Note:\s*/,"")) });
+  } else if (m.topic === STATUS){
+    let s; try{ s = JSON.parse(m.message); }catch(e){ return; }
+    if (!s || !s.id || !STATUS_LABEL[s.state]) return;
+    const prev = states.get(s.id);
+    if (!prev || prev.time <= m.time) states.set(s.id, { state:s.state, time:m.time });
+  }
+}
+function connect(){
+  if (es) return;
+  const url = NTFY + "/" + ORDERS + "," + STATUS + "/sse?since=12h";
+  try{
+    es = new EventSource(url);
+    es.onopen = () => { connected = true; emit(); };
+    es.onmessage = ev => { try{ ingest(JSON.parse(ev.data)); emit(); }catch(e){} };
+    es.onerror = () => { connected = false; emit(); };
+  }catch(e){ connected = false; emit(); }
+}
+function stateOf(id){ return (states.get(id) || {state:"queued"}).state; }
+function activeQueue(){ return [...orders.values()].filter(o => stateOf(o.id) !== "ready" || (Date.now()/1000 - (states.get(o.id)||{}).time) < 600).sort((a,b) => a.time - b.time); }
+
+async function publish(topic, title, message){
+  // No Content-Type header: keeps this a simple CORS request. ntfy reads JSON posted to its root.
+  const res = await fetch(NTFY + "/", { method:"POST", body: JSON.stringify({ topic, title, message, tags:["coffee"] }) });
+  if (!res.ok) throw new Error("HTTP " + res.status);
+  return res.json();
+}
+
+/* ---------- PHONE MENU ---------- */
+function renderMenu(){
+  document.body.className = "";
+  app.replaceChildren();
+  app.append(
+    el("header",{class:"crest"},
+      el("div",{class:"est",text:"est. 2026 · the private coffee bar"}),
+      el("h1",{text:"Foreunder"}),
+      el("div",{class:"house",text:"The Coffee House · A good round starts here"}),
+      el("div",{class:"rule"})
+    )
+  );
+
+  // Drinks
+  const list = el("ul",{class:"drinks"});
+  M.drinks.forEach(d => {
+    const available = d.uses === "none" || beansFor(d).length > 0;
+    if (!available) return;
+    list.append(el("li",{class:"drink"},
+      el("div",{class:"n",text:d.name}),
+      el("div",{class:"l",text:d.line}),
+      el("div",{class:"d",text:d.note}),
+      el("button",{class:"btn",type:"button","aria-label":"Order a " + d.name,onclick:()=>openOrder(d.id),text:"order"})
+    ));
+  });
+  app.append(el("section",{id:"drinks"},
+    el("h2",{text:"On the bar tonight"}),
+    el("p",{class:"sub",text:"Every espresso drink is a double shot, pulled to order."}),
+    list,
+    el("p",{class:"decaf",text:M.decafNote})
+  ));
+
+  // Beans
+  const beansWrap = el("div",{class:"beans"});
+  [...M.beans].sort((a,b) => ({bar:0,press:1,out:2}[a.status] - {bar:0,press:1,out:2}[b.status])).forEach(b => beansWrap.append(beanCard(b)));
+  app.append(el("section",{id:"beans"},
+    el("h2",{text:"The bean library"}),
+    el("p",{class:"sub",text:"What's in the grinder, where it came from, and what to expect."}),
+    beansWrap
+  ));
+
+  // Order
+  app.append(el("section",{id:"order"}, el("h2",{text:"Place your order"}), el("p",{class:"sub",text:"Pick a drink and a bean. Your order goes straight to Jamey at the bar."}), orderForm()));
+
+  app.append(el("footer",{text:"Foreunder · Omaha, Nebraska"}));
+  const bar = el("div",{class:"orderbar"}, el("button",{class:"btn solid",type:"button",onclick:()=>openOrder(),text:"order a drink"}));
+  app.append(bar);
+  // Hide the floating button once the order form is on screen.
+  if ("IntersectionObserver" in window){
+    new IntersectionObserver(es => { bar.hidden = es[0].isIntersecting; }, {rootMargin:"0px 0px -30% 0px"}).observe(document.getElementById("order"));
+  }
+}
+
+function beanCard(b){
+  const pillText = { bar:"on the bar", press:"french press only", out:"finished" }[b.status];
+  const facts = el("dl",{class:"facts"});
+  const add = (k,v) => { if (v) facts.append(el("div",null, el("dt",{text:k}), el("dd",{text:v}))); };
+  add("origin", b.origin);
+  add("process", b.process);
+  add("roast", b.roastLevel);
+  add("type", b.type);
+  const fr = b.status !== "out" ? freshness(b) : null;
+
+  const card = el("article",{class:"bean" + (b.status === "out" ? " out" : "")},
+    el("div",{class:"top"},
+      el("div",null, el("h3",{text:b.name}), el("div",{class:"by",text:b.roaster + (b.roasterCity ? " · " + b.roasterCity : "")})),
+      el("span",{class:"pill " + b.status,text:pillText})
+    ),
+    fr ? el("div",{class:"label fresh",text:fr}) : null,
+    b.roasterNotes ? el("p",{class:"expect"}, el("span",{class:"label",text:"roaster's notes  "}), b.roasterNotes) : null,
+    b.status !== "out" && b.expect ? el("p",{class:"expect",text:b.expect}) : null,
+    b.take ? el("p",{class:"take"}, b.take, el("span",{class:"who",text:"jamey's take"})) : null
+  );
+  if (b.status !== "out"){
+    const more = el("details",{class:"more"}, el("summary",{text:"the details"}),
+      el("div",{class:"inner"},
+        facts,
+        el("div",{class:"scales"},
+          el("div",{class:"scale"}, el("span",{text:"body"}), dots(b.scale.body)),
+          el("div",{class:"scale"}, el("span",{text:"acidity"}), dots(b.scale.acidity)),
+          el("div",{class:"scale"}, el("span",{text:"roast"}), dots(b.scale.roast))
+        ),
+        b.bestFor ? el("div",{class:"facts"}, el("div",null, el("dt",{text:"best for"}), el("dd",{text:b.bestFor.join(", ")}))) : null,
+        b.recipe ? el("div",{class:"facts"}, el("div",null, el("dt",{text:"jamey's recipe"}), el("dd",{text:b.recipe}))) : null
+      )
+    );
+    card.append(more);
+  }
+  return card;
+}
+
+/* order form */
+const draft = { name: store("fu-name") || "", drink:null, bean:null, milk:null, choc:null, serve:"Hot", note:"" };
+let formEl = null;
+
+function radios(name, options, current, onpick){
+  const wrap = el("div",{class:"choices",role:"radiogroup"});
+  options.forEach((o,i) => {
+    const id = name + "-" + i;
+    const inp = el("input",{type:"radio",name,id,value:o.value,checked:o.value === current});
+    inp.addEventListener("change", () => onpick(o.value));
+    wrap.append(el("label",{class:"choice",for:id}, inp, el("span",{text:o.label})));
+  });
+  return wrap;
+}
+
+function orderForm(){
+  formEl = el("form",{class:"order",id:"order-form",novalidate:true});
+  formEl.addEventListener("submit", e => { e.preventDefault(); sendOrder(); });
+  drawForm();
+  return formEl;
+}
+
+function drawForm(){
+  if (!formEl) return;
+  const drinks = M.drinks.filter(d => d.uses === "none" || beansFor(d).length);
+  const drink = drinks.find(d => d.id === draft.drink) || null;
+  const beans = drink ? beansFor(drink) : [];
+  if (drink && beans.length && !beans.find(b => b.id === draft.bean)) draft.bean = beans[0].id;
+  if (drink && !beans.length) draft.bean = null;
+  if (drink && drink.milk && !draft.milk) draft.milk = M.milks[0];
+  if (drink && drink.chocolate && !draft.choc) draft.choc = M.chocolates[0];
+  if (drink && !drink.iced) draft.serve = "Hot";
+
+  const nameIn = el("input",{type:"text",id:"guest-name",maxlength:"24",autocomplete:"given-name",placeholder:"First name",value:draft.name});
+  nameIn.addEventListener("input", () => { draft.name = nameIn.value; drawSummary(); });
+  const noteIn = el("textarea",{id:"guest-note",maxlength:"120",placeholder:"Anything else? Extra hot, less milk, a second cup…"});
+  noteIn.value = draft.note;
+  noteIn.addEventListener("input", () => { draft.note = noteIn.value; });
+
+  formEl.replaceChildren(...[
+    el("div",{class:"field"}, el("label",{for:"guest-name",text:"your name"}), nameIn),
+    el("div",{class:"field"}, el("div",{class:"legend",text:"drink"}),
+      radios("drink", drinks.map(d => ({value:d.id,label:d.name})), draft.drink, v => { draft.drink = v; drawForm(); })),
+    beans.length ? el("div",{class:"field"}, el("div",{class:"legend",text:"beans"}),
+      radios("bean", beans.map(b => ({value:b.id,label:b.name})), draft.bean, v => { draft.bean = v; drawSummary(); })) : null,
+    drink && drink.milk ? el("div",{class:"field"}, el("div",{class:"legend",text:"milk"}),
+      radios("milk", M.milks.map(m => ({value:m,label:m})), draft.milk, v => { draft.milk = v; drawSummary(); })) : null,
+    drink && drink.chocolate ? el("div",{class:"field"}, el("div",{class:"legend",text:"chocolate"}),
+      radios("choc", M.chocolates.map(c => ({value:c,label:c})), draft.choc, v => { draft.choc = v; drawSummary(); })) : null,
+    drink && drink.iced ? el("div",{class:"field"}, el("div",{class:"legend",text:"serve"}),
+      radios("serve", [{value:"Hot",label:"Hot"},{value:"Iced",label:"Iced"}], draft.serve, v => { draft.serve = v; drawSummary(); })) : null,
+    el("div",{class:"field"}, el("label",{for:"guest-note",text:"note for jamey (optional)"}), noteIn),
+    el("div",{class:"summary",id:"order-summary"}),
+    el("p",{class:"err",id:"order-err",hidden:true}),
+    el("button",{class:"btn solid",type:"submit",id:"send-btn",text:"send to the bar"})
+  ].filter(Boolean));
+  drawSummary();
+}
+
+function orderLine(){
+  const d = M.drinks.find(x => x.id === draft.drink);
+  if (!d) return null;
+  const parts = [ (draft.serve === "Iced" ? "Iced " : "") + d.name ];
+  if (draft.bean) parts.push(beanById[draft.bean].name);
+  if (d.milk && draft.milk) parts.push(draft.milk);
+  if (d.chocolate && draft.choc) parts.push(draft.choc);
+  return parts;
+}
+function drawSummary(){
+  const s = document.getElementById("order-summary");
+  if (!s) return;
+  const parts = orderLine();
+  s.replaceChildren(
+    el("div",{class:"label",text:"your order"}),
+    el("div",{class:"what",text: parts ? parts[0] : "Choose a drink"}),
+    el("div",{class:"how",text: parts ? parts.slice(1).join(" · ") || "Straight up" : "Then pick your beans."})
+  );
+  const btn = document.getElementById("send-btn");
+  if (btn) btn.disabled = !(parts && draft.name.trim());
+}
+
+function openOrder(drinkId){
+  if (drinkId){ draft.drink = drinkId; drawForm(); }
+  const target = document.getElementById("order");
+  if (target) target.scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block:"start"});
+  setTimeout(() => { const n = document.getElementById(draft.name ? "send-btn" : "guest-name"); if (n) n.focus({preventScroll:true}); }, 400);
+}
+
+async function sendOrder(){
+  const parts = orderLine();
+  const name = draft.name.trim().slice(0,24);
+  const err = document.getElementById("order-err");
+  if (!parts || !name){ err.textContent = "Add your name and choose a drink."; err.hidden = false; return; }
+  store("fu-name", name);
+  const line = parts.join(" · ");
+  const note = draft.note.trim().slice(0,120);
+  const btn = document.getElementById("send-btn");
+  btn.disabled = true; btn.textContent = "sending…";
+  try{
+    const res = await publish(ORDERS, name, line + (note ? "\nNote: " + note : ""));
+    showSent(res.id, name, line, note, true);
+  }catch(e){
+    showSent(null, name, line, note, false);
+  }
+}
+
+function showSent(id, name, line, note, ok){
+  const section = document.getElementById("order");
+  const status = el("div",{class:"status-step",id:"my-status",text: ok ? "in the queue" : "show this to jamey"});
+  section.replaceChildren(
+    el("div",{class:"sent"},
+      el("div",{class:"label",text: ok ? "order sent" : "couldn't reach the bar"}),
+      el("div",{class:"big",text: ok ? "Thanks, " + name + "." : "Show Jamey this ticket"}),
+      status,
+      el("div",{class:"ticket"}, el("div",{class:"who",text:name}), el("div",{text:line}), note ? el("div",{class:"by",text:note}) : null),
+      el("button",{class:"btn",type:"button",onclick:()=>{ draft.drink=null; draft.note=""; section.replaceChildren(el("h2",{text:"Place your order"}), el("p",{class:"sub",text:"Pick a drink and a bean. Your order goes straight to Jamey at the bar."}), orderForm()); openOrder(); },text:"order another"})
+    )
+  );
+  section.scrollIntoView({block:"start"});
+  if (ok && id){
+    connect();
+    listeners.push(() => {
+      const s = document.getElementById("my-status");
+      if (!s) return;
+      const st = stateOf(id);
+      s.textContent = STATUS_LABEL[st];
+      if (st !== "queued") s.style.color = st === "ready" ? "var(--ok)" : "var(--brass)";
+      if (st === "queued"){
+        const ahead = activeQueue().filter(o => stateOf(o.id) !== "ready" && o.time < (orders.get(id)||{time:Infinity}).time).length;
+        if (ahead > 0) s.textContent = "in the queue · " + ahead + " ahead of you";
+      }
+    });
+  }
+}
+
+/* ---------- TV BOARD ---------- */
+function renderBoard(){
+  document.body.className = "board";
+  app.className = "";
+  app.replaceChildren();
+  const left = el("div",null,
+    el("div",{class:"est label",text:"est. 2026 · the private coffee bar"}),
+    el("h1",{text:"Foreunder"}),
+    el("div",{class:"house",text:"The Coffee House"}),
+    el("h2",{text:"On the bar"})
+  );
+  const list = el("ul",{class:"drinks"});
+  M.drinks.filter(d => d.uses === "none" || beansFor(d).length).forEach(d => list.append(el("li",{class:"drink"}, el("div",{class:"n",text:d.name}), el("div",{class:"l",text:d.line}))));
+  left.append(list);
+
+  const mid = el("div",null, el("h2",{text:"In the grinder"}));
+  M.beans.filter(b => b.status !== "out").forEach(b => mid.append(
+    el("div",{class:"bboard-bean"},
+      el("h3",{text:b.name}),
+      el("div",{class:"meta",text:[b.roaster, b.origin, b.status === "press" ? "french press" : null].filter(Boolean).join(" · ")}),
+      el("p",{text: b.roasterNotes || b.take || ""})
+    )));
+
+  const qr = el("div",{class:"qrbox",id:"qr"});
+  const queue = el("div",{class:"queue",id:"queue"});
+  const right = el("div",null, el("h2",{text:"Order from your phone"}), qr, el("div",{class:"scan",text:"Scan to browse the beans and send your order to the bar."}), el("h2",{text:"The queue"}), queue, el("div",{class:"wait",id:"wait"}));
+  app.append(el("div",{class:"board-grid"}, left, mid, right));
+  makeQR(qr);
+  connect();
+  const draw = () => {
+    const q = activeQueue();
+    queue.replaceChildren(...(q.length ? q.slice(-8).map(o => {
+      const st = stateOf(o.id);
+      return el("div",{class:"q"}, el("div",null, el("div",{class:"nm",text:o.name}), el("div",{class:"dr",text:o.what})), el("div",{class:"st " + st,text:STATUS_LABEL[st]}));
+    }) : [el("div",{class:"dr",text:"No orders yet. Be the first."})]));
+    const waiting = q.filter(o => stateOf(o.id) !== "ready").length;
+    document.getElementById("wait").textContent = waiting ? "about " + waiting * M.minutesPerDrink + " min for a new order" : "";
+  };
+  listeners.push(draw); draw();
+  setInterval(draw, 30000);
+  keepAwake();
+}
+
+/* ---------- BAR VIEW (iPad) ---------- */
+function renderBar(){
+  document.body.className = "";
+  app.replaceChildren();
+  const conn = el("span",{class:"conn off",text:"connecting…"});
+  const showAll = el("input",{type:"checkbox",id:"show-ready"});
+  app.append(
+    el("div",{class:"barhead"}, el("h1",{text:"The Bar"}), conn),
+    el("p",{class:"sub",text:"New orders appear here. Tap Making when you start and Ready when it's on the bar. Guests see the change on their phones and the TV."}),
+    el("label",{for:"show-ready",class:"label",style:"display:flex;gap:8px;align-items:center;margin-bottom:12px"}, showAll, "show ready orders"),
+  );
+  const box = el("div",{class:"tickets"});
+  app.append(box,
+    el("div",{class:"help"},
+      el("p",null,"Phone alerts: install the free ntfy app and subscribe to the topic ", el("code",{text:ORDERS}), "."),
+      el("p",null,"Guest menu: ", el("code",{text:M.siteUrl}), " · TV board: ", el("code",{text:M.siteUrl + "#board"}))
+    )
+  );
+  showAll.addEventListener("change", draw);
+  connect();
+  async function setState(id, state, btn){
+    btn.disabled = true;
+    try{ await publish(STATUS, "status", JSON.stringify({id, state})); }
+    catch(e){ btn.disabled = false; btn.textContent = "retry"; }
+  }
+  function draw(){
+    conn.textContent = connected ? "live" : "reconnecting…";
+    conn.className = "conn " + (connected ? "on" : "off");
+    const all = [...orders.values()].sort((a,b) => a.time - b.time);
+    const rows = all.filter(o => showAll.checked || stateOf(o.id) !== "ready");
+    box.replaceChildren(...(rows.length ? rows.map(o => {
+      const st = stateOf(o.id);
+      return el("div",{class:"bt " + st},
+        el("div",{class:"who",text:o.name}),
+        el("div",{class:"what",text:o.what}),
+        o.note ? el("div",{class:"note",text:o.note}) : null,
+        el("div",{class:"ago",text:agoText(o.time) + " · " + STATUS_LABEL[st]}),
+        el("div",{class:"acts"},
+          st === "queued" ? el("button",{class:"btn",type:"button",text:"making",onclick:e=>setState(o.id,"making",e.currentTarget)}) : null,
+          st !== "ready" ? el("button",{class:"btn solid",type:"button",text:"ready",onclick:e=>setState(o.id,"ready",e.currentTarget)}) : null
+        )
+      );
+    }) : [el("div",{class:"empty",text:"No open orders. Quiet night at the bar."})]));
+  }
+  listeners.push(draw); draw();
+  setInterval(draw, 30000);
+  keepAwake();
+}
+
+function makeQR(node){
+  if (typeof qrcode !== "function"){ node.append(el("div",{style:"color:#111;font-size:14px;max-width:200px",text:M.siteUrl})); return; }
+  const q = qrcode(0, "M"); q.addData(M.siteUrl); q.make();
+  node.innerHTML = q.createSvgTag({cellSize:8, margin:0, scalable:true}).replace(/fill="white"/g,'fill="#f0e7d3"').replace(/fill="black"/g,'fill="#0f1c16"');
+}
+async function keepAwake(){ try{ if (navigator.wakeLock) await navigator.wakeLock.request("screen"); }catch(e){} }
+document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && /board|bar/.test(location.hash)) keepAwake(); });
+
+/* ---------- router ---------- */
+function route(){
+  listeners = [];
+  const h = location.hash.replace("#","");
+  if (h === "board") renderBoard();
+  else if (h === "bar") renderBar();
+  else { renderMenu(); if (h === "order") openOrder(); }
+}
+window.addEventListener("hashchange", () => location.reload());
+route();
+})();
+</script>
+</body>
+</html>
