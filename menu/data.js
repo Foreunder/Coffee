@@ -87,6 +87,7 @@ window.FOREUNDER = {
     { id: "espresso", name: "Espresso", uses: "espresso", milk: false, iced: false, line: "Double shot · 2 oz", note: "Straight up, the purest way to taste the bean." },
     { id: "americano", name: "Americano", uses: "espresso", milk: false, iced: true, line: "Double shot · hot water", note: "Long and clean, about 6 oz." },
     { id: "cortado", name: "Cortado", uses: "espresso", milk: true, iced: false, line: "Double shot · equal milk", note: "Small and strong, softened with a little steamed milk." },
+    { id: "cappuccino", name: "Cappuccino", uses: "espresso", milk: true, iced: false, line: "Double shot · airy foam", note: "Thick cap of foam over a strong double, about 6 oz." },
     { id: "flatwhite", name: "Flat White", uses: "espresso", milk: true, iced: false, line: "Double shot · silky milk", note: "The house favorite. Velvety, about 6 oz." },
     { id: "latte", name: "Latte", uses: "espresso", milk: true, iced: true, line: "Double shot · steamed milk", note: "Milder and milkier, about 10 oz." },
     { id: "mocha", name: "Mocha", uses: "espresso", milk: true, iced: false, chocolate: true, line: "Double shot · dark chocolate · milk", note: "Real dark chocolate melted in, no sugar added." },
