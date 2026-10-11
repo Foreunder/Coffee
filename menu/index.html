@@ -65,6 +65,8 @@ h2{font:400 26px/1.15 var(--display);letter-spacing:.04em;margin:0 0 4px;text-wr
 .drink{display:grid;grid-template-columns:1fr auto;gap:4px 14px;align-items:center;padding-block:14px;border-bottom:1px solid var(--rule)}
 .drink:first-child{border-top:1px solid var(--rule)}
 .drink .n{font:400 22px/1.2 var(--display);letter-spacing:.03em}
+.drink .sig{grid-column:1/-1;font:700 11px/1 var(--label);letter-spacing:.2em;text-transform:lowercase;color:var(--oxblood);background:var(--brass);justify-self:start;padding:5px 8px;border-radius:3px;margin-bottom:4px}
+.drink.signature .n{color:var(--brass)}
 .drink .l{font:500 13px/1.3 var(--label);letter-spacing:.08em;color:var(--brass);text-transform:lowercase}
 .drink .d{grid-column:1;color:var(--muted);font-size:15px;line-height:1.45;min-width:0}
 .drink button{grid-row:1/span 3;grid-column:2}
@@ -143,7 +145,7 @@ body.board{padding-block:0;overflow:hidden;font-size:clamp(16px,1.35vw,26px);hei
 .board .drinks .n{font-size:1.75vw}
 .board .drinks .l{font-size:.95vw}
 .board .drinks .d{display:none}
-.board .drink{padding-block:.75vw}
+.board .drink{padding-block:.55vw}
 .bboard-bean{border-bottom:1px solid var(--rule);padding-bottom:1vw;display:flex;flex-direction:column;gap:.3vw}
 .bboard-bean h3{font:400 1.8vw/1.15 var(--display);margin:0}
 .bboard-bean .meta{font:500 .95vw/1.3 var(--label);letter-spacing:.1em;color:var(--brass);text-transform:lowercase}
@@ -307,7 +309,8 @@ function renderMenu(){
   M.drinks.forEach(d => {
     const available = d.uses === "none" || beansFor(d).length > 0;
     if (!available) return;
-    list.append(el("li",{class:"drink"},
+    list.append(el("li",{class:"drink" + (d.signature ? " signature" : "")},
+      d.signature ? el("div",{class:"sig",text:"house signature"}) : null,
       el("div",{class:"n",text:d.name}),
       el("div",{class:"l",text:d.line}),
       el("div",{class:"d",text:d.note}),
@@ -525,7 +528,7 @@ function renderBoard(){
     el("h2",{text:"Drinks"})
   );
   const list = el("ul",{class:"drinks"});
-  M.drinks.filter(d => d.uses === "none" || beansFor(d).length).forEach(d => list.append(el("li",{class:"drink"}, el("div",{class:"n",text:d.name}), el("div",{class:"l",text:d.line}))));
+  M.drinks.filter(d => d.tv !== false && (d.uses === "none" || beansFor(d).length)).forEach(d => list.append(el("li",{class:"drink" + (d.signature ? " signature" : "")}, el("div",{class:"n",text:d.name}), el("div",{class:"l",text: d.signature ? "house signature · " + d.line : d.line}))));
   left.append(list);
 
   const mid = el("div",null, el("h2",{text:"Our coffees"}));
