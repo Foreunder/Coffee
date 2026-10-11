@@ -6,7 +6,7 @@ window.FOREUNDER = {
   // so it is long and random. Install the ntfy app and subscribe to it for phone alerts.
   ntfyTopic: "foreunder-bar-q7m4x2k9vz",
   minutesPerDrink: 4,
-  decafNote: "No decaf on the bar right now. Ask Jamey and he'll sort you out.",
+  decafNote: "No decaf right now. Ask Jamey and he'll sort you out.",
 
   beans: [
     {

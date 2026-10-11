@@ -230,7 +230,7 @@ function fmtDate(iso){ if(!iso) return null; const [y,m,d] = iso.split("-").map(
 function daysSince(iso){ if(!iso) return null; const [y,m,d] = iso.split("-").map(Number); const then = new Date(y,m-1,d); const now = new Date(); now.setHours(0,0,0,0); return Math.round((now - then)/86400000); }
 function store(k,v){ try{ if(v===undefined) return JSON.parse(localStorage.getItem(k)); localStorage.setItem(k, JSON.stringify(v)); }catch(e){ return null; } }
 function agoText(sec){ const m = Math.max(0, Math.round((Date.now()/1000 - sec)/60)); return m < 1 ? "just now" : m + " min ago"; }
-const STATUS_LABEL = { queued:"in the queue", making:"being made", ready:"ready at the bar" };
+const STATUS_LABEL = { queued:"in the queue", making:"being made", ready:"ready to pick up" };
 
 const beanById = Object.fromEntries(M.beans.map(b => [b.id, b]));
 const onBar = M.beans.filter(b => b.status === "bar");
@@ -292,7 +292,7 @@ function renderMenu(){
     el("header",{class:"crest"},
       el("img",{class:"logo",src:"logo.jpg",alt:"Foreunder Coffee House crest: crossed golf clubs, a steaming cup and a thistle"}),
       el("h1",{class:"sr",text:"Foreunder Coffee House"}),
-      el("div",{class:"est",text:"est. 2026 · the private coffee bar"}),
+      el("div",{class:"est",text:"est. 2026"}),
       el("div",{class:"rule"})
     )
   );
@@ -310,7 +310,7 @@ function renderMenu(){
     ));
   });
   app.append(el("section",{id:"drinks"},
-    el("h2",{text:"On the bar tonight"}),
+    el("h2",{text:"Drinks"}),
     el("p",{class:"sub",text:"Every espresso drink is a double shot, pulled to order."}),
     list,
     el("p",{class:"decaf",text:M.decafNote})
@@ -320,13 +320,13 @@ function renderMenu(){
   const beansWrap = el("div",{class:"beans"});
   [...M.beans].sort((a,b) => ({bar:0,press:1,out:2}[a.status] - {bar:0,press:1,out:2}[b.status])).forEach(b => beansWrap.append(beanCard(b)));
   app.append(el("section",{id:"beans"},
-    el("h2",{text:"The bean library"}),
-    el("p",{class:"sub",text:"What's in the grinder, where it came from, and what to expect."}),
+    el("h2",{text:"The coffees"}),
+    el("p",{class:"sub",text:"Every coffee in the house: where it's from and what to expect."}),
     beansWrap
   ));
 
   // Order
-  app.append(el("section",{id:"order"}, el("h2",{text:"Place your order"}), el("p",{class:"sub",text:"Pick a drink and a bean. Your order goes straight to Jamey at the bar."}), orderForm()));
+  app.append(el("section",{id:"order"}, el("h2",{text:"Place your order"}), el("p",{class:"sub",text:"Pick a drink and a bean. Your order goes straight to Jamey."}), orderForm()));
 
   app.append(el("footer",{text:"Foreunder · Omaha, Nebraska"}));
   const bar = el("div",{class:"orderbar"}, el("button",{class:"btn solid",type:"button",onclick:()=>openOrder(),text:"order a drink"}));
@@ -338,7 +338,7 @@ function renderMenu(){
 }
 
 function beanCard(b){
-  const pillText = { bar:"on the bar", press:"french press only", out:"finished" }[b.status];
+  const pillText = { bar:"available", press:"french press only", out:"finished" }[b.status];
   const facts = el("dl",{class:"facts"});
   const add = (k,v) => { if (v) facts.append(el("div",null, el("dt",{text:k}), el("dd",{text:v}))); };
   add("origin", b.origin);
@@ -429,7 +429,7 @@ function drawForm(){
     el("div",{class:"field"}, el("label",{for:"guest-note",text:"note for jamey (optional)"}), noteIn),
     el("div",{class:"summary",id:"order-summary"}),
     el("p",{class:"err",id:"order-err",hidden:true}),
-    el("button",{class:"btn solid",type:"submit",id:"send-btn",text:"send to the bar"})
+    el("button",{class:"btn solid",type:"submit",id:"send-btn",text:"send order"})
   ].filter(Boolean));
   drawSummary();
 }
@@ -486,11 +486,11 @@ function showSent(id, name, line, note, ok){
   const status = el("div",{class:"status-step",id:"my-status",text: ok ? "in the queue" : "show this to jamey"});
   section.replaceChildren(
     el("div",{class:"sent"},
-      el("div",{class:"label",text: ok ? "order sent" : "couldn't reach the bar"}),
+      el("div",{class:"label",text: ok ? "order sent" : "order didn't send"}),
       el("div",{class:"big",text: ok ? "Thanks, " + name + "." : "Show Jamey this ticket"}),
       status,
       el("div",{class:"ticket"}, el("div",{class:"who",text:name}), el("div",{text:line}), note ? el("div",{class:"by",text:note}) : null),
-      el("button",{class:"btn",type:"button",onclick:()=>{ draft.drink=null; draft.note=""; section.replaceChildren(el("h2",{text:"Place your order"}), el("p",{class:"sub",text:"Pick a drink and a bean. Your order goes straight to Jamey at the bar."}), orderForm()); openOrder(); },text:"order another"})
+      el("button",{class:"btn",type:"button",onclick:()=>{ draft.drink=null; draft.note=""; section.replaceChildren(el("h2",{text:"Place your order"}), el("p",{class:"sub",text:"Pick a drink and a bean. Your order goes straight to Jamey."}), orderForm()); openOrder(); },text:"order another"})
     )
   );
   section.scrollIntoView({block:"start"});
@@ -517,13 +517,13 @@ function renderBoard(){
   app.replaceChildren();
   const left = el("div",null,
     el("img",{class:"logo",src:"logo.jpg",alt:"Foreunder Coffee House"}),
-    el("h2",{text:"On the bar"})
+    el("h2",{text:"Drinks"})
   );
   const list = el("ul",{class:"drinks"});
   M.drinks.filter(d => d.uses === "none" || beansFor(d).length).forEach(d => list.append(el("li",{class:"drink"}, el("div",{class:"n",text:d.name}), el("div",{class:"l",text:d.line}))));
   left.append(list);
 
-  const mid = el("div",null, el("h2",{text:"In the grinder"}));
+  const mid = el("div",null, el("h2",{text:"The coffees"}));
   M.beans.filter(b => b.status !== "out").forEach(b => mid.append(
     el("div",{class:"bboard-bean"},
       el("h3",{text:b.name}),
@@ -533,7 +533,7 @@ function renderBoard(){
 
   const qr = el("div",{class:"qrbox",id:"qr"});
   const queue = el("div",{class:"queue",id:"queue"});
-  const right = el("div",null, el("h2",{text:"Order from your phone"}), qr, el("div",{class:"scan",text:"Scan to browse the beans and send your order to the bar."}), el("h2",{text:"The queue"}), queue, el("div",{class:"wait",id:"wait"}));
+  const right = el("div",null, el("h2",{text:"Order from your phone"}), qr, el("div",{class:"scan",text:"Scan to see the coffees and order."}), el("h2",{text:"The queue"}), queue, el("div",{class:"wait",id:"wait"}));
   app.append(el("div",{class:"board-grid"}, left, mid, right));
   makeQR(qr);
   connect();
@@ -558,8 +558,8 @@ function renderBar(){
   const conn = el("span",{class:"conn off",text:"connecting…"});
   const showAll = el("input",{type:"checkbox",id:"show-ready"});
   app.append(
-    el("div",{class:"barhead"}, el("h1",{text:"The Bar"}), conn),
-    el("p",{class:"sub",text:"New orders appear here. Tap Making when you start and Ready when it's on the bar. Guests see the change on their phones and the TV."}),
+    el("div",{class:"barhead"}, el("h1",{text:"Orders"}), conn),
+    el("p",{class:"sub",text:"New orders appear here. Tap Making when you start and Ready when it's done. Guests see the change on their phones and the TV."}),
     el("label",{for:"show-ready",class:"label",style:"display:flex;gap:8px;align-items:center;margin-bottom:12px"}, showAll, "show ready orders"),
   );
   const box = el("div",{class:"tickets"});
@@ -593,7 +593,7 @@ function renderBar(){
           st !== "ready" ? el("button",{class:"btn solid",type:"button",text:"ready",onclick:e=>setState(o.id,"ready",e.currentTarget)}) : null
         )
       );
-    }) : [el("div",{class:"empty",text:"No open orders. Quiet night at the bar."})]));
+    }) : [el("div",{class:"empty",text:"No open orders."})]));
   }
   listeners.push(draw); draw();
   setInterval(draw, 30000);
@@ -609,13 +609,13 @@ function renderTable(){
   const wait = el("div",{class:"wait"});
   app.append(el("div",{class:"tstand"},
     el("img",{class:"logo",src:"logo.jpg",alt:"Foreunder Coffee House"}),
-    el("div",{class:"side"}, qr, el("div",{class:"scan",text:"Scan to explore tonight's coffees and send your order to the bar."}), wait)
+    el("div",{class:"side"}, qr, el("div",{class:"scan",text:"Scan to see the coffees and order."}), wait)
   ));
   makeQR(qr);
   connect();
   const draw = () => {
     const n = activeQueue().filter(o => stateOf(o.id) !== "ready").length;
-    wait.textContent = n ? n + (n === 1 ? " drink" : " drinks") + " in the queue · about " + n * M.minutesPerDrink + " min" : "the bar is open";
+    wait.textContent = n ? n + (n === 1 ? " drink" : " drinks") + " in the queue · about " + n * M.minutesPerDrink + " min" : "order anytime";
   };
   listeners.push(draw); draw();
   setInterval(draw, 30000);
