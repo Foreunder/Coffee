@@ -172,6 +172,22 @@ body.board{padding-block:0;overflow:hidden;font-size:clamp(16px,1.35vw,26px);hei
 .help{color:var(--muted);font-size:15px;border-top:1px solid var(--rule);margin-top:24px;padding-top:16px}
 .help code{color:var(--ink);word-break:break-all}
 
+/* ===== Table stand (iPad on the pub table) ===== */
+body.table{overflow:hidden}
+.tstand{height:100vh;height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3.2vmin;padding:4vmin;text-align:center}
+.tstand .logo{width:46vmin;aspect-ratio:1;display:block;-webkit-mask-image:radial-gradient(circle,#000 62%,transparent 72%);mask-image:radial-gradient(circle,#000 62%,transparent 72%);margin:-3vmin 0 -4vmin}
+.tstand .qrbox{align-self:center;padding:2vmin}
+.tstand .qrbox svg{width:30vmin;height:30vmin}
+.tstand .scan{font-size:3.4vmin;max-width:70vmin}
+.tstand .wait{font-size:2.3vmin}
+@media (orientation:landscape){
+  .tstand{flex-direction:row;gap:7vmin}
+  .tstand .logo{width:58vmin;margin:0}
+  .tstand .side{display:flex;flex-direction:column;align-items:center;gap:3vmin}
+  .tstand .qrbox svg{width:38vmin;height:38vmin}
+}
+.tstand .side{display:flex;flex-direction:column;align-items:center;gap:3vmin}
+
 @media (min-width:760px){
   .beans{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
 }
@@ -550,7 +566,7 @@ function renderBar(){
   app.append(box,
     el("div",{class:"help"},
       el("p",null,"Phone alerts: install the free ntfy app and subscribe to the topic ", el("code",{text:ORDERS}), "."),
-      el("p",null,"Guest menu: ", el("code",{text:M.siteUrl}), " · TV board: ", el("code",{text:M.siteUrl + "#board"}))
+      el("p",null,"Guest menu: ", el("code",{text:M.siteUrl}), " · TV board: ", el("code",{text:M.siteUrl + "#board"}), " · Table iPad: ", el("code",{text:M.siteUrl + "#table"}))
     )
   );
   showAll.addEventListener("change", draw);
@@ -584,13 +600,35 @@ function renderBar(){
   keepAwake();
 }
 
+/* ---------- TABLE STAND (iPad on the pub table) ---------- */
+function renderTable(){
+  document.body.className = "table";
+  app.className = "";
+  app.replaceChildren();
+  const qr = el("div",{class:"qrbox"});
+  const wait = el("div",{class:"wait"});
+  app.append(el("div",{class:"tstand"},
+    el("img",{class:"logo",src:"logo.jpg",alt:"Foreunder Coffee House"}),
+    el("div",{class:"side"}, qr, el("div",{class:"scan",text:"Scan to explore tonight's coffees and send your order to the bar."}), wait)
+  ));
+  makeQR(qr);
+  connect();
+  const draw = () => {
+    const n = activeQueue().filter(o => stateOf(o.id) !== "ready").length;
+    wait.textContent = n ? n + (n === 1 ? " drink" : " drinks") + " in the queue · about " + n * M.minutesPerDrink + " min" : "the bar is open";
+  };
+  listeners.push(draw); draw();
+  setInterval(draw, 30000);
+  keepAwake();
+}
+
 function makeQR(node){
   if (typeof qrcode !== "function"){ node.append(el("div",{style:"color:#111;font-size:14px;max-width:200px",text:M.siteUrl})); return; }
   const q = qrcode(0, "M"); q.addData(M.siteUrl); q.make();
   node.innerHTML = q.createSvgTag({cellSize:8, margin:0, scalable:true}).replace(/fill="white"/g,'fill="#f0e7d3"').replace(/fill="black"/g,'fill="#0f1c16"');
 }
 async function keepAwake(){ try{ if (navigator.wakeLock) await navigator.wakeLock.request("screen"); }catch(e){} }
-document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && /board|bar/.test(location.hash)) keepAwake(); });
+document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && /board|bar|table/.test(location.hash)) keepAwake(); });
 
 /* ---------- router ---------- */
 function route(){
@@ -598,6 +636,7 @@ function route(){
   const h = location.hash.replace("#","");
   if (h === "board") renderBoard();
   else if (h === "bar") renderBar();
+  else if (h === "table") renderTable();
   else { renderMenu(); if (h === "order") openOrder(); }
 }
 window.addEventListener("hashchange", () => location.reload());
