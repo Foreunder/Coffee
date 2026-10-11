@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0f1c16">
 <meta property="og:title" content="Foreunder Coffee House">
-<meta property="og:description" content="See the coffees and order from your phone.">
+<meta property="og:description" content="See our coffees and order from your phone.">
 <meta property="og:image" content="https://foreunder.github.io/Coffee/menu/logo.jpg">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
@@ -325,7 +325,7 @@ function renderMenu(){
   const beansWrap = el("div",{class:"beans"});
   [...M.beans].sort((a,b) => ({bar:0,press:1,out:2}[a.status] - {bar:0,press:1,out:2}[b.status])).forEach(b => beansWrap.append(beanCard(b)));
   app.append(el("section",{id:"beans"},
-    el("h2",{text:"The coffees"}),
+    el("h2",{text:"Our coffees"}),
     el("p",{class:"sub",text:"Every coffee in the house: where it's from and what to expect."}),
     beansWrap
   ));
@@ -528,7 +528,7 @@ function renderBoard(){
   M.drinks.filter(d => d.uses === "none" || beansFor(d).length).forEach(d => list.append(el("li",{class:"drink"}, el("div",{class:"n",text:d.name}), el("div",{class:"l",text:d.line}))));
   left.append(list);
 
-  const mid = el("div",null, el("h2",{text:"The coffees"}));
+  const mid = el("div",null, el("h2",{text:"Our coffees"}));
   M.beans.filter(b => b.status !== "out").forEach(b => mid.append(
     el("div",{class:"bboard-bean"},
       el("h3",{text:b.name}),
@@ -538,7 +538,7 @@ function renderBoard(){
 
   const qr = el("div",{class:"qrbox",id:"qr"});
   const queue = el("div",{class:"queue",id:"queue"});
-  const right = el("div",null, el("h2",{text:"Order from your phone"}), qr, el("div",{class:"scan",text:"Scan to see the coffees and order."}), el("h2",{text:"The queue"}), queue, el("div",{class:"wait",id:"wait"}));
+  const right = el("div",null, el("h2",{text:"Order from your phone"}), qr, el("div",{class:"scan",text:"Scan to see our coffees and order."}), el("h2",{text:"The queue"}), queue, el("div",{class:"wait",id:"wait"}));
   app.append(el("div",{class:"board-grid"}, left, mid, right));
   makeQR(qr);
   connect();
@@ -614,7 +614,7 @@ function renderTable(){
   const wait = el("div",{class:"wait"});
   app.append(el("div",{class:"tstand"},
     el("img",{class:"logo",src:"logo.jpg",alt:"Foreunder Coffee House"}),
-    el("div",{class:"side"}, qr, el("div",{class:"scan",text:"Scan to see the coffees and order."}), wait)
+    el("div",{class:"side"}, qr, el("div",{class:"scan",text:"Scan to see our coffees and order."}), wait)
   ));
   makeQR(qr);
   connect();
