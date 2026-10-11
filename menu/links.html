@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Foreunder Links">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="icon" href="icon.png">
+<title>Foreunder Links</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=Alegreya:wght@400;500&family=Alegreya+Sans+SC:wght@500&display=swap">
+<style>
+:root{--bg:#0f1c16;--panel:#16271f;--ink:#f0e7d3;--muted:#b9b09b;--brass:#c9a24f;--rule:#2b3d33;--oxblood:#7a2430}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.4 "Alegreya",Georgia,serif}
+.band{height:8px;background:repeating-linear-gradient(90deg,var(--bg) 0 26px,var(--brass) 26px 28px,var(--bg) 28px 48px,var(--oxblood) 48px 54px)}
+main{max-width:640px;margin:0 auto;padding:16px 16px 48px}
+header{display:flex;align-items:center;gap:14px;padding:12px 0 8px}
+header img{width:64px;height:64px;border-radius:50%}
+h1{font:400 28px/1.05 "IM Fell English SC",Georgia,serif;letter-spacing:.04em;margin:0}
+.sub{color:var(--muted);font-size:15px;margin:2px 0 0}
+h2{font:500 13px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.16em;text-transform:lowercase;color:var(--brass);margin:28px 0 10px}
+.l{display:grid;grid-template-columns:1fr auto;gap:2px 12px;align-items:center;background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:12px 14px;margin-bottom:8px}
+.l a{color:var(--ink);font-weight:500;font-size:18px;text-decoration:none}
+.l a::after{content:" ›";color:var(--brass)}
+.l .d{grid-column:1;color:var(--muted);font-size:14px}
+.l code{grid-column:1;color:var(--brass);font:12px/1.3 ui-monospace,Menlo,monospace;word-break:break-all}
+.l button{grid-column:2;grid-row:1/span 3;border:1px solid var(--brass);background:transparent;color:var(--brass);font:500 12px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.12em;text-transform:lowercase;border-radius:999px;padding:10px 14px;min-height:40px;cursor:pointer}
+.note{color:var(--muted);font-size:14px;border-top:1px solid var(--rule);margin-top:28px;padding-top:14px}
+</style>
+</head>
+<body>
+<div class="band"></div>
+<main>
+<header>
+  <img src="logo.jpg" alt="">
+  <div><h1>Foreunder Links</h1><p class="sub">Everything for the coffee bar in one place.</p></div>
+</header>
+
+<h2>For guests</h2>
+<div class="l"><a href="https://foreunder.github.io/Coffee/menu/">Guest menu &amp; ordering</a><span class="d">What the QR codes open. Beans, drinks, send an order.</span><code>foreunder.github.io/Coffee/menu/</code></div>
+
+<h2>Screens</h2>
+<div class="l"><a href="https://foreunder.github.io/Coffee/menu/table.html">iPad mini table card</a><span class="d">Crest + QR. Static, works on any iPad.</span><code>foreunder.github.io/Coffee/menu/table.html</code></div>
+<div class="l"><a href="https://foreunder.github.io/Coffee/menu/#board">TV menu board</a><span class="d">Drinks, beans, QR and live queue for the big TV.</span><code>foreunder.github.io/Coffee/menu/#board</code></div>
+<div class="l"><a href="https://foreunder.github.io/Coffee/menu/#table">Table card with live queue</a><span class="d">Same as the table card plus "2 drinks in the queue". Newer iPads only.</span><code>foreunder.github.io/Coffee/menu/#table</code></div>
+
+<h2>Behind the bar</h2>
+<div class="l"><a href="https://foreunder.github.io/Coffee/menu/#bar">Order queue</a><span class="d">Incoming orders. Tap Making, then Ready.</span><code>foreunder.github.io/Coffee/menu/#bar</code></div>
+<div class="l"><a href="https://ntfy.sh/foreunder-bar-q7m4x2k9vz">Order alerts (ntfy)</a><span class="d">Subscribe to this topic in the ntfy app so every order buzzes your phone.</span><code>foreunder-bar-q7m4x2k9vz</code></div>
+<div class="l"><a href="http://gaggimate.local">GaggiMate</a><span class="d">Machine dashboard. Home Wi-Fi only.</span><code>http://gaggimate.local</code></div>
+
+<h2>Print</h2>
+<div class="l"><a href="https://foreunder.github.io/Coffee/menu/card.html">4×6 table card</a><span class="d">Print at 100% on card stock for the walnut frame.</span><code>foreunder.github.io/Coffee/menu/card.html</code></div>
+<div class="l"><a href="https://foreunder.github.io/Coffee/menu/tag.html">Golf-ball tag inserts</a><span class="d">Round QR inserts in 2.25, 2.5 and 2.75 in.</span><code>foreunder.github.io/Coffee/menu/tag.html</code></div>
+
+<h2>Logs &amp; trackers</h2>
+<div class="l"><a href="https://claude.ai/artifact/5f1QndavtLYuimXLnqTEp2">Shot Log (live)</a><span class="d">Every pull, dial-in references and beans.</span><code>claude.ai/artifact/5f1QndavtLYuimXLnqTEp2</code></div>
+<div class="l"><a href="https://foreunder.github.io/Coffee/">Shot Log backup</a><span class="d">GitHub mirror of the log. Works without signing in.</span><code>foreunder.github.io/Coffee/</code></div>
+<div class="l"><a href="https://docs.google.com/spreadsheets/d/1Zvr2YNlzn-xh26AJtMd0dB4RmBjImDFNNrr1j65wLgk/edit">Coffee Bean Tracker</a><span class="d">Google Sheet: every bag, roast date, status.</span><code>docs.google.com · Coffee Bean Tracker</code></div>
+<div class="l"><a href="https://docs.google.com/spreadsheets/d/1miE7HEUi2zbofa2p0V2gUbDxs36oWpNv7a7ucx8BZXQ/edit">Purchase &amp; Spend Tracker</a><span class="d">Google Sheet: espresso build and pub room spend.</span><code>docs.google.com · Purchase &amp; Spend Tracker</code></div>
+
+<h2>Admin</h2>
+<div class="l"><a href="https://github.com/Foreunder/Coffee">GitHub repo</a><span class="d">Source for the menu and the log mirror.</span><code>github.com/Foreunder/Coffee</code></div>
+
+<p class="note">Save this page: open it in Safari, tap Share, then Add to Home Screen. Pages on the Wi-Fi only (GaggiMate) won't open away from home.</p>
+</main>
+<script>
+document.querySelectorAll(".l").forEach(function(row){
+  var a=row.querySelector("a"); var b=document.createElement("button"); b.type="button"; b.textContent="copy";
+  b.addEventListener("click",function(){
+    var done=function(){b.textContent="copied";setTimeout(function(){b.textContent="copy"},1500)};
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(a.href).then(done,function(){})}
+  });
+  row.appendChild(b);
+});
+</script>
+</body>
+</html>

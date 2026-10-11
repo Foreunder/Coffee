@@ -18,6 +18,10 @@ The live log is the master copy; this repo is updated by Claude after each logge
 - `menu/` – guest menu and ordering for the home coffee bar: https://foreunder.github.io/Coffee/menu/
   - `#board` – TV menu board with QR code and live order queue
   - `#bar` – bar iPad view: incoming orders, mark Making / Ready
+  - `#table` – table iPad with live queue line
+  - `table.html` – static table card (old iPads)
+  - `card.html` / `tag.html` – print: 4×6 card, golf-ball tag inserts
+  - `links.html` – every Foreunder link in one page
   - `card.html` – printable 4×6 QR table card
 - `menu/data.js` – beans and drinks; Claude keeps it current
 - Orders relay through ntfy.sh (no account). Topic is in `data.js`.
