@@ -328,7 +328,7 @@ function renderMenu(){
   // Order
   app.append(el("section",{id:"order"}, el("h2",{text:"Place your order"}), el("p",{class:"sub",text:"Pick a drink and a bean. Your order goes straight to Jamey."}), orderForm()));
 
-  app.append(el("footer",{text:"Foreunder · Omaha, Nebraska"}));
+  app.append(el("footer",null, el("a",{href:"about.html",text:"Why a thistle? Read our story"}), el("div",{text:"Foreunder · Omaha, Nebraska"})));
   const bar = el("div",{class:"orderbar"}, el("button",{class:"btn solid",type:"button",onclick:()=>openOrder(),text:"order a drink"}));
   app.append(bar);
   // Hide the floating button once the order form is on screen.
