@@ -65,11 +65,12 @@ h2{font:400 26px/1.15 var(--display);letter-spacing:.04em;margin:0 0 4px;text-wr
 .drink{display:grid;grid-template-columns:1fr auto;gap:4px 14px;align-items:center;padding-block:14px;border-bottom:1px solid var(--rule)}
 .drink:first-child{border-top:1px solid var(--rule)}
 .drink .n{font:400 22px/1.2 var(--display);letter-spacing:.03em}
-.drink .sig{grid-column:1/-1;font:700 11px/1 var(--label);letter-spacing:.2em;text-transform:lowercase;color:var(--oxblood);background:var(--brass);justify-self:start;padding:5px 8px;border-radius:3px;margin-bottom:4px}
+.drink .sig{grid-column:1;font:700 11px/1 var(--label);letter-spacing:.2em;text-transform:lowercase;color:var(--oxblood);background:var(--brass);justify-self:start;padding:5px 8px;border-radius:3px;margin-bottom:4px}
 .drink.signature .n{color:var(--brass)}
 .drink .l{font:500 13px/1.3 var(--label);letter-spacing:.08em;color:var(--brass);text-transform:lowercase}
 .drink .d{grid-column:1;color:var(--muted);font-size:15px;line-height:1.45;min-width:0}
 .drink button{grid-row:1/span 3;grid-column:2}
+.drink.signature button{grid-row:1/span 4}
 .btn{border:1px solid var(--brass);background:transparent;color:var(--brass);font:700 14px/1 var(--label);letter-spacing:.12em;text-transform:lowercase;padding:11px 16px;border-radius:999px;cursor:pointer;min-height:44px}
 .btn:hover{background:rgba(201,162,79,.12)}
 .btn.solid{background:var(--brass);color:#1a1408}
