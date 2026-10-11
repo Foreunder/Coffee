@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0f1c16">
 <title>Foreunder Coffee House</title>
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="icon" href="icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=IM+Fell+English:ital@0;1&family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Alegreya+Sans+SC:wght@500;700&display=swap">
@@ -46,6 +48,9 @@ header.crest{text-align:center;padding-block:28px 20px;display:flex;flex-directi
 .crest .house{font:italic 400 20px/1.2 var(--italic);color:var(--brass)}
 .crest .rule{width:120px;height:1px;background:var(--rule);margin-top:10px}
 
+.crest .logo{width:min(320px,78vw);aspect-ratio:1;display:block;-webkit-mask-image:radial-gradient(circle at 50% 50%,#000 62%,transparent 72%);mask-image:radial-gradient(circle at 50% 50%,#000 62%,transparent 72%)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.board .logo{width:17vw;aspect-ratio:1;display:block;margin:-1vw 0 -.5vw -1vw;-webkit-mask-image:radial-gradient(circle,#000 62%,transparent 72%);mask-image:radial-gradient(circle,#000 62%,transparent 72%)}
 section{padding-block:22px}
 h2{font:400 26px/1.15 var(--display);letter-spacing:.04em;margin:0 0 4px;text-wrap:balance}
 .sub{color:var(--muted);margin:0 0 16px;font-style:italic}
@@ -269,9 +274,9 @@ function renderMenu(){
   app.replaceChildren();
   app.append(
     el("header",{class:"crest"},
+      el("img",{class:"logo",src:"logo.jpg",alt:"Foreunder Coffee House crest: crossed golf clubs, a steaming cup and a thistle"}),
+      el("h1",{class:"sr",text:"Foreunder Coffee House"}),
       el("div",{class:"est",text:"est. 2026 · the private coffee bar"}),
-      el("h1",{text:"Foreunder"}),
-      el("div",{class:"house",text:"The Coffee House · A good round starts here"}),
       el("div",{class:"rule"})
     )
   );
@@ -495,9 +500,7 @@ function renderBoard(){
   app.className = "";
   app.replaceChildren();
   const left = el("div",null,
-    el("div",{class:"est label",text:"est. 2026 · the private coffee bar"}),
-    el("h1",{text:"Foreunder"}),
-    el("div",{class:"house",text:"The Coffee House"}),
+    el("img",{class:"logo",src:"logo.jpg",alt:"Foreunder Coffee House"}),
     el("h2",{text:"On the bar"})
   );
   const list = el("ul",{class:"drinks"});
