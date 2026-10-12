@@ -69,6 +69,21 @@ h2{font:400 26px/1.15 "IM Fell English SC",Georgia,serif;color:var(--brass);marg
 .foot{color:var(--muted);font-size:14px;border-top:1px solid var(--rule);margin-top:28px;padding-top:12px}
 .reset{background:none;border:1px solid var(--rule);color:var(--muted);border-radius:999px;padding:8px 14px;font:500 13px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.1em;cursor:pointer;margin-top:10px}
 @media (max-width:420px){td.sc{width:48px}.mk{width:32px;height:32px;font-size:17px}td.hole{width:34px;font-size:19px}.cf .nt{display:none}}
+.rt{display:inline-block;font:700 11px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.12em;text-transform:lowercase;border-radius:999px;padding:6px 9px;white-space:nowrap;border:1.5px solid currentColor}
+.rt.e{background:var(--oxblood);border-color:var(--oxblood);color:var(--card)}
+.rt.b{color:var(--oxblood)}
+.rt.p{color:var(--green)}
+.rt.g{color:var(--cardmuted)}
+.rt.d{color:var(--cardmuted);border-style:dotted}
+.rt.n{color:var(--cardrule);border-style:dashed}
+.you{position:relative;display:inline-block}
+.you select{position:absolute;inset:0;opacity:0;width:100%;height:100%;font-size:16px;cursor:pointer}
+td.sc{width:82px}
+.key .rt{justify-self:start;background:var(--card)}
+.key .rt.e{background:var(--oxblood)}
+.key div{grid-template-columns:118px 1fr!important}
+.key .rt.n{display:none}
+.sum .v{font-size:22px!important}
 </style>
 </head>
 <body>
@@ -77,15 +92,14 @@ h2{font:400 26px/1.15 "IM Fell English SC",Georgia,serif;color:var(--brass);marg
   <a class="back" id="back" href="./">‹ back to the menu</a>
   <header>
     <img src="logo.jpg" alt="">
-    <div><h1>The Scorecard</h1><p class="kicker">Every coffee we've played. Par is 4 on every hole; the goal is four under.</p></div>
+    <div><h1>The Scorecard</h1><p class="kicker">Every coffee we've played, rated in golf terms. A birdie beats a par.</p></div>
   </header>
 
   <div class="card">
     <div class="top"><b>Foreunder Coffee House</b><span>the coffee round</span></div>
     <table>
-      <thead><tr><th>hole</th><th class="l">coffee</th><th>par</th><th>jamey</th><th>you</th></tr></thead>
+      <thead><tr><th>hole</th><th class="l">coffee</th><th>jamey</th><th>you</th></tr></thead>
       <tbody id="rows"></tbody>
-      <tfoot><tr><td colspan="2" style="text-align:left;padding-left:12px">total</td><td class="tot" id="tPar"></td><td class="tot" id="tJ"></td><td class="tot" id="tY"></td></tr></tfoot>
     </table>
   </div>
 
@@ -96,14 +110,14 @@ h2{font:400 26px/1.15 "IM Fell English SC",Georgia,serif;color:var(--brass);marg
 
   <h2>How to Score</h2>
   <div class="key">
-    <div><span class="mk e">2</span><p style="margin:0"><b>Eagle</b><br><span>One of the best cups you've had.</span></p></div>
-    <div><span class="mk b">3</span><p style="margin:0"><b>Birdie</b><br><span>Really good. You'd buy it again.</span></p></div>
-    <div><span class="mk n" style="color:var(--cardink)">4</span><p style="margin:0"><b>Par</b><br><span>Solid and enjoyable.</span></p></div>
-    <div><span class="mk g">5</span><p style="margin:0"><b>Bogey</b><br><span>Fine, but you wouldn't go back for it.</span></p></div>
-    <div><span class="mk d">6</span><p style="margin:0"><b>Double bogey</b><br><span>Not for you.</span></p></div>
+    <div><span class="rt e">eagle</span><p style="margin:0"><span>One of the best cups you've had.</span></p></div>
+    <div><span class="rt b">birdie</span><p style="margin:0"><span>Really good. You'd buy it again.</span></p></div>
+    <div><span class="rt p">par</span><p style="margin:0"><span>Solid and enjoyable.</span></p></div>
+    <div><span class="rt g">bogey</span><p style="margin:0"><span>Fine, but you wouldn't go back for it.</span></p></div>
+    <div><span class="rt d">double bogey</span><p style="margin:0"><span>Not for you.</span></p></div>
   </div>
 
-  <p class="foot">Tap the box in the "you" column to score a coffee you've tried. Your card stays on your phone. A new hole is added every time a new bag goes on.<br><button class="reset" id="reset" type="button">clear my card</button></p>
+  <p class="foot">Tap "tap to score" next to any coffee you've tried. Your card stays on your phone. A new hole is added every time a new bag goes on.<br><button class="reset" id="reset" type="button">clear my card</button></p>
 </main>
 <script src="data.js"></script>
 <script src="../data/shots.js" onerror="window.SHOTS=[]"></script>
@@ -115,9 +129,10 @@ h2{font:400 26px/1.15 "IM Fell English SC",Georgia,serif;color:var(--brass);marg
     for (var k in attrs){ if(k==="text") e.textContent=attrs[k]; else e.setAttribute(k,attrs[k]); }
     for (var i=2;i<arguments.length;i++){ var c=arguments[i]; if(c==null) continue; e.append(c.nodeType?c:document.createTextNode(c)); }
     return e; }
-  function cls(n){ return n==null ? "n" : n<=2 ? "e" : n===3 ? "b" : n===4 ? "p" : n===5 ? "g" : "d"; }
-  function mark(n){ return el("span",{class:"mk "+cls(n)}, n==null ? "·" : String(n)); }
-  function toPar(t, holes){ var d = t - holes*PAR; return d===0 ? "Even par" : Math.abs(d) + (d<0 ? " under" : " over"); }
+  var R = {2:["e","eagle"],3:["b","birdie"],4:["p","par"],5:["g","bogey"],6:["d","double bogey"]};
+  function tag(n){ var r = R[n]; return el("span",{class:"rt " + (r ? r[0] : "n")}, r ? r[1] : "tap to score"); }
+  function tally(list){ var c = {}; list.forEach(function(n){ c[n]=(c[n]||0)+1; });
+    return [2,3,4,5,6].filter(function(n){ return c[n]; }).map(function(n){ var w=R[n][1]; return c[n] + " " + (c[n]>1 ? (w==="par"?"pars":w==="double bogey"?"double bogeys":w+"s") : w); }).join(" · "); }
   var mine = {}; try { mine = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch(e) {}
   function save(){ try { localStorage.setItem(KEY, JSON.stringify(mine)); } catch(e) {} }
 
@@ -127,15 +142,15 @@ h2{font:400 26px/1.15 "IM Fell English SC",Georgia,serif;color:var(--brass);marg
 
   function draw(){
     var rows = document.getElementById("rows"); rows.replaceChildren();
-    var tJ=0, nJ=0, tY=0, nY=0;
+    var js = [], ys = [];
     holes.forEach(function(b, i){
       var you = mine[b.id] != null ? +mine[b.id] : null;
-      if (b.score != null){ tJ += b.score; nJ++; }
-      if (you != null){ tY += you; nY++; }
-      var sel = el("select",{"aria-label":"Your score for " + b.name},
-        el("option",{value:""},"Not played"),
-        el("option",{value:"2"},"2 · Eagle"), el("option",{value:"3"},"3 · Birdie"), el("option",{value:"4"},"4 · Par"),
-        el("option",{value:"5"},"5 · Bogey"), el("option",{value:"6"},"6 · Double bogey"));
+      if (b.score != null) js.push(b.score);
+      if (you != null) ys.push(you);
+      var sel = el("select",{"aria-label":"Your rating for " + b.name},
+        el("option",{value:""},"Not tried"),
+        el("option",{value:"2"},"Eagle: one of the best"), el("option",{value:"3"},"Birdie: really good"), el("option",{value:"4"},"Par: solid"),
+        el("option",{value:"5"},"Bogey: wouldn't go back"), el("option",{value:"6"},"Double bogey: not for me"));
       sel.value = you == null ? "" : String(you);
       sel.addEventListener("change", function(){ if (sel.value === "") delete mine[b.id]; else mine[b.id] = +sel.value; save(); draw(); });
       rows.append(el("tr",null,
@@ -144,18 +159,14 @@ h2{font:400 26px/1.15 "IM Fell English SC",Georgia,serif;color:var(--brass);marg
           el("div",{class:"nm"}, b.name, b.status !== "out" ? el("span",{class:"oh"},"on hand") : null),
           el("div",{class:"mt"}, [b.roaster, b.origin && b.origin !== "Blend" ? b.origin : b.type].filter(Boolean).join(" · ")),
           b.scoreNote ? el("div",{class:"nt"}, b.scoreNote) : null),
-        el("td",{class:"par"}, String(PAR)),
-        el("td",{class:"sc"}, mark(b.score)),
-        el("td",{class:"sc"}, el("span",{class:"you"}, mark(you), sel))
+        el("td",{class:"sc"}, b.score != null ? tag(b.score) : el("span",{class:"rt n"},"not yet")),
+        el("td",{class:"sc"}, el("span",{class:"you"}, tag(you), sel))
       ));
     });
-    document.getElementById("tPar").textContent = holes.length * PAR;
-    document.getElementById("tJ").textContent = nJ ? tJ : "–";
-    document.getElementById("tY").textContent = nY ? tY : "–";
-    document.getElementById("sJ").textContent = nJ ? toPar(tJ, nJ) : "No scores yet";
-    document.getElementById("sJs").textContent = nJ + " of " + holes.length + " holes scored";
-    document.getElementById("sY").textContent = nY ? toPar(tY, nY) : "Tee it up";
-    document.getElementById("sYs").textContent = nY ? nY + " of " + holes.length + " holes played" : "Score the coffees you've tried.";
+    document.getElementById("sJ").textContent = js.length ? tally(js) : "No ratings yet";
+    document.getElementById("sJs").textContent = js.length + " of " + holes.length + " coffees rated";
+    document.getElementById("sY").textContent = ys.length ? tally(ys) : "Tee it up";
+    document.getElementById("sYs").textContent = ys.length ? ys.length + " of " + holes.length + " coffees rated" : "Rate the coffees you've tried.";
   }
   document.getElementById("reset").addEventListener("click", function(){ mine = {}; save(); draw(); });
   draw();
