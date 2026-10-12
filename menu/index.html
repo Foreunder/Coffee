@@ -174,6 +174,33 @@ body.noorder{padding-bottom:32px}
 .board .browse .qrbox svg{width:calc(17*var(--u));height:calc(17*var(--u))}
 .board .browse .tagline{font:italic 400 calc(1.9*var(--u))/1.2 var(--italic);color:var(--brass);margin-top:calc(2*var(--u))}
 .board .browse .tagline2{font:500 calc(1*var(--u))/1.2 var(--label);letter-spacing:.16em;text-transform:lowercase;color:var(--muted)}
+/* ===== TV menu board (descriptive) ===== */
+body.mb{display:flex;flex-direction:column}
+.mb-head{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:calc(2.5*var(--u));padding:calc(1.2*var(--u)) calc(3*var(--u)) calc(.4*var(--u))}
+.mb-crest{width:calc(9.5*var(--u));aspect-ratio:1;display:block;-webkit-mask-image:radial-gradient(circle,#000 66%,transparent 76%);mask-image:radial-gradient(circle,#000 66%,transparent 76%)}
+.mb-tag{font:italic 400 calc(2.4*var(--u))/1.1 var(--italic);color:var(--brass)}
+.mb-sub{font:500 calc(1*var(--u))/1.3 var(--label);letter-spacing:.14em;text-transform:lowercase;color:var(--muted);margin-top:calc(.6*var(--u))}
+.mb-qr{display:flex;align-items:center;gap:calc(1.2*var(--u))}
+.mb-qr .qrbox{padding:calc(.6*var(--u))}
+.mb-qr .qrbox svg{width:calc(7.5*var(--u));height:calc(7.5*var(--u))}
+.mb-scan{font:italic 400 calc(1.3*var(--u))/1.3 var(--italic);max-width:calc(10*var(--u))}
+.mb-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:calc(3.5*var(--u));padding:0 calc(3*var(--u)) calc(1*var(--u));flex:1;min-height:0;overflow:hidden}
+.mb h2{font-size:calc(1.8*var(--u));color:var(--brass);margin:0 0 calc(.3*var(--u))}
+.mb-row{display:flex;justify-content:space-between;align-items:baseline;gap:calc(1*var(--u))}
+.mb-drink{border-top:1px solid var(--rule);padding:calc(.38*var(--u)) 0}
+.mb-drink .n{font:400 calc(1.55*var(--u))/1.15 var(--display);letter-spacing:.03em;white-space:nowrap}
+.mb-drink .l{font:500 calc(.82*var(--u))/1.2 var(--label);letter-spacing:.1em;color:var(--brass);text-transform:lowercase;text-align:right}
+.mb-drink .d{color:var(--muted);font-size:calc(1.02*var(--u));line-height:1.3;margin-top:calc(.15*var(--u))}
+.mb-bean{border-top:1px solid var(--rule);padding:calc(.6*var(--u)) 0 calc(.5*var(--u))}
+.mb-bean h3{font:400 calc(1.75*var(--u))/1.1 var(--display);margin:0}
+.mb-pill{font:700 calc(.75*var(--u))/1 var(--label);letter-spacing:.12em;text-transform:lowercase;color:var(--brass);border:1px solid var(--brass);border-radius:999px;padding:calc(.35*var(--u)) calc(.7*var(--u))}
+.mb-bean .meta{font:500 calc(.85*var(--u))/1.3 var(--label);letter-spacing:.1em;color:var(--brass);text-transform:lowercase;margin-top:calc(.3*var(--u))}
+.mb-bean .meta2{font:500 calc(.8*var(--u))/1.3 var(--label);letter-spacing:.1em;color:var(--muted);text-transform:lowercase}
+.mb-bean .notes{font-size:calc(1.08*var(--u));margin-top:calc(.35*var(--u))}
+.mb-bean .k{font:500 calc(.78*var(--u))/1 var(--label);letter-spacing:.12em;text-transform:lowercase;color:var(--brass)}
+.mb-bean .expect{margin:calc(.35*var(--u)) 0 0;font-size:calc(1.05*var(--u));line-height:1.35;color:var(--ink)}
+.mb-bean .take{margin:calc(.35*var(--u)) 0 0;font:italic 400 calc(1.1*var(--u))/1.3 var(--italic);color:var(--muted);border-left:2px solid var(--oxblood);padding-left:calc(.8*var(--u))}
+.mb-bean .take .k{font-style:normal}
 /* ===== Bar view ===== */
 .alertbtn{margin:0 0 14px}
 .newbanner{position:fixed;inset:auto 16px 20px 16px;background:var(--brass);color:#1a1408;border-radius:10px;padding:18px 20px;box-shadow:0 10px 30px rgba(0,0,0,.5);display:none;flex-direction:column;gap:4px;z-index:20;cursor:pointer;font-size:18px}
@@ -591,7 +618,46 @@ function showSent(id, name, line, note, ok){
 }
 
 /* ---------- TV BOARD ---------- */
+/* ---------- TV MENU BOARD (simple version): full descriptions, a conversation piece ---------- */
+function renderMenuBoard(){
+  document.body.className = "board mb";
+  app.className = "";
+  app.replaceChildren();
+  const head = el("header",{class:"mb-head"},
+    el("img",{class:"mb-crest",src:"logo.jpg",alt:"Foreunder Coffee House"}),
+    el("div",{class:"mb-title"}, el("div",{class:"mb-tag",text:"A good round starts here."}), el("div",{class:"mb-sub",text:"Every espresso drink is a double shot, pulled to order."})),
+    el("div",{class:"mb-qr"}, el("div",{class:"qrbox",id:"qr"}), el("div",{class:"mb-scan",text:"Scan to read it on your phone."}))
+  );
+  const drinks = el("section",{class:"mb-drinks"}, el("h2",{text:"Drinks"}));
+  M.drinks.filter(d => d.tv !== false && (d.uses === "none" || beansFor(d).length)).forEach(d => drinks.append(
+    el("div",{class:"mb-drink"},
+      el("div",{class:"mb-row"}, el("span",{class:"n",text:d.name}), el("span",{class:"l",text:d.line})),
+      el("div",{class:"d",text:d.note})
+    )));
+  const coffees = el("section",{class:"mb-coffees"}, el("h2",{text:"Our coffees"}));
+  M.beans.filter(b => b.status !== "out").sort((a,b) => ({bar:0,press:1}[a.status] - {bar:0,press:1}[b.status])).forEach(b => {
+    const meta = [b.roaster, b.origin !== "Blend" ? b.origin : b.type, b.process !== "Blended" ? b.process : null, b.roastLevel ? b.roastLevel + " roast" : null].filter(Boolean).join(" · ");
+    coffees.append(el("article",{class:"mb-bean"},
+      el("div",{class:"mb-row"}, el("h3",{text:b.name}), b.status === "press" ? el("span",{class:"mb-pill",text:"french press"}) : null),
+      el("div",{class:"meta",text:meta}),
+      b.roastDate ? el("div",{class:"meta2",text:"Roasted " + fmtDate(b.roastDate) + " · " + daysSince(b.roastDate) + " days off roast"}) : null,
+      b.roasterNotes ? el("div",{class:"notes"}, el("span",{class:"k",text:"tasting notes "}), b.roasterNotes) : null,
+      b.expect ? el("p",{class:"expect",text:b.expect}) : null,
+      b.take ? el("p",{class:"take"}, el("span",{class:"k",text:"Jamey's take "}), b.take) : null
+    ));
+  });
+  app.append(head, el("div",{class:"mb-grid"}, drinks, coffees));
+  makeQR(document.getElementById("qr"));
+  keepAwake();
+  const fs = el("button",{type:"button",text:"full screen",onclick:()=>{ const d=document.documentElement; (d.requestFullscreen||d.webkitRequestFullscreen||function(){}).call(d); }});
+  const nav = el("nav",{class:"boardnav"}, el("a",{href:"./" + MODE_QS,text:"menu"}), el("a",{href:"links.html",text:"links"}), fs);
+  document.body.append(nav);
+  let t; const show = () => { nav.classList.add("show"); clearTimeout(t); t = setTimeout(() => nav.classList.remove("show"), 3000); };
+  ["mousemove","touchstart","keydown"].forEach(ev => document.addEventListener(ev, show, {passive:true}));
+}
+
 function renderBoard(){
+  if (!ORDERING) return renderMenuBoard();
   document.body.className = "board";
   app.className = "";
   app.replaceChildren();
