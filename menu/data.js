@@ -87,6 +87,7 @@ window.FOREUNDER = {
   // uses: "espresso" drinks can use any bean on the bar; "press" uses French press beans; "none" has no coffee.
   drinks: [
     { id: "espresso", name: "Espresso", uses: "espresso", milk: false, iced: false, line: "Double shot · 2 oz", note: "Straight up, the purest way to taste the bean." },
+    { id: "macchiato", name: "Macchiato", uses: "espresso", milk: true, iced: false, line: "Double shot · spoon of foam", note: "Espresso marked with a spoonful of milk foam. Strong, short, a touch softer." },
     { id: "americano", name: "Americano", uses: "espresso", milk: false, iced: true, line: "Double shot · hot water", note: "Long and clean, about 6 oz." },
     { id: "groundscrew", name: "The Grounds Crew", uses: "espresso", milk: false, iced: false, line: "Double shot · hot water · steamed cream cap", note: "The daily work drink. A long Americano finished with a rich cap of steamed cream. About 10 oz." },
     { id: "cortado", name: "Cortado", uses: "espresso", milk: true, iced: false, line: "Double shot · equal milk", note: "Small and strong, softened with a little steamed milk." },
@@ -94,6 +95,7 @@ window.FOREUNDER = {
     { id: "flatwhite", name: "Flat White", uses: "espresso", milk: true, iced: false, line: "Double shot · silky milk", note: "The house favorite. Velvety, about 6 oz." },
     { id: "latte", name: "Latte", uses: "espresso", milk: true, iced: true, line: "Double shot · steamed milk", note: "Milder and milkier, about 10 oz." },
     { id: "mocha", name: "Mocha", uses: "espresso", milk: true, iced: false, chocolate: true, line: "Double shot · dark chocolate · milk", note: "Real dark chocolate melted in, no sugar added." },
+    { id: "affogato", name: "Affogato", tv: false, uses: "espresso", milk: false, iced: false, line: "Double shot · vanilla ice cream", note: "Dessert. A hot double shot poured over vanilla ice cream. Ask Jamey if the freezer is stocked." },
     { id: "press", name: "French Press", uses: "press", milk: false, iced: false, line: "Full immersion · serves two", note: "Full-bodied and slow. Takes about 6 minutes." },
     { id: "hotchoc", tv: false, name: "Hot Chocolate", uses: "none", milk: true, iced: false, chocolate: true, line: "Dark chocolate · steamed milk", note: "No coffee. Rich, not sweet." }
   ],
