@@ -482,12 +482,24 @@ async function sendOrder(){
   const note = draft.note.trim().slice(0,120);
   const btn = document.getElementById("send-btn");
   btn.disabled = true; btn.textContent = "sending…";
+  unlockChime();
   try{
     const res = await publish(ORDERS, name, line + (note ? "\nNote: " + note : ""));
     showSent(res.id, name, line, note, true);
   }catch(e){
     showSent(null, name, line, note, false);
   }
+}
+
+/* Ready alert: iPhones only allow sound after a tap, so the "send order" tap unlocks it. */
+let chimeCtx = null;
+function unlockChime(){ try{ chimeCtx = chimeCtx || new (window.AudioContext || window.webkitAudioContext)(); chimeCtx.resume(); const o = chimeCtx.createOscillator(), g = chimeCtx.createGain(); g.gain.value = 0; o.connect(g).connect(chimeCtx.destination); o.start(); o.stop(chimeCtx.currentTime + .01); }catch(e){} }
+function readyAlert(){
+  try{
+    if (chimeCtx){ chimeCtx.resume(); [0, .22, .44].forEach((t,i) => { const o = chimeCtx.createOscillator(), g = chimeCtx.createGain(); o.type = "sine"; o.frequency.value = [784, 988, 1175][i]; const at = chimeCtx.currentTime + t; g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(.25, at + .02); g.gain.exponentialRampToValueAtTime(.001, at + .6); o.connect(g).connect(chimeCtx.destination); o.start(at); o.stop(at + .65); }); }
+  }catch(e){}
+  try{ if (navigator.vibrate) navigator.vibrate([200,100,200]); }catch(e){}
+  document.title = "☕ Your drink is ready · Foreunder";
 }
 
 function showSent(id, name, line, note, ok){
@@ -498,6 +510,7 @@ function showSent(id, name, line, note, ok){
       el("div",{class:"label",text: ok ? "order sent" : "order didn't send"}),
       el("div",{class:"big",text: ok ? "Thanks, " + name + "." : "Show Jamey this ticket"}),
       status,
+      ok ? el("p",{class:"sub",id:"keep-open",text:"Keep this page open. It will chime when your drink is ready."}) : null,
       el("div",{class:"ticket"}, el("div",{class:"who",text:name}), el("div",{text:line}), note ? el("div",{class:"by",text:note}) : null),
       el("button",{class:"btn",type:"button",onclick:()=>{ draft.drink=null; draft.note=""; section.replaceChildren(el("h2",{text:"Place your order"}), el("p",{class:"sub",text:"Pick a drink and a bean. Your order goes straight to Jamey."}), orderForm()); openOrder(); },text:"order another"})
     )
@@ -510,6 +523,7 @@ function showSent(id, name, line, note, ok){
       if (!s) return;
       const st = stateOf(id);
       s.textContent = STATUS_LABEL[st];
+      if (st === "ready" && !s.dataset.alerted){ s.dataset.alerted = "1"; readyAlert(); const big = document.querySelector(".sent .big"); if (big) big.textContent = "Your drink is ready, " + name + "."; const h = document.getElementById("keep-open"); if (h) h.remove(); }
       if (st !== "queued") s.style.color = st === "ready" ? "var(--ok)" : "var(--brass)";
       if (st === "queued"){
         const ahead = activeQueue().filter(o => stateOf(o.id) !== "ready" && o.time < (orders.get(id)||{time:Infinity}).time).length;
