@@ -680,5 +680,35 @@
     "taste": "5 stars · Balanced",
     "time": 30.7,
     "yield": 36.1
+  },
+  {
+    "bean": "Hill of Beans India Monsooned Malabar",
+    "date": "2026-10-11",
+    "dialed": "Malabar: 18g → 36g · grind 7 · ~26–27s warm machine · 93°C",
+    "dose": 18,
+    "drink": "Milk drink with latte art pour · steamed with single-hole steam tip",
+    "estimated": false,
+    "grind": 7,
+    "n": 48,
+    "notes": "26.2s, 1:1.99, peak 9.8 bar, avg pump flow 2.8 ml/s, 74.6 ml pumped, avg temp 94.8°C. 5 stars. Same grind 7 ran ~5s faster than this morning's #46–47 because the machine was fully warm.",
+    "session": "Evening (GaggiMate shot #23, 8:19 PM, Foreunder profile)",
+    "taste": "5 stars",
+    "time": 26.2,
+    "yield": 35.9
+  },
+  {
+    "bean": "Hill of Beans India Monsooned Malabar",
+    "date": "2026-10-11",
+    "dialed": "Malabar: 18g → 36g · grind 7 · ~26–27s warm machine · 93°C",
+    "dose": 18,
+    "drink": "Milk drink with latte art pour · steamed with single-hole steam tip",
+    "estimated": false,
+    "grind": 7,
+    "n": 49,
+    "notes": "27.2s, 1:1.99, peak 9.8 bar, avg pump flow 2.8 ml/s, 76.8 ml pumped, avg temp 95.7°C (flat ~93°C start, climbing to ~100°C). 5 stars, GaggiMate: Balanced. Glossy, high-contrast microfoam from the single-hole tip.",
+    "session": "Evening (GaggiMate shot #24, 8:22 PM, Foreunder profile)",
+    "taste": "5 stars · Balanced",
+    "time": 27.2,
+    "yield": 35.8
   }
 ]
