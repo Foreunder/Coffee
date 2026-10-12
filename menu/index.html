@@ -169,6 +169,14 @@ body.board{--u:min(1vw,1.7778vh);padding-block:0;overflow:hidden;font-size:clamp
 .boardnav.show{opacity:1;pointer-events:auto}
 .boardnav a,.boardnav button{color:var(--brass);background:none;border:0;font:700 13px/1 var(--label);letter-spacing:.12em;text-transform:lowercase;text-decoration:none;padding:8px 12px;cursor:pointer}
 /* ===== Bar view ===== */
+.alertbtn{margin:0 0 14px}
+.newbanner{position:fixed;inset:auto 16px 20px 16px;background:var(--brass);color:#1a1408;border-radius:10px;padding:18px 20px;box-shadow:0 10px 30px rgba(0,0,0,.5);display:none;flex-direction:column;gap:4px;z-index:20;cursor:pointer;font-size:18px}
+.newbanner.show{display:flex;animation:pulse 1s ease-in-out 3}
+.newbanner .label{color:#1a1408}
+.newbanner .nb-name{font:400 30px/1.1 var(--display)}
+.newbanner .nb-tap{font:700 12px/1 var(--label);letter-spacing:.12em;text-transform:lowercase;opacity:.7;margin-top:6px}
+@keyframes pulse{50%{transform:scale(1.02)}}
+
 .barhead{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding-block:20px 8px}
 .barhead h1{font:400 32px/1 var(--display);margin:0}
 .conn{font:700 12px/1 var(--label);letter-spacing:.12em;text-transform:lowercase}
@@ -501,6 +509,13 @@ async function sendOrder(){
 /* Ready alert: iPhones only allow sound after a tap, so the "send order" tap unlocks it. */
 let chimeCtx = null;
 function unlockChime(){ try{ chimeCtx = chimeCtx || new (window.AudioContext || window.webkitAudioContext)(); chimeCtx.resume(); const o = chimeCtx.createOscillator(), g = chimeCtx.createGain(); g.gain.value = 0; o.connect(g).connect(chimeCtx.destination); o.start(); o.stop(chimeCtx.currentTime + .01); }catch(e){} }
+function orderChime(){
+  try{
+    if (!chimeCtx) return;
+    chimeCtx.resume();
+    [0, .18, .36, .9, 1.08, 1.26].forEach((t,i) => { const o = chimeCtx.createOscillator(), g = chimeCtx.createGain(); o.type = "triangle"; o.frequency.value = [1047, 1319, 1568][i % 3]; const at = chimeCtx.currentTime + t; g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(.35, at + .02); g.gain.exponentialRampToValueAtTime(.001, at + .5); o.connect(g).connect(chimeCtx.destination); o.start(at); o.stop(at + .55); });
+  }catch(e){}
+}
 function readyAlert(){
   try{
     if (chimeCtx){ chimeCtx.resume(); [0, .22, .44].forEach((t,i) => { const o = chimeCtx.createOscillator(), g = chimeCtx.createGain(); o.type = "sine"; o.frequency.value = [784, 988, 1175][i]; const at = chimeCtx.currentTime + t; g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(.25, at + .02); g.gain.exponentialRampToValueAtTime(.001, at + .6); o.connect(g).connect(chimeCtx.destination); o.start(at); o.stop(at + .65); }); }
@@ -598,10 +613,29 @@ function renderBar(){
     el("p",{class:"sub",text:"New orders appear here. Tap Making when you start and Ready when it's done. Guests see the change on their phones and the TV."}),
     el("label",{for:"show-ready",class:"label",style:"display:flex;gap:8px;align-items:center;margin-bottom:12px"}, showAll, "show ready orders"),
   );
+  // New-order alerts on this screen: chime + vibration + banner + tab title. Phones and iPads only allow sound after a tap.
+  const alertBtn = el("button",{class:"btn solid alertbtn",type:"button",text:"turn on order sound"});
+  alertBtn.addEventListener("click", () => { unlockChime(); orderChime(); alertBtn.textContent = "order sound on"; alertBtn.disabled = true; });
+  const banner = el("div",{class:"newbanner",role:"alert"});
+  banner.addEventListener("click", () => { banner.classList.remove("show"); document.title = baseTitle; });
+  app.append(alertBtn, banner);
+  const baseTitle = document.title, loadedAt = Date.now()/1000 - 5, seen = new Set();
+  listeners.push(() => {
+    for (const o of orders.values()){
+      if (seen.has(o.id)) continue;
+      seen.add(o.id);
+      if (o.time < loadedAt) continue;          // history replayed on connect: no alert
+      orderChime();
+      try{ if (navigator.vibrate) navigator.vibrate([300,150,300]); }catch(e){}
+      banner.replaceChildren(el("div",{class:"label",text:"new order"}), el("div",{class:"nb-name",text:o.name}), el("div",{text:o.what}), el("div",{class:"nb-tap",text:"tap to dismiss"}));
+      banner.classList.add("show");
+      document.title = "🔔 New order: " + o.name;
+    }
+  });
   const box = el("div",{class:"tickets"});
   app.append(box,
     el("div",{class:"help"},
-      el("p",null,"Phone alerts: install the free ntfy app and subscribe to the topic ", el("code",{text:ORDERS}), "."),
+      el("p",null,"Keep this screen open and tap \u201cturn on order sound\u201d each time you open it. Optional phone alerts: the free ntfy app, topic ", el("code",{text:ORDERS}), "."),
       el("p",null,"Guest menu: ", el("code",{text:M.siteUrl}), " · TV board: ", el("code",{text:M.siteUrl + "#board"}), " · Table iPad: ", el("code",{text:M.siteUrl + "#table"}))
     )
   );
