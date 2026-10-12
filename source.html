@@ -31,7 +31,7 @@ th{font-weight:600;font-size:12px;letter-spacing:.05em;text-transform:uppercase;
 tr:last-child td{border-bottom:0}
 td.num{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
 .day td{background:var(--soft);font-weight:600;font-size:13px;color:var(--accent)}
-.pill{display:inline-block;padding:1px 8px;border-radius:999px;font-size:12px;border:1px solid currentColor;white-space:nowrap}
+.pill{display:inline-block;padding:1px 8px;border-radius:999px;font-size:12px;border:1px solid currentColor;max-width:100%;overflow-wrap:anywhere}
 .bal{color:var(--good)}.sour,.bitter{color:var(--warn)}.na{color:var(--muted)}
 .est{color:var(--muted)}
 .notes{color:var(--muted);max-width:280px}
@@ -58,7 +58,7 @@ td.num{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;w
 @keyframes spin{to{transform:rotate(360deg)}}
 .updated{font-size:12px;color:var(--muted);margin-top:6px;transition:color .4s}
 .updated.flash{color:var(--good);font-weight:600}
-.beanbar{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.beanbar{display:flex;gap:8px;overflow-x:auto;min-width:0;max-width:100%;padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .beanbar::-webkit-scrollbar{display:none}
 .chip{flex:none;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:500 14px/1.2 "IBM Plex Sans",sans-serif;cursor:pointer;white-space:nowrap}
 .chip small{color:var(--muted);font-weight:400;margin-left:4px}
@@ -91,7 +91,7 @@ details.method dd{margin:0}
   <header class="head">
     <div>
     <h1>Gaggia Shot Log</h1>
-    <p class="sub">Classic Evo Pro · DF64 · BOOKOO scale. Every pull, logged automatically by Claude.</p>
+    <p class="sub">Classic Evo Pro · GaggiMate · DF64 · BOOKOO scale. Every pull, logged automatically by Claude.</p>
     <p class="updated" id="updated"></p>
     </div>
     <button class="refresh" id="refresh" type="button" aria-label="Refresh shot log"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>Refresh</button>
@@ -106,13 +106,13 @@ details.method dd{margin:0}
   <details class="method" id="method">
     <summary>How I test</summary>
     <dl>
-      <dt>Machine</dt><dd>Gaggia Classic Evo Pro, stock (GaggiMate Pro temperature and pressure control being installed)</dd>
+      <dt>Machine</dt><dd>Gaggia Classic Evo Pro with GaggiMate Pro (installed Oct 7): Foreunder profile, 93 °C, brew-by-weight. Pulls before Oct 7 were on the stock machine</dd>
       <dt>Grinder</dt><dd>DF64 II, stepless, single-dosed; settings are this grinder's dial numbers</dd>
       <dt>Basket</dt><dd>Creamore 18g, single wall</dd>
       <dt>Water</dt><dd>Refrigerator carbon-filtered water (NSF-42; minerals not stripped)</dd>
-      <dt>Recipe</dt><dd>18g in, 36g out (1:2), target 27–32 seconds; scale stopped about 0.5g early for drips</dd>
+      <dt>Recipe</dt><dd>18g in, 36g out (1:2), target about 26–30 seconds (28 s preferred)</dd>
       <dt>Puck prep</dt><dd>RDT spritz, WDT, distribution tool, calibrated tamper</dd>
-      <dt>Measuring</dt><dd>BOOKOO scale: weight, flow and time on every pull</dd>
+      <dt>Measuring</dt><dd>GaggiMate shot data (pressure, flow, temperature) plus BOOKOO weight and time</dd>
       <dt>Tasting</dt><dd>Straight sip before milk. A coffee is judged on straight shots only; milk drinks are noted, not scored</dd>
       <dt>Practice shots</dt><dd>Early pulls without timing are labelled Practice and left out of each coffee's stats</dd>
       <dt>Independence</dt><dd>Every coffee bought at retail with my own money. No samples, no sponsors</dd>

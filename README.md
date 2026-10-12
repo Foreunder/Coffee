@@ -15,13 +15,13 @@ The live log is the master copy; this repo is updated by Claude after each logge
 - A shot with `"ref": true` is the bean's dial-in reference shown at the top of the page.
 
 ## Foreunder Coffee House menu
-- `menu/` – guest menu and ordering for the home coffee bar: https://foreunder.github.io/Coffee/menu/
-  - `#board` – TV menu board with QR code and live order queue
-  - `#bar` – order screen (only when `ordering: true` in data.js)
-  - `#table` – table iPad with live queue line
-  - `table.html` – static table card (old iPads)
-  - `card.html` / `tag.html` – print: 4×6 card, golf-ball tag inserts
+- `menu/` – guest menu: https://foreunder.github.io/Coffee/menu/ (add `?order` for the ordering version)
+  - `#board` – TV menu board (drinks, dessert, coffees, QR). `tv/` and `ordertv/` are short redirects for the Fire TVs
+  - `?order#bar` – order screen; `?order#table` – table iPad with live queue
+  - `about.html` – Why a Thistle? brand story
+  - `recipes.html` – bar recipes and current dial-ins (reads `data.js` and the Shot Log mirror)
   - `links.html` – every Foreunder link in one page
-  - `card.html` – printable 4×6 QR table card
-- `menu/data.js` – beans and drinks; Claude keeps it current
+  - `table.html` – static table card for older iPads
+  - `card.html` – printable 4×6 QR table card; `coaster.html` – 3×3 QR insert for the 4×4 acrylic coaster
+- `menu/data.js` – beans, drinks and recipes; Claude keeps it current
 - Orders relay through ntfy.sh (no account). Topic is in `data.js`.

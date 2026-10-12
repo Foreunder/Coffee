@@ -21,7 +21,7 @@ h1{font:400 34pt/1 "IM Fell English SC",Georgia,serif;letter-spacing:.06em;margi
 #qr{background:var(--paper);padding:6px}
 #qr svg{display:block;width:1.45in;height:1.45in}
 .scan{font:italic 12pt/1.35 "IM Fell English",Georgia,serif;max-width:2.8in}
-.url{font:500 7.5pt/1 "Alegreya Sans SC",sans-serif;letter-spacing:.08em;color:var(--brass);text-transform:lowercase}
+.url{font:500 7.5pt/1 "Alegreya Sans SC",sans-serif;letter-spacing:.06em;color:var(--brass)}
 .tip{font:13px/1.4 Georgia,serif;text-align:center;color:#444;margin:0 16px 24px}
 @media print{html,body{background:var(--paper)}.card{margin:0;border:0}.tip{display:none}}
 </style>
@@ -33,14 +33,14 @@ h1{font:400 34pt/1 "IM Fell English SC",Georgia,serif;letter-spacing:.06em;margi
   <div id="qr" aria-label="QR code for the coffee menu"></div>
   <div style="display:flex;flex-direction:column;gap:8px;align-items:center">
     <div class="scan" id="scanline">Scan to see our coffees.</div>
-    <div class="url">foreunder.github.io/coffee/menu</div>
+    <div class="url">foreunder.github.io/Coffee/menu</div>
   </div>
 </div>
 <script src="qrcode.js"></script>
 <script src="data.js"></script>
 <script>
 var ORDER=/[?&]order\b/.test(location.search); var URL=window.FOREUNDER.siteUrl+(ORDER?"?order":"");
-if(ORDER){document.getElementById("scanline").textContent="Scan to see our coffees and order.";document.title="Foreunder Table Card (ordering)";}
+if(ORDER){document.getElementById("scanline").textContent="Scan to see our coffees and order.";document.querySelector(".url").textContent="foreunder.github.io/Coffee/menu/?order";document.title="Foreunder Table Card (ordering)";}
 var q = qrcode(0, "M"); q.addData(URL); q.make();
 document.getElementById("qr").innerHTML = q.createSvgTag({cellSize: 8, margin: 0, scalable: true}).replace(/fill="white"/g, 'fill="#f3ead6"').replace(/fill="black"/g, 'fill="#14231b"');
 </script>

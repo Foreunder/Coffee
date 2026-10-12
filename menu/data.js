@@ -1,5 +1,5 @@
 // Foreunder Coffee House menu data.
-// Claude keeps this file current. Status values: "bar" (on the bar), "press" (French press only), "out" (finished).
+// Claude keeps this file current. Status values: "bar" (espresso, on hand), "press" (French press only), "out" (finished).
 window.FOREUNDER = {
   siteUrl: "https://foreunder.github.io/Coffee/menu/",
   // Orders are relayed through ntfy.sh on this topic. Anyone who knows the topic name can read it,
@@ -28,7 +28,7 @@ window.FOREUNDER = {
       expect: "A classic Northern Italian-style blend built for espresso and milk. Rich and rounded, low in acidity, and comfortable under a lot of milk.",
       take: "The house espresso. Balanced straight, neither sour nor bitter, and the one I reach for most.",
       scale: { body: 4, acidity: 1, roast: 4 },
-      recipe: "18 g in · 36 g out · grind 13 · about 28 s (to confirm on the GaggiMate; 14 ran 24 s)"
+      recipe: "18 g in · 36 g out · about 28 s", dialNote: "Grind 13 to confirm on the GaggiMate (grind 14 ran 24 s on 10/10)."
     },
     {
       id: "malabar",
@@ -47,7 +47,7 @@ window.FOREUNDER = {
       expect: "Green coffee left open to the monsoon winds on India's Malabar coast, which swells the beans and strips out acidity. Expect a heavy, syrupy body with earthy, spiced and nutty notes. FTCO certified.",
       take: "Thick and full of flavor, with real nuttiness. Outstanding in a mocha.",
       scale: { body: 5, acidity: 1, roast: 3 },
-      recipe: "18 g in · 36 g out · grind 7 · 26–28 s warm (7.5 if it runs fast)"
+      recipe: "18 g in · 36 g out · about 27 s", dialNote: "Grind 7 on a warm machine; 7.5 if it runs fast."
     },
     {
       id: "colombia",
@@ -84,11 +84,11 @@ window.FOREUNDER = {
     }
   ],
 
-  // uses: "espresso" drinks can use any bean on the bar; "press" uses French press beans; "none" has no coffee.
+  // uses: "espresso" drinks can use any on-hand espresso bean; "press" uses French press beans; "none" has no coffee.
   drinks: [
     { id: "espresso", name: "Espresso", uses: "espresso", milk: false, iced: false, line: "Double shot · 2 oz", note: "Straight up, the purest way to taste the bean.", mine: true, cup: "Demitasse, preheated", how: ["Dose 18 g, pull to 36 g out (1:2) in about 26–30 s.", "Serve right away. Use the dial-in for whichever coffee is in the hopper (below)."] },
     { id: "macchiato", name: "Macchiato", uses: "espresso", milk: true, iced: false, line: "Double shot · spoon of foam", note: "Espresso marked with a spoonful of milk foam. Strong, short, a touch softer.", mine: false, cup: "Demitasse", how: ["Pull the double into a warm demitasse.", "Steam a small splash of whole milk with plenty of air.", "Spoon 1–2 teaspoons of the foam onto the center of the shot. No poured milk."] },
-    { id: "americano", name: "Americano", uses: "espresso", milk: false, iced: true, line: "Double shot · hot water", note: "Long and clean, about 6 oz.", mine: true, cup: "6 oz cup", how: ["Pull the double.", "Add about 100 g (3.5 oz) hot water from GaggiMate water mode (80 °C). Water in the cup first keeps more crema."] },
+    { id: "americano", name: "Americano", uses: "espresso", milk: false, iced: true, line: "Double shot · hot water", note: "Long and clean, about 5 oz.", mine: true, cup: "6 oz cup", how: ["Pull the double.", "Add about 100 g (3.5 oz) hot water from GaggiMate water mode (80 °C). Water in the cup first keeps more crema."] },
     { id: "groundscrew", name: "The Grounds Crew", uses: "espresso", milk: false, iced: false, line: "Double shot · hot water · steamed cream cap", note: "The daily work drink. A long Americano finished with a rich cap of steamed cream. About 10 oz.", mine: true, cup: "12 oz cup", how: ["Pour about 6 oz hot water into the cup.", "Pull the double straight into the water.", "Steam about 3 oz full-fat heavy cream in the 12 oz pitcher (measure by volume) with a cappuccino-style stretch for a cap.", "Pour the cream last so it sits as a rich cap.", "Good use for beans past their espresso peak."] },
     { id: "cortado", name: "Cortado", uses: "espresso", milk: true, iced: false, line: "Double shot · equal milk", note: "Small and strong, softened with a little steamed milk.", mine: false, cup: "4–5 oz glass", how: ["Pull the double into the glass.", "Steam about 2 oz whole milk with very little foam (barely stretch).", "Pour in an equal amount to the espresso. Small and strong."] },
     { id: "cappuccino", name: "Cappuccino", uses: "espresso", milk: true, iced: false, line: "Double shot · airy foam", note: "Thick cap of foam over a strong double, about 6 oz.", mine: true, cup: "6 oz cup", how: ["Pull the double.", "Steam about 3 oz cold whole milk to about 150 °F. Stretch longer than a flat white for airy foam.", "Swirl, then pour so a thick cap of foam sits on top."] },

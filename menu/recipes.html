@@ -107,7 +107,7 @@ dl.kv dd{margin:0}
     return e; }
   function fmt(d){ var p=d.split("-"); return ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][+p[1]-1]+" "+(+p[2]); }
   function latestDial(b){
-    var hits = SHOTS.filter(function(s){ return s.dialed && s.dialed.indexOf("→") !== -1 && s.bean && s.bean.indexOf(b.name) !== -1; });
+    var hits = SHOTS.filter(function(s){ return s.dialed && s.dialed.indexOf("→") !== -1 && s.date >= "2026-10-07" && s.bean && s.bean.indexOf(b.name) !== -1; });
     hits.sort(function(a,c){ return a.n - c.n; });
     return hits[hits.length-1] || null;
   }
@@ -120,6 +120,7 @@ dl.kv dd{margin:0}
       el("div",{class:"top"}, el("h3",{text:b.name}), el("span",{class:"pill",text:status})),
       el("div",{class:"meta",text:[b.roaster, b.roastLevel ? b.roastLevel + " roast" : null].filter(Boolean).join(" · ")}),
       b.recipe ? el("div",{class:"recipe",text:b.recipe}) : null,
+      b.dialNote ? el("div",null,b.dialNote) : null,
       dial ? el("div",{class:"log"}, el("b",{text:"shot log · " + fmt(dial.date) + " · "}), dial.dialed.replace(/^[^:]+:\s*/,"")) : null
     ));
   });
