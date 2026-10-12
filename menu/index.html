@@ -445,7 +445,7 @@ function renderMenu(){
     el("h2",{text:"Our coffees"}),
     el("p",{class:"sub",text:"On hand now: where each one is from and what to expect."}),
     beansWrap,
-    el("a",{class:"cardlink",href:"scorecard.html" + MODE_QS},"See the scorecard: how every coffee played ›")
+    el("a",{class:"cardlink",href:"scorecard.html" + MODE_QS},"Score your drink on the scorecard ›")
   ));
   // Coffees we've finished: kept for the record, clearly not available.
   const past = M.beans.filter(b => b.status === "out");

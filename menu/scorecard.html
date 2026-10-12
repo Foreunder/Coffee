@@ -23,34 +23,40 @@ header{display:flex;align-items:center;gap:14px;margin:4px 0 12px}
 header img{width:68px;height:68px;flex:none;-webkit-mask-image:radial-gradient(circle,#000 66%,transparent 76%);mask-image:radial-gradient(circle,#000 66%,transparent 76%)}
 h1{font:400 clamp(32px,8.5vw,44px)/1.02 "IM Fell English SC",Georgia,serif;letter-spacing:.04em;margin:0}
 .kicker{font:italic 18px/1.35 "IM Fell English",Georgia,serif;color:var(--brass);margin:4px 0 0}
-.how{background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:12px 16px;margin:6px 0 18px}
-.how ol{margin:0;padding-left:20px}
-.how li{margin:3px 0}
-.hole{background:var(--card);color:var(--cardink);border-radius:10px;padding:14px 14px 16px;margin-bottom:14px;box-shadow:0 8px 24px rgba(0,0,0,.3)}
-.hole .hn{font:700 11px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.18em;text-transform:lowercase;color:var(--green)}
-.hole h2{font:400 25px/1.15 "IM Fell English SC",Georgia,serif;letter-spacing:.02em;margin:4px 0 2px}
-.hole .mt{font:500 12px/1.4 "Alegreya Sans SC",sans-serif;letter-spacing:.1em;text-transform:lowercase;color:var(--cardmuted)}
-.oh{display:inline-block;font:700 10px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.12em;text-transform:lowercase;color:var(--card);background:var(--green);border-radius:999px;padding:4px 8px;margin-left:6px;vertical-align:4px}
-.who{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
-.who > div{border:1px solid var(--cardrule);border-radius:8px;padding:8px 10px}
-.who .k{font:700 11px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.14em;text-transform:lowercase;color:var(--cardmuted)}
-.who .v{font:500 18px/1.25 "Alegreya",Georgia,serif;margin-top:4px}
-.who .s{font-size:13px;color:var(--cardmuted)}
-.nt{font:italic 15px/1.4 "Alegreya",Georgia,serif;color:var(--cardmuted);margin:0 0 10px}
-.yl{font:700 12px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.14em;text-transform:lowercase;color:var(--green);margin:4px 0 8px}
-.opts{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
-.opts button{border:1.5px solid var(--cardrule);background:#fffaf0;color:var(--cardink);border-radius:10px;min-height:54px;padding:6px 2px;cursor:pointer;font:700 12px/1.15 "Alegreya Sans SC",sans-serif;letter-spacing:.04em;text-transform:lowercase;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
-.opts button span{font:400 10.5px/1.1 "Alegreya",Georgia,serif;letter-spacing:0;text-transform:none;color:var(--cardmuted)}
-.opts button.on{background:var(--green);border-color:var(--green);color:var(--card)}
-.opts button.on span{color:#d9cfae}
-.saved{font-size:13px;color:var(--green);min-height:18px;margin-top:6px}
-.summary{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:6px 0 4px}
-.sum{border:1px solid var(--rule);border-radius:10px;padding:12px 14px;background:var(--panel)}
-.sum .k{font:500 12px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.16em;text-transform:lowercase;color:var(--brass)}
-.sum .v{font:400 20px/1.2 "IM Fell English SC",Georgia,serif;margin-top:6px}
-.foot{color:var(--muted);font-size:14px;border-top:1px solid var(--rule);margin-top:24px;padding-top:12px}
-.reset{background:none;border:1px solid var(--rule);color:var(--muted);border-radius:999px;padding:10px 16px;font:500 13px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.1em;cursor:pointer;margin-top:10px}
-@media (max-width:380px){.opts{grid-template-columns:repeat(5,1fr);gap:4px}.opts button{font-size:11px}.opts button span{display:none}}
+.step{margin:18px 0 0}
+.sl{display:flex;align-items:center;gap:10px;font:700 13px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.14em;text-transform:lowercase;color:var(--brass);margin-bottom:10px}
+.sl b{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--brass);color:#1a1408;font:700 13px/1 "Alegreya Sans SC",sans-serif;letter-spacing:0}
+.sl i{font-style:normal;color:var(--muted);letter-spacing:.06em}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.grid button,.scores button{border:1.5px solid var(--rule);background:var(--panel);color:var(--ink);border-radius:12px;min-height:52px;padding:10px 12px;cursor:pointer;font:500 17px/1.2 "Alegreya",Georgia,serif;text-align:left}
+.grid button small{display:block;font:500 11px/1.3 "Alegreya Sans SC",sans-serif;letter-spacing:.08em;text-transform:lowercase;color:var(--muted);margin-top:2px}
+.grid button.on,.scores button.on{background:var(--brass);border-color:var(--brass);color:#1a1408}
+.grid button.on small,.scores button.on span{color:#3a2f12}
+.scores{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.scores button{text-align:center;padding:8px 2px;font:700 13px/1.1 "Alegreya Sans SC",sans-serif;letter-spacing:.04em;text-transform:lowercase;display:flex;flex-direction:column;align-items:center;gap:3px;min-height:60px;justify-content:center}
+.scores button span{font:400 11px/1.1 "Alegreya",Georgia,serif;letter-spacing:0;text-transform:none;color:var(--muted)}
+input.nm{width:100%;background:var(--panel);color:var(--ink);border:1.5px solid var(--rule);border-radius:12px;padding:13px 14px;font:17px/1.2 "Alegreya",Georgia,serif;min-height:52px}
+.when{color:var(--muted);font-size:14px;margin-top:8px}
+.submit{display:block;width:100%;margin-top:20px;border:0;background:var(--brass);color:#1a1408;font:700 16px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.14em;text-transform:lowercase;padding:18px;border-radius:999px;cursor:pointer}
+.submit[disabled]{opacity:.4;cursor:default}
+.msg{text-align:center;color:var(--muted);margin-top:10px;min-height:22px}
+.done{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:22px 18px;text-align:center;margin-top:18px}
+.done .big{font:400 30px/1.1 "IM Fell English SC",Georgia,serif;color:var(--brass)}
+.done p{margin:8px 0 16px;color:var(--ink)}
+.again{border:1.5px solid var(--brass);background:none;color:var(--brass);border-radius:999px;padding:12px 20px;font:700 14px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.12em;text-transform:lowercase;cursor:pointer}
+h2.lb{font:400 26px/1.15 "IM Fell English SC",Georgia,serif;color:var(--brass);margin:36px 0 8px}
+.board{background:var(--card);color:var(--cardink);border-radius:10px;overflow:hidden}
+.row{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--cardrule)}
+.row:last-child{border-bottom:0}
+.row .c{font:500 17px/1.2 "Alegreya",Georgia,serif}
+.row .c small{display:block;font:500 11px/1.3 "Alegreya Sans SC",sans-serif;letter-spacing:.08em;text-transform:lowercase;color:var(--cardmuted)}
+.row .r{text-align:center;min-width:70px}
+.row .r .k{font:700 10px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.12em;text-transform:lowercase;color:var(--cardmuted)}
+.row .r .v{font:500 15px/1.2 "Alegreya",Georgia,serif;margin-top:3px}
+.row .r .s{font-size:11px;color:var(--cardmuted)}
+.hd{display:grid;grid-template-columns:1fr auto auto;gap:10px;padding:10px 14px;background:var(--green);color:var(--card);font:700 11px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.14em;text-transform:lowercase}
+.hd span:not(:first-child){min-width:70px;text-align:center}
+@media (max-width:380px){.scores button span{display:none}}
 </style>
 </head>
 <body>
@@ -59,84 +65,100 @@ h1{font:400 clamp(32px,8.5vw,44px)/1.02 "IM Fell English SC",Georgia,serif;lette
   <a class="back" id="back" href="./">‹ back to the menu</a>
   <header>
     <img src="logo.jpg" alt="">
-    <div><h1>The Scorecard</h1><p class="kicker">Every coffee we've played, rated in golf terms.</p></div>
+    <div><h1>The Scorecard</h1><p class="kicker">Score your drink in a few taps. Birdie beats par.</p></div>
   </header>
-  <div class="how"><ol>
-    <li>Find a coffee you've tried below.</li>
-    <li>Tap how it played for you, from <b>eagle</b> (one of the best) to <b>double</b> (not for you).</li>
-    <li>See how Jamey and the family rated it. Tap your rating again to undo it.</li>
-  </ol></div>
-  <div class="summary">
-    <div class="sum"><div class="k">Jamey's round</div><div class="v" id="sJ"></div></div>
-    <div class="sum"><div class="k">Your round</div><div class="v" id="sY"></div></div>
+  <div id="form">
+    <div class="step"><div class="sl"><b>1</b>pick your drink</div><div class="grid" id="drinks"></div></div>
+    <div class="step" id="coffeeStep"><div class="sl"><b>2</b>pick the coffee</div><div class="grid" id="coffees"></div></div>
+    <div class="step"><div class="sl"><b id="n3">3</b>how did it play?</div><div class="scores" id="scores"></div></div>
+    <div class="step"><div class="sl"><b id="n4">4</b>your name <i>(remembered next time)</i></div><input class="nm" id="name" type="text" maxlength="40" autocomplete="given-name" placeholder="First name"><div class="when" id="when"></div></div>
+    <button class="submit" id="submit" type="button" disabled>submit my score</button>
+    <p class="msg" id="msg"></p>
   </div>
-  <div id="holes" style="margin-top:16px"></div>
-  <p class="foot">Your ratings are saved on your phone and added to the family ratings. A new hole is added every time a new bag goes on.<br><button class="reset" id="reset" type="button">clear my ratings</button></p>
+  <div class="done" id="done" hidden><div class="big" id="doneBig"></div><p id="doneTxt"></p><button class="again" id="again" type="button">score another</button></div>
+
+  <h2 class="lb">The Leaderboard</h2>
+  <div class="board" id="board"></div>
 </main>
 <script src="data.js"></script>
 <script src="../data/shots.js" onerror="window.SHOTS=[]"></script>
 <script src="guest.js"></script>
 <script>
 (function(){
-  var M = window.FOREUNDER, SHOTS = window.SHOTS || [], G = window.GUEST, KEY = "foreunder.scorecard";
+  var M = window.FOREUNDER, G = window.GUEST;
   if (/[?&](order|test)\b/.test(location.search)) document.getElementById("back").href = "./?order";
   var R = [[2,"eagle","best cup"],[3,"birdie","really good"],[4,"par","solid"],[5,"bogey","meh"],[6,"double","not for me"]];
   var WORD = {2:"Eagle",3:"Birdie",4:"Par",5:"Bogey",6:"Double bogey"};
+  var $ = function(id){ return document.getElementById(id); };
   function el(tag, attrs){ var e=document.createElement(tag); attrs=attrs||{};
     for (var k in attrs){ if(k==="text") e.textContent=attrs[k]; else if(k==="onclick") e.addEventListener("click",attrs[k]); else e.setAttribute(k,attrs[k]); }
     for (var i=2;i<arguments.length;i++){ var c=arguments[i]; if(c==null) continue; e.append(c.nodeType?c:document.createTextNode(c)); }
     return e; }
-  function tally(list){ if (!list.length) return null; var c={}; list.forEach(function(n){ c[n]=(c[n]||0)+1; });
-    return [2,3,4,5,6].filter(function(n){ return c[n]; }).map(function(n){ var w=WORD[n].toLowerCase(); return c[n]+" "+(c[n]>1 ? (w==="par"?"pars":w+"s") : w); }).join(" · "); }
-  var mine = {}; try { mine = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch(e) {}
-  function save(){ try { localStorage.setItem(KEY, JSON.stringify(mine)); } catch(e) {} }
-  var FAM = {}, live = !!(G && G.on);
-  function firstPull(b){ var d = SHOTS.filter(function(s){ return s.bean && s.bean.indexOf(b.name) !== -1; }).map(function(s){ return s.date; }).sort()[0]; return d || b.opened || b.roastDate || "9999"; }
-  var holes = M.beans.slice().sort(function(a,b){ return firstPull(a) < firstPull(b) ? -1 : firstPull(a) > firstPull(b) ? 1 : 0; });
-  function famText(id){
-    var f = FAM[id]; if (!f || !f.count) return ["No ratings yet", ""];
-    var best = [2,3,4,5,6].reduce(function(a,n){ return f[n] > (f[a]||0) ? n : a; }, 4);
-    return [WORD[best], f.count + (f.count === 1 ? " rating" : " ratings")];
+  var pick = { drink:null, bean:null, score:null };
+  var beansFor = function(d){ if (!d || d.uses === "none") return []; return M.beans.filter(function(b){ return d.uses === "press" ? b.status === "press" : b.status === "bar"; }); };
+  var drinks = M.drinks.filter(function(d){ return d.uses === "none" || beansFor(d).length; });
+
+  function drawDrinks(){
+    var g = $("drinks"); g.replaceChildren();
+    drinks.forEach(function(d){ g.append(el("button",{type:"button",class: pick.drink === d ? "on" : "",onclick:function(){
+      pick.drink = d; var bs = beansFor(d); pick.bean = bs.length === 1 ? bs[0] : (bs.indexOf(pick.bean) !== -1 ? pick.bean : null); drawAll();
+    }}, d.name)); });
   }
-  function draw(){
-    var wrap = document.getElementById("holes"); wrap.replaceChildren();
-    var js = [], ys = [];
-    holes.forEach(function(b, i){
-      var you = mine[b.id] != null ? +mine[b.id] : null;
-      if (b.score != null) js.push(b.score);
-      if (you != null) ys.push(you);
-      var ft = famText(b.id), saved = el("div",{class:"saved"});
-      var opts = el("div",{class:"opts",role:"group","aria-label":"Your rating for " + b.name});
-      R.forEach(function(r){
-        opts.append(el("button",{type:"button",class: you === r[0] ? "on" : "","aria-pressed": String(you === r[0]),onclick:function(){
-          var val = you === r[0] ? 0 : r[0];
-          if (val) mine[b.id] = val; else delete mine[b.id];
-          save(); draw();
-          if (live) G.rate(b.id, val).then(function(){ return G.ratings(); }).then(function(x){ FAM = x || FAM; draw(); }).catch(function(){});
-        }}, r[1], el("span",null,r[2])));
-      });
-      wrap.append(el("section",{class:"hole"},
-        el("div",{class:"hn",text:"hole " + (i+1)}),
-        el("h2",null, b.name, b.status !== "out" ? el("span",{class:"oh"},"on hand") : null),
-        el("div",{class:"mt",text:[b.roaster, b.origin && b.origin !== "Blend" ? b.origin : b.type].filter(Boolean).join(" · ")}),
-        el("div",{class:"who"},
-          el("div",null, el("div",{class:"k",text:"jamey"}), el("div",{class:"v",text: b.score != null ? WORD[b.score] : "Not yet"})),
-          live ? el("div",null, el("div",{class:"k",text:"family"}), el("div",{class:"v",text:ft[0]}), ft[1] ? el("div",{class:"s",text:ft[1]}) : null)
-               : el("div",null, el("div",{class:"k",text:"you"}), el("div",{class:"v",text: you != null ? WORD[you] : "Not rated"}))),
-        b.scoreNote ? el("p",{class:"nt",text:"“" + b.scoreNote + "”"}) : null,
-        el("div",{class:"yl",text:"your rating"}),
-        opts
-      ));
-    });
-    document.getElementById("sJ").textContent = tally(js) || "No ratings yet";
-    document.getElementById("sY").textContent = tally(ys) || "Not started";
+  function drawCoffees(){
+    var bs = beansFor(pick.drink), step = $("coffeeStep"), g = $("coffees"); g.replaceChildren();
+    var noCoffee = pick.drink && pick.drink.uses === "none";
+    step.hidden = noCoffee; $("n3").textContent = noCoffee ? "2" : "3"; $("n4").textContent = noCoffee ? "3" : "4";
+    if (!pick.drink){ g.append(el("p",{class:"when",text:"Pick a drink first."})); return; }
+    bs.forEach(function(b){ g.append(el("button",{type:"button",class: pick.bean === b ? "on" : "",onclick:function(){ pick.bean = b; drawAll(); }},
+      b.name, el("small",null, b.roaster.replace(/ Coffee Roasters| Coffee Co\./,"")))); });
   }
-  document.getElementById("reset").addEventListener("click", function(){
-    var ids = Object.keys(mine); mine = {}; save(); draw();
-    if (live) Promise.all(ids.map(function(id){ return G.rate(id, 0); })).then(function(){ return G.ratings(); }).then(function(x){ FAM = x || FAM; draw(); }).catch(function(){});
+  function drawScores(){
+    var g = $("scores"); g.replaceChildren();
+    R.forEach(function(r){ g.append(el("button",{type:"button",class: pick.score === r[0] ? "on" : "",onclick:function(){ pick.score = r[0]; drawAll(); }}, r[1], el("span",null,r[2]))); });
+  }
+  function ready(){ return pick.drink && pick.score && (pick.drink.uses === "none" || pick.bean) && $("name").value.trim(); }
+  function drawAll(){ drawDrinks(); drawCoffees(); drawScores(); $("submit").disabled = !ready(); }
+  function tick(){ $("when").textContent = "Saved with today's date and time: " + new Date().toLocaleString([], {weekday:"short", month:"short", day:"numeric", hour:"numeric", minute:"2-digit"}); }
+
+  $("name").value = G ? G.name() : "";
+  $("name").addEventListener("input", function(){ $("submit").disabled = !ready(); });
+  var want = new URLSearchParams(location.search).get("drink");
+  if (want){ pick.drink = drinks.find(function(d){ return d.id === want; }) || null; var b0 = beansFor(pick.drink); if (b0.length === 1) pick.bean = b0[0]; }
+  drawAll(); tick(); setInterval(tick, 30000);
+
+  $("submit").addEventListener("click", function(){
+    if (!ready() || !G || !G.on) { $("msg").textContent = "Scoring isn't switched on yet."; return; }
+    var name = $("name").value.trim(); G.name(name);
+    var key = pick.drink.uses === "none" ? "none--" + pick.drink.id : pick.bean.id + "--" + pick.drink.id;
+    $("submit").disabled = true; $("msg").textContent = "Sending…";
+    G.rate(key, pick.score).then(function(r){
+      if (!r || !r.ok) throw 0;
+      $("form").hidden = true; $("done").hidden = false;
+      $("doneBig").textContent = WORD[pick.score] + "!";
+      $("doneTxt").textContent = "Thanks, " + name + ". " + pick.drink.name + (pick.bean ? " with " + pick.bean.name : "") + " is on the card.";
+      $("msg").textContent = ""; loadBoard();
+    }).catch(function(){ $("msg").textContent = "That didn't go through. Check the Wi-Fi and try again."; $("submit").disabled = false; });
   });
-  draw();
-  if (live) G.ratings().then(function(r){ FAM = r || {}; draw(); }).catch(function(){});
+  $("again").addEventListener("click", function(){ pick = { drink:null, bean:null, score:null }; $("done").hidden = true; $("form").hidden = false; drawAll(); window.scrollTo({top:0,behavior:"smooth"}); });
+
+  // Leaderboard: every coffee, Jamey's rating and the family's most common rating across all drinks.
+  function loadBoard(){
+    var draw = function(F){
+      var bd = $("board"); bd.replaceChildren(el("div",{class:"hd"}, el("span",null,"coffee"), el("span",null,"jamey"), el("span",null,"family")));
+      M.beans.forEach(function(b){
+        var t = {2:0,3:0,4:0,5:0,6:0,count:0};
+        Object.keys(F).forEach(function(k){ if (k === b.id || k.indexOf(b.id + "--") === 0){ [2,3,4,5,6].forEach(function(n){ t[n] += +F[k][n] || 0; }); t.count += +F[k].count || 0; } });
+        var best = t.count ? [2,3,4,5,6].reduce(function(a,n){ return t[n] > (t[a]||0) ? n : a; }, 4) : null;
+        bd.append(el("div",{class:"row"},
+          el("div",{class:"c"}, b.name, el("small",null, b.status === "out" ? "finished" : "on hand")),
+          el("div",{class:"r"}, el("div",{class:"v",text: b.score ? WORD[b.score] : "–"})),
+          el("div",{class:"r"}, el("div",{class:"v",text: best ? WORD[best] : "–"}), t.count ? el("div",{class:"s",text: t.count + (t.count === 1 ? " score" : " scores")}) : null)));
+      });
+    };
+    draw({});
+    if (G && G.on) G.ratings().then(draw).catch(function(){});
+  }
+  loadBoard();
 })();
 </script>
 </body>
