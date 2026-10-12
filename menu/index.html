@@ -294,7 +294,7 @@ function activeQueue(){ return [...orders.values()].filter(o => stateOf(o.id) !=
 
 async function publish(topic, title, message){
   // No Content-Type header: keeps this a simple CORS request. ntfy reads JSON posted to its root.
-  const res = await fetch(NTFY + "/", { method:"POST", body: JSON.stringify({ topic, title, message, tags:["coffee"] }) });
+  const res = await fetch(NTFY + "/", { method:"POST", body: JSON.stringify(Object.assign({ topic, title, message, tags:["coffee"] }, topic === ORDERS ? { priority:4 } : {})) });
   if (!res.ok) throw new Error("HTTP " + res.status);
   return res.json();
 }
