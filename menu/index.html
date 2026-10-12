@@ -296,6 +296,7 @@ body.table{overflow:hidden}
 
 <script src="qrcode.js"></script>
 <script src="data.js"></script>
+<script src="guest.js"></script>
 <script src="../data/shots.js" onerror="window.SHOTS=[]"></script>
 <script>
 (function(){
@@ -424,7 +425,8 @@ function renderMenu(){
     el("p",{class:"sub",text:"Every espresso drink is a double shot, pulled to order."}),
     picker(),
     list,
-    el("p",{class:"decaf",text:M.decafNote})
+    el("p",{class:"decaf",text:M.decafNote}),
+    window.GUEST && window.GUEST.on ? el("a",{class:"cardlink",href:"share.html" + MODE_QS},"Got a good-looking cup? Share your pour ›") : null
   ));
   if (seasonList.children.length) app.append(el("section",{id:"seasonal"},
     el("h2",{text:(M.season && M.season.name ? M.season.name + " Seasonal" : "Seasonal")}),

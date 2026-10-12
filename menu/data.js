@@ -7,6 +7,8 @@ window.FOREUNDER = {
   ntfyTopic: "foreunder-bar-q7m4x2k9vz",
   // Phone ordering, order screen and TV queue. Off: guests browse, Jamey serves the room.
   ordering: false,
+  // Guest backend (Google Apps Script web app in Jamey's Google account). Empty = family ratings and photo sharing stay hidden.
+  guestApi: "",
   minutesPerDrink: 4,
   // Seasonal section heading. Swap the drinks marked section: "seasonal" when the season changes.
   season: { name: "Fall", sub: "Here for the season. Ask Jamey which one he's pouring." },

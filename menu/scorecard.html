@@ -83,6 +83,10 @@ td.sc{width:82px}
 .key .rt.e{background:var(--oxblood)}
 .key div{grid-template-columns:118px 1fr!important}
 .key .rt.n{display:none}
+.fc{display:flex;flex-direction:column;align-items:center;gap:3px}
+.fc small{font:500 10px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.1em;color:var(--cardmuted)}
+body:not(.live) .fam{display:none}
+@media (max-width:420px){td.sc{width:70px}.rt{padding:5px 6px;letter-spacing:.06em}}
 .sum .v{font-size:22px!important}
 </style>
 </head>
@@ -98,7 +102,7 @@ td.sc{width:82px}
   <div class="card">
     <div class="top"><b>Foreunder Coffee House</b><span>the coffee round</span></div>
     <table>
-      <thead><tr><th>hole</th><th class="l">coffee</th><th>jamey</th><th>you</th></tr></thead>
+      <thead><tr><th>hole</th><th class="l">coffee</th><th>jamey</th><th class="fam">family</th><th>you</th></tr></thead>
       <tbody id="rows"></tbody>
     </table>
   </div>
@@ -117,10 +121,11 @@ td.sc{width:82px}
     <div><span class="rt d">double bogey</span><p style="margin:0"><span>Not for you.</span></p></div>
   </div>
 
-  <p class="foot">Tap "tap to score" next to any coffee you've tried. Your card stays on your phone. A new hole is added every time a new bag goes on.<br><button class="reset" id="reset" type="button">clear my card</button></p>
+  <p class="foot">Tap "rate it" next to any coffee you've tried. Your ratings are saved on your phone and count toward the family column. A new hole is added every time a new bag goes on.<br><button class="reset" id="reset" type="button">clear my card</button></p>
 </main>
 <script src="data.js"></script>
 <script src="../data/shots.js" onerror="window.SHOTS=[]"></script>
+<script src="guest.js"></script>
 <script>
 (function(){
   var M = window.FOREUNDER, SHOTS = window.SHOTS || [], PAR = 4, KEY = "foreunder.scorecard";
@@ -130,7 +135,7 @@ td.sc{width:82px}
     for (var i=2;i<arguments.length;i++){ var c=arguments[i]; if(c==null) continue; e.append(c.nodeType?c:document.createTextNode(c)); }
     return e; }
   var R = {2:["e","eagle"],3:["b","birdie"],4:["p","par"],5:["g","bogey"],6:["d","double bogey"]};
-  function tag(n){ var r = R[n]; return el("span",{class:"rt " + (r ? r[0] : "n")}, r ? r[1] : "tap to score"); }
+  function tag(n){ var r = R[n]; return el("span",{class:"rt " + (r ? r[0] : "n")}, r ? r[1] : "rate it"); }
   function tally(list){ var c = {}; list.forEach(function(n){ c[n]=(c[n]||0)+1; });
     return [2,3,4,5,6].filter(function(n){ return c[n]; }).map(function(n){ var w=R[n][1]; return c[n] + " " + (c[n]>1 ? (w==="par"?"pars":w==="double bogey"?"double bogeys":w+"s") : w); }).join(" · "); }
   var mine = {}; try { mine = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch(e) {}
@@ -140,6 +145,13 @@ td.sc{width:82px}
   function firstPull(b){ var d = SHOTS.filter(function(s){ return s.bean && s.bean.indexOf(b.name) !== -1; }).map(function(s){ return s.date; }).sort()[0]; return d || b.opened || b.roastDate || "9999"; }
   var holes = M.beans.slice().sort(function(a,b){ return firstPull(a) < firstPull(b) ? -1 : firstPull(a) > firstPull(b) ? 1 : 0; });
 
+  var G = window.GUEST, FAM = {};
+  if (G && G.on){ document.body.classList.add("live"); G.ratings().then(function(r){ FAM = r || {}; draw(); }).catch(function(){}); }
+  function famCell(id){
+    var f = FAM[id]; if (!f || !f.count) return el("span",{class:"rt n"},"no votes");
+    var best = [2,3,4,5,6].reduce(function(a,n){ return f[n] > (f[a]||0) ? n : a; }, 4);
+    return el("div",{class:"fc"}, tag(best), el("small",null, f.count + (f.count === 1 ? " vote" : " votes")));
+  }
   function draw(){
     var rows = document.getElementById("rows"); rows.replaceChildren();
     var js = [], ys = [];
@@ -152,7 +164,10 @@ td.sc{width:82px}
         el("option",{value:"2"},"Eagle: one of the best"), el("option",{value:"3"},"Birdie: really good"), el("option",{value:"4"},"Par: solid"),
         el("option",{value:"5"},"Bogey: wouldn't go back"), el("option",{value:"6"},"Double bogey: not for me"));
       sel.value = you == null ? "" : String(you);
-      sel.addEventListener("change", function(){ if (sel.value === "") delete mine[b.id]; else mine[b.id] = +sel.value; save(); draw(); });
+      sel.addEventListener("change", function(){
+        if (sel.value === "") delete mine[b.id]; else mine[b.id] = +sel.value; save(); draw();
+        if (G && G.on) G.rate(b.id, +sel.value || 0).then(function(){ return G.ratings(); }).then(function(r){ FAM = r || FAM; draw(); }).catch(function(){});
+      });
       rows.append(el("tr",null,
         el("td",{class:"hole"}, String(i+1)),
         el("td",{class:"cf"},
@@ -160,6 +175,7 @@ td.sc{width:82px}
           el("div",{class:"mt"}, [b.roaster, b.origin && b.origin !== "Blend" ? b.origin : b.type].filter(Boolean).join(" · ")),
           b.scoreNote ? el("div",{class:"nt"}, b.scoreNote) : null),
         el("td",{class:"sc"}, b.score != null ? tag(b.score) : el("span",{class:"rt n"},"not yet")),
+        el("td",{class:"sc fam"}, famCell(b.id)),
         el("td",{class:"sc"}, el("span",{class:"you"}, tag(you), sel))
       ));
     });
