@@ -58,7 +58,7 @@ dl.kv dd{margin:0}
     <img src="logo.jpg" alt="">
     <div><h1>Bar Recipes</h1><p class="kicker">How we make every drink, and where each coffee is dialed.</p></div>
   </header>
-  <nav class="jump"><a href="#machine">machine</a><a href="#coffees">coffees</a><a href="#drinks">drinks</a><a href="#dessert">dessert</a><a href="#milk">milk</a></nav>
+  <nav class="jump"><a href="#machine">machine</a><a href="#coffees">coffees</a><a href="#drinks">drinks</a><a href="#seasonal">seasonal</a><a href="#dessert">dessert</a><a href="#milk">milk</a></nav>
 
   <h2 id="machine">The Machine</h2>
   <p class="lead">Baseline for every shot unless a coffee says otherwise.</p>
@@ -80,6 +80,10 @@ dl.kv dd{margin:0}
   <h2 id="drinks">Drinks</h2>
   <p class="lead"><span class="tag mine">my recipe</span> is how Jamey makes it. <span class="tag std">starting point</span> is the classic method, to be tuned.</p>
   <div id="drinkList" class="grid"></div>
+
+  <h2 id="seasonal">Seasonal</h2>
+  <p class="lead">Rotates with the season. Practice these before pouring them for guests.</p>
+  <div id="seasonList" class="grid"></div>
 
   <h2 id="dessert">Dessert</h2>
   <div id="dessertList" class="grid"></div>
@@ -131,8 +135,9 @@ dl.kv dd{margin:0}
       el.apply(null, ["ol",{}].concat((d.how||[]).map(function(s){ return el("li",{text:s}); })))
     );
   }
+  if (M.season && M.season.name) document.getElementById("seasonal").textContent = M.season.name + " Seasonal";
   M.drinks.forEach(function(d){
-    document.getElementById(d.section === "dessert" ? "dessertList" : "drinkList").append(card(d));
+    document.getElementById(d.section === "dessert" ? "dessertList" : d.section === "seasonal" ? "seasonList" : "drinkList").append(card(d));
   });
 })();
 </script>

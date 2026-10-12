@@ -55,7 +55,7 @@ header.crest{text-align:center;padding-block:28px 20px;display:flex;flex-directi
 
 .crest .logo{width:min(320px,78vw);aspect-ratio:1;display:block;-webkit-mask-image:radial-gradient(circle at 50% 50%,#000 66%,transparent 76%);mask-image:radial-gradient(circle at 50% 50%,#000 66%,transparent 76%)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.board .logo{width:calc(12*var(--u));aspect-ratio:1;display:block;margin:calc(-1*var(--u)) 0 calc(-.5*var(--u)) calc(-1*var(--u));-webkit-mask-image:radial-gradient(circle,#000 66%,transparent 76%);mask-image:radial-gradient(circle,#000 66%,transparent 76%)}
+.board .logo{width:calc(8*var(--u));aspect-ratio:1;display:block;margin:calc(-1*var(--u)) 0 calc(-.5*var(--u)) calc(-1*var(--u));-webkit-mask-image:radial-gradient(circle,#000 66%,transparent 76%);mask-image:radial-gradient(circle,#000 66%,transparent 76%)}
 section{padding-block:22px}
 h2{font:400 26px/1.15 var(--display);letter-spacing:.04em;margin:0 0 4px;text-wrap:balance}
 .sub{color:var(--muted);margin:0 0 16px;font-style:italic}
@@ -69,6 +69,23 @@ h2{font:400 26px/1.15 var(--display);letter-spacing:.04em;margin:0 0 4px;text-wr
 .drink.signature .n{color:var(--brass)}
 .drink .l{font:500 13px/1.3 var(--label);letter-spacing:.08em;color:var(--brass);text-transform:lowercase}
 .drink .d{grid-column:1;color:var(--muted);font-size:15px;line-height:1.45;min-width:0}
+.pickbox{margin:0 0 16px}
+.pickstart{width:100%}
+.picker{background:var(--panel,#16271f);border:1px solid var(--rule);border-radius:12px;padding:16px}
+.picker .pq{font:400 21px/1.2 var(--display);margin:0 0 12px}
+.picker .pbtns{display:flex;flex-wrap:wrap;gap:8px}
+.picker .pbtns .btn{flex:1 1 auto}
+.picker .pdots{font:500 12px/1 var(--label);letter-spacing:.14em;text-transform:lowercase;color:var(--muted);margin-top:12px}
+.pick-res .pk{font:500 12px/1 var(--label);letter-spacing:.16em;text-transform:lowercase;color:var(--brass)}
+.pick-res .pn{font:400 28px/1.15 var(--display);margin:4px 0 6px}
+.pick-res .pw{color:var(--muted);margin:0 0 14px}
+.btn.ghost{border-color:var(--rule);color:var(--muted)}
+.drink.flash{background:rgba(201,162,79,.14);transition:background .4s}
+body:not(.board) .drink.hasph{grid-template-columns:1fr 76px}
+body:not(.board) .drink .ph{grid-column:2;grid-row:1/span 3;width:76px;height:76px;border-radius:50%;object-fit:cover;border:1px solid var(--rule);align-self:center}
+.cardlink{display:inline-block;margin-top:14px;color:var(--brass);font:500 15px/1.3 var(--label);letter-spacing:.08em;text-decoration:none}
+.drink .ph{display:none}
+body:not(.board) .drink .ph{display:block}
 .drink button{grid-row:1/span 3;grid-column:2}
 body:not(.board) .drink .l{grid-column:1}
 body:not(.board) .drink{align-items:start}
@@ -154,7 +171,7 @@ body.board{--u:min(1vw,1.7778vh);padding-block:0;overflow:hidden;font-size:clamp
 .board .drinks .n{white-space:nowrap}
 .board .drinks .l{text-align:right}
 .board .queue{overflow:hidden;min-height:0;flex:1 1 auto}
-.board .drink{padding-block:calc(.32*var(--u))}
+.board .drink{padding-block:calc(.2*var(--u))}
 .bboard-bean{border-bottom:1px solid var(--rule);padding-bottom:calc(1*var(--u));display:flex;flex-direction:column;gap:calc(.3*var(--u))}
 .bboard-bean h3{font:400 calc(1.8*var(--u))/1.15 var(--display);margin:0}
 .bboard-bean .meta{font:500 calc(.95*var(--u))/1.3 var(--label);letter-spacing:.1em;color:var(--brass);text-transform:lowercase}
@@ -179,7 +196,7 @@ body.noorder{padding-bottom:32px}
 .board .browse .tagline2{font:500 calc(1*var(--u))/1.2 var(--label);letter-spacing:.16em;text-transform:lowercase;color:var(--muted)}
 /* ===== TV menu board (descriptive) ===== */
 body.mb{display:flex;flex-direction:column}
-.mb-head{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:calc(2.5*var(--u));padding:calc(1.2*var(--u)) calc(3*var(--u)) calc(.4*var(--u))}
+.mb-head{display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:calc(2.5*var(--u));padding:calc(1.2*var(--u)) calc(3*var(--u)) calc(.4*var(--u))}
 .mb-crest{width:calc(8*var(--u));aspect-ratio:1;display:block;-webkit-mask-image:radial-gradient(circle,#000 66%,transparent 76%);mask-image:radial-gradient(circle,#000 66%,transparent 76%)}
 .mb-tag{font:italic 400 calc(2.4*var(--u))/1.1 var(--italic);color:var(--brass)}
 .mb-sub{font:500 calc(1*var(--u))/1.3 var(--label);letter-spacing:.14em;text-transform:lowercase;color:var(--muted);margin-top:calc(.6*var(--u))}
@@ -191,15 +208,20 @@ body.mb{display:flex;flex-direction:column}
 .mb h2{font-size:calc(1.8*var(--u));color:var(--brass);margin:0 0 calc(.3*var(--u))}
 .mb-row{display:flex;justify-content:space-between;align-items:baseline;gap:calc(1*var(--u))}
 .mb-drinks h2.mb-sub2{margin-top:calc(.8*var(--u))}
-.board h2.sub2{margin-top:calc(.9*var(--u))}
+.board h2.sub2{margin-top:calc(.6*var(--u))}
 .mb-dessert{display:grid;grid-template-columns:1fr 1fr;column-gap:calc(2*var(--u));border-top:1px solid var(--rule)}
 .mb-dz{border-bottom:1px solid var(--rule);padding:calc(.3*var(--u)) 0}
 .mb-dz .n{font:400 calc(1.36*var(--u))/1.1 var(--display);letter-spacing:.03em;white-space:nowrap}
 .mb-dz .l{font:500 calc(.78*var(--u))/1.3 var(--label);letter-spacing:.1em;color:var(--brass);text-transform:lowercase}
 .bdessert{display:grid;grid-template-columns:1fr 1fr;column-gap:calc(2*var(--u));border-top:1px solid var(--rule)}
-.bdessert .n{font:400 calc(1.6*var(--u))/1.2 var(--display);letter-spacing:.03em;white-space:nowrap;border-bottom:1px solid var(--rule);padding:calc(.32*var(--u)) 0}
+.bdessert .n{font:400 calc(1.45*var(--u))/1.2 var(--display);letter-spacing:.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-bottom:1px solid var(--rule);padding:calc(.22*var(--u)) 0}
 .mb-lately{font:500 calc(.7*var(--u))/1 var(--label);letter-spacing:.12em;text-transform:lowercase;color:var(--ink);background:var(--oxblood);border-radius:999px;padding:calc(.25*var(--u)) calc(.6*var(--u));margin-left:calc(.8*var(--u));vertical-align:middle;position:relative;top:calc(-.15*var(--u))}
 .lately{font:500 11px/1 var(--label);letter-spacing:.12em;text-transform:lowercase;color:var(--ink);background:var(--oxblood);border-radius:999px;padding:4px 8px;margin-left:10px;vertical-align:middle;white-space:nowrap;display:inline-block;position:relative;top:-2px}
+.mb-season{border-left:2px solid var(--oxblood);padding:calc(.4*var(--u)) 0 calc(.4*var(--u)) calc(1.4*var(--u));margin-right:calc(1*var(--u));max-width:calc(30*var(--u))}
+.mb-season .k{font:500 calc(.8*var(--u))/1 var(--label);letter-spacing:.16em;text-transform:lowercase;color:var(--brass);margin-bottom:calc(.4*var(--u))}
+.mb-season .sd{margin-top:calc(.3*var(--u))}
+.mb-season .n{display:block;font:400 calc(1.45*var(--u))/1.1 var(--display);letter-spacing:.02em}
+.mb-season .l{display:block;font:500 calc(.72*var(--u))/1.3 var(--label);letter-spacing:.08em;color:var(--muted);text-transform:lowercase}
 .mb-drink{border-top:1px solid var(--rule);padding:calc(.1*var(--u)) 0}
 .mb-drink .n{font:400 calc(1.36*var(--u))/1.1 var(--display);letter-spacing:.03em;white-space:nowrap}
 .mb-drink .l{font:500 calc(.82*var(--u))/1.2 var(--label);letter-spacing:.1em;color:var(--brass);text-transform:lowercase;text-align:right}
@@ -384,10 +406,12 @@ function renderMenu(){
   const lately = notMadeLately(3);
   const list = el("ul",{class:"drinks"});
   const dessertList = el("ul",{class:"drinks"});
+  const seasonList = el("ul",{class:"drinks"});
   M.drinks.forEach(d => {
     const available = d.uses === "none" || beansFor(d).length > 0;
     if (!available) return;
-    (d.section === "dessert" ? dessertList : list).append(el("li",{class:"drink" + (d.signature ? " signature" : "")},
+    (d.section === "dessert" ? dessertList : d.section === "seasonal" ? seasonList : list).append(el("li",{class:"drink" + (d.signature ? " signature" : "") + (d.photo && !ORDERING ? " hasph" : ""), id:"d-" + d.id},
+      d.photo && !ORDERING ? el("img",{class:"ph",src:d.photo,alt:d.name + " made at the Foreunder bar",loading:"lazy"}) : null,
       d.signature ? el("div",{class:"sig",text:"house signature"}) : null,
       el("div",{class:"n"}, d.name, lately.has(d.id) ? el("span",{class:"lately",text:"not made lately"}) : null),
       el("div",{class:"l",text:d.line}),
@@ -398,8 +422,14 @@ function renderMenu(){
   app.append(el("section",{id:"drinks"},
     el("h2",{text:"Drinks"}),
     el("p",{class:"sub",text:"Every espresso drink is a double shot, pulled to order."}),
+    picker(),
     list,
     el("p",{class:"decaf",text:M.decafNote})
+  ));
+  if (seasonList.children.length) app.append(el("section",{id:"seasonal"},
+    el("h2",{text:(M.season && M.season.name ? M.season.name + " Seasonal" : "Seasonal")}),
+    M.season && M.season.sub ? el("p",{class:"sub",text:M.season.sub}) : null,
+    seasonList
   ));
   if (dessertList.children.length) app.append(el("section",{id:"dessert"},
     el("h2",{text:"Dessert"}),
@@ -412,7 +442,8 @@ function renderMenu(){
   app.append(el("section",{id:"beans"},
     el("h2",{text:"Our coffees"}),
     el("p",{class:"sub",text:"On hand now: where each one is from and what to expect."}),
-    beansWrap
+    beansWrap,
+    el("a",{class:"cardlink",href:"scorecard.html" + MODE_QS},"See the scorecard: how every coffee played ›")
   ));
   // Coffees we've finished: kept for the record, clearly not available.
   const past = M.beans.filter(b => b.status === "out");
@@ -639,6 +670,58 @@ function showSent(id, name, line, note, ok){
 
 /* ---------- TV BOARD ---------- */
 /* ---------- TV MENU BOARD (simple version): full descriptions, a conversation piece ---------- */
+// "Help me pick": three quick taps that point a guest to a drink Jamey makes well.
+function picker(){
+  const has = id => M.drinks.some(d => d.id === id && (d.uses === "none" || beansFor(d).length));
+  const pickFrom = ids => ids.find(has);
+  const wrap = el("div",{class:"picker"});
+  const ans = {};
+  const Q = [
+    {k:"style", q:"How do you like your coffee?", o:[["bold","Strong and bold"],["mellow","Smooth and mellow"],["none","No coffee for me"]]},
+    {k:"milk", q:"Milk?", o:[["black","None, keep it black"],["little","Just a little"],["lots","Creamy and milky"]]},
+    {k:"sweet", q:"Something sweet?", o:[["yes","Yes, treat me"],["no","No thanks"]]}
+  ];
+  function result(){
+    if (ans.style === "none") return [pickFrom(["hotchoc"]), "Rich dark chocolate, no coffee at all."];
+    if (ans.milk === "black") return ans.style === "bold"
+      ? [pickFrom(["espresso","americano"]), "The purest taste of the coffee."]
+      : [pickFrom(["americano","press","espresso"]), "Long, clean and easy to sip."];
+    if (ans.sweet === "yes") return [pickFrom(["mocha","latte"]), "Espresso, real dark chocolate and steamed milk."];
+    if (ans.milk === "little") return ans.style === "bold"
+      ? [pickFrom(["flatwhite","cappuccino"]), "Strong coffee softened with silky milk. The house favorite."]
+      : [pickFrom(["groundscrew","flatwhite"]), "A long Americano with a rich cap of steamed cream."];
+    return ans.style === "bold"
+      ? [pickFrom(["cappuccino","flatwhite"]), "A strong double under a thick cap of foam."]
+      : [pickFrom(["latte","flatwhite"]), "Milder and milkier, easy any time of day."];
+  }
+  function step(i){
+    wrap.replaceChildren();
+    if (i === 0) delete ans.milk, delete ans.sweet;
+    const qs = Q.filter(q => !(q.k !== "style" && ans.style === "none") && !(q.k === "sweet" && ans.milk === "black"));
+    if (i >= qs.length){
+      const [id, why] = result(); const d = M.drinks.find(x => x.id === id);
+      if (!d) { wrap.append(el("p",{class:"pq",text:"Ask Jamey. He'll sort you out."})); return; }
+      wrap.append(el("div",{class:"pick-res"},
+        el("div",{class:"pk",text:"Try the"}),
+        el("div",{class:"pn",text:d.name}),
+        el("p",{class:"pw",text:why}),
+        el("div",{class:"pbtns"},
+          ORDERING ? el("button",{class:"btn solid",type:"button",onclick:()=>openOrder(d.id),text:"order it"})
+                   : el("button",{class:"btn",type:"button",onclick:()=>{ const t=document.getElementById("d-"+d.id); if(t){ t.scrollIntoView({behavior:"smooth",block:"center"}); t.classList.add("flash"); setTimeout(()=>t.classList.remove("flash"),1800);} },text:"show me"}),
+          el("button",{class:"btn ghost",type:"button",onclick:()=>step(0),text:"start over"}))
+      ));
+      return;
+    }
+    const q = qs[i];
+    wrap.append(el("p",{class:"pq",text:q.q}),
+      el("div",{class:"pbtns"}, ...q.o.map(([v,label]) => el("button",{class:"btn",type:"button",onclick:()=>{ ans[q.k]=v; step(i+1); },text:label}))),
+      el("div",{class:"pdots",text: (i+1) + " of " + qs.length}));
+  }
+  const start = el("button",{class:"btn pickstart",type:"button",onclick:()=>{ start.remove(); wrap.hidden=false; step(0); },text:"Not sure? Help me pick"});
+  wrap.hidden = true;
+  return el("div",{class:"pickbox"}, start, wrap);
+}
+
 // "Not made lately": reads the Shot Log mirror and flags the everyday espresso drinks made least recently.
 const DRINK_MATCH = [
   ["groundscrew", /grounds crew|swilcan/i], ["mocha", /mocha/i], ["flatwhite", /flat white/i],
@@ -652,7 +735,7 @@ function notMadeLately(n){
     if (hit && sh.date && (!last[hit[0]] || sh.date > last[hit[0]])) last[hit[0]] = sh.date;
   });
   if (!Object.keys(last).length) return new Set();
-  const pool = M.drinks.filter(d => d.uses === "espresso" && d.section !== "dessert" && d.tv !== false && beansFor(d).length);
+  const pool = M.drinks.filter(d => d.uses === "espresso" && !d.section && d.tv !== false && beansFor(d).length);
   pool.sort((a, b) => (last[a.id] || "") < (last[b.id] || "") ? -1 : (last[a.id] || "") > (last[b.id] || "") ? 1 : 0);
   return new Set(pool.slice(0, n).map(d => d.id));
 }
@@ -664,6 +747,7 @@ function renderMenuBoard(){
   const head = el("header",{class:"mb-head"},
     el("img",{class:"mb-crest",src:"logo.jpg",alt:"Foreunder Coffee House"}),
     el("div",{class:"mb-title"}, el("div",{class:"mb-tag",text:"A good round starts here."}), el("div",{class:"mb-sub",text:"Every espresso drink is a double shot, pulled to order."})),
+    (() => { const sd = M.drinks.filter(d => d.section === "seasonal" && d.tv !== false && (d.uses === "none" || beansFor(d).length)); return sd.length ? el("div",{class:"mb-season"}, el("div",{class:"k",text:(M.season && M.season.name ? M.season.name : "Seasonal") + " seasonal"}), ...sd.map(d => el("div",{class:"sd"}, el("span",{class:"n",text:d.name}), el("span",{class:"l",text:d.line})))) : el("div"); })(),
     el("div",{class:"mb-qr"}, el("div",{class:"qrbox",id:"qr"}), el("div",{class:"mb-scan",text:"Scan to read it on your phone."}))
   );
   const drinks = el("section",{class:"mb-drinks"}, el("h2",{text:"Drinks"}));
@@ -672,7 +756,7 @@ function renderMenuBoard(){
   const mbItem = d => el("div",{class:"mb-drink"},
       el("div",{class:"mb-row"}, el("span",{class:"n"}, d.name, lately.has(d.id) ? el("span",{class:"mb-lately",text:"not made lately"}) : null), el("span",{class:"l",text:d.line})),
       el("div",{class:"d",text:d.note}));
-  tvItems.filter(d => d.section !== "dessert").forEach(d => drinks.append(mbItem(d)));
+  tvItems.filter(d => !d.section).forEach(d => drinks.append(mbItem(d)));
   const tvDessert = tvItems.filter(d => d.section === "dessert");
   if (tvDessert.length) {
     const g = el("div",{class:"mb-dessert"});
@@ -714,8 +798,10 @@ function renderBoard(){
   const list = el("ul",{class:"drinks"});
   const bItem = d => el("li",{class:"drink" + (d.signature ? " signature" : "")}, el("div",{class:"n",text:d.name}), el("div",{class:"l",text: d.signature ? "house signature · " + d.line : d.line}));
   const bItems = M.drinks.filter(d => d.tv !== false && (d.uses === "none" || beansFor(d).length));
-  bItems.filter(d => d.section !== "dessert").forEach(d => list.append(bItem(d)));
+  bItems.filter(d => !d.section).forEach(d => list.append(bItem(d)));
   left.append(list);
+  const bSeason = bItems.filter(d => d.section === "seasonal");
+
   const bDessert = bItems.filter(d => d.section === "dessert");
   if (bDessert.length) { const dl = el("div",{class:"bdessert"}); bDessert.forEach(d => dl.append(el("div",{class:"n",text:d.name}))); left.append(el("h2",{class:"sub2",text:"Dessert"}), dl); }
 
@@ -732,6 +818,7 @@ function renderBoard(){
   const right = ORDERING
     ? el("div",null, el("h2",{text:"Order from your phone"}), qr, el("div",{class:"scan",text:SCAN_LINE}), el("h2",{text:"The queue"}), queue, el("div",{class:"wait",id:"wait"}))
     : el("div",{class:"browse"}, el("h2",{text:"On your phone"}), qr, el("div",{class:"scan",text:SCAN_LINE}), el("div",{class:"tagline",text:"A good round starts here."}), el("div",{class:"tagline2",text:"Great coffee. Better grounds."}));
+  if (bSeason.length) { mid.append(el("h2",{class:"sub2",text:(M.season && M.season.name ? M.season.name + " seasonal" : "Seasonal")})); bSeason.forEach(d => mid.append(el("div",{class:"bboard-bean"}, el("h3",{text:d.name}), el("div",{class:"meta",text:d.line})))); }
   app.append(el("div",{class:"board-grid"}, left, mid, right));
   makeQR(qr);
   if (ORDERING) connect();
