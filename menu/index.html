@@ -89,6 +89,8 @@ h2{font:400 26px/1.15 var(--display);letter-spacing:.04em;margin:0 0 4px;text-wr
 .pill.bar{color:var(--ok)}
 .pill.press{color:var(--brass)}
 .pill.out{color:var(--muted)}
+#past h2{color:var(--muted)}
+.beans.past .bean{opacity:.8}
 .facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 16px;margin:0}
 .facts div{min-width:0}
 .facts dt{font:500 12px/1.2 var(--label);letter-spacing:.12em;color:var(--brass);text-transform:lowercase}
@@ -359,12 +361,23 @@ function renderMenu(){
 
   // Beans
   const beansWrap = el("div",{class:"beans"});
-  [...M.beans].sort((a,b) => ({bar:0,press:1,out:2}[a.status] - {bar:0,press:1,out:2}[b.status])).forEach(b => beansWrap.append(beanCard(b)));
+  M.beans.filter(b => b.status !== "out").sort((a,b) => ({bar:0,press:1}[a.status] - {bar:0,press:1}[b.status])).forEach(b => beansWrap.append(beanCard(b)));
   app.append(el("section",{id:"beans"},
     el("h2",{text:"Our coffees"}),
-    el("p",{class:"sub",text:"Every coffee in the house: where it's from and what to expect."}),
+    el("p",{class:"sub",text:"On hand now: where each one is from and what to expect."}),
     beansWrap
   ));
+  // Coffees we've finished: kept for the record, clearly not available.
+  const past = M.beans.filter(b => b.status === "out");
+  if (past.length){
+    const pastWrap = el("div",{class:"beans past"});
+    past.forEach(b => pastWrap.append(beanCard(b)));
+    app.append(el("section",{id:"past"},
+      el("h2",{text:"Coffees we've tried"}),
+      el("p",{class:"sub",text:"Past bags we've brewed and enjoyed. Not on hand right now."}),
+      pastWrap
+    ));
+  }
 
   if (!ORDERING){
     app.append(el("footer",null, el("a",{href:"about.html" + MODE_QS,text:"Why a thistle? Read our story"}), el("div",{text:"Foreunder · Omaha, Nebraska"})));
@@ -384,7 +397,7 @@ function renderMenu(){
 }
 
 function beanCard(b){
-  const pillText = { bar:"available", press:"french press only", out:"finished" }[b.status];
+  const pillText = { bar:"available", press:"french press only", out:"not on hand" }[b.status];
   const facts = el("dl",{class:"facts"});
   const add = (k,v) => { if (v) facts.append(el("div",null, el("dt",{text:k}), el("dd",{text:v}))); };
   add("origin", b.origin);
