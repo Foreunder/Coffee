@@ -5,7 +5,7 @@ Usage: python3 scripts/page.py
 import pathlib
 root = pathlib.Path(__file__).resolve().parent.parent
 s = (root / "source.html").read_text()
-s = s.replace('<title>Gaggia Shot Log</title>', '<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n<title>Gaggia Shot Log</title>', 1)
+s = s.replace('<title>Foreunder Shot Log</title>', '<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n<title>Foreunder Shot Log</title>', 1)
 s = s.replace('</style>\n', '</style>\n</head>\n<body>\n', 1)
 s = s.replace('Every pull, logged automatically by Claude.', 'Every pull, logged automatically by Claude. GitHub mirror of the live log.')
 start = s.index('$("#refresh").addEventListener'); end = s.index('</script>', start)
