@@ -177,22 +177,28 @@ body.noorder{padding-bottom:32px}
 /* ===== TV menu board (descriptive) ===== */
 body.mb{display:flex;flex-direction:column}
 .mb-head{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:calc(2.5*var(--u));padding:calc(1.2*var(--u)) calc(3*var(--u)) calc(.4*var(--u))}
-.mb-crest{width:calc(9.5*var(--u));aspect-ratio:1;display:block;-webkit-mask-image:radial-gradient(circle,#000 66%,transparent 76%);mask-image:radial-gradient(circle,#000 66%,transparent 76%)}
+.mb-crest{width:calc(8*var(--u));aspect-ratio:1;display:block;-webkit-mask-image:radial-gradient(circle,#000 66%,transparent 76%);mask-image:radial-gradient(circle,#000 66%,transparent 76%)}
 .mb-tag{font:italic 400 calc(2.4*var(--u))/1.1 var(--italic);color:var(--brass)}
 .mb-sub{font:500 calc(1*var(--u))/1.3 var(--label);letter-spacing:.14em;text-transform:lowercase;color:var(--muted);margin-top:calc(.6*var(--u))}
 .mb-qr{display:flex;align-items:center;gap:calc(1.2*var(--u))}
 .mb-qr .qrbox{padding:calc(.6*var(--u))}
-.mb-qr .qrbox svg{width:calc(7.5*var(--u));height:calc(7.5*var(--u))}
+.mb-qr .qrbox svg{width:calc(7*var(--u));height:calc(7*var(--u))}
 .mb-scan{font:italic 400 calc(1.3*var(--u))/1.3 var(--italic);max-width:calc(10*var(--u))}
 .mb-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:calc(3.5*var(--u));padding:0 calc(3*var(--u)) calc(1*var(--u));flex:1;min-height:0;overflow:hidden}
 .mb h2{font-size:calc(1.8*var(--u));color:var(--brass);margin:0 0 calc(.3*var(--u))}
 .mb-row{display:flex;justify-content:space-between;align-items:baseline;gap:calc(1*var(--u))}
 .mb-drinks h2.mb-sub2{margin-top:calc(.8*var(--u))}
 .board h2.sub2{margin-top:calc(.9*var(--u))}
-.mb-drink{border-top:1px solid var(--rule);padding:calc(.15*var(--u)) 0}
-.mb-drink .n{font:400 calc(1.42*var(--u))/1.1 var(--display);letter-spacing:.03em;white-space:nowrap}
+.mb-dessert{display:grid;grid-template-columns:1fr 1fr;column-gap:calc(2*var(--u));border-top:1px solid var(--rule)}
+.mb-dz{border-bottom:1px solid var(--rule);padding:calc(.3*var(--u)) 0}
+.mb-dz .n{font:400 calc(1.36*var(--u))/1.1 var(--display);letter-spacing:.03em;white-space:nowrap}
+.mb-dz .l{font:500 calc(.78*var(--u))/1.3 var(--label);letter-spacing:.1em;color:var(--brass);text-transform:lowercase}
+.bdessert{display:grid;grid-template-columns:1fr 1fr;column-gap:calc(2*var(--u));border-top:1px solid var(--rule)}
+.bdessert .n{font:400 calc(1.6*var(--u))/1.2 var(--display);letter-spacing:.03em;white-space:nowrap;border-bottom:1px solid var(--rule);padding:calc(.32*var(--u)) 0}
+.mb-drink{border-top:1px solid var(--rule);padding:calc(.1*var(--u)) 0}
+.mb-drink .n{font:400 calc(1.36*var(--u))/1.1 var(--display);letter-spacing:.03em;white-space:nowrap}
 .mb-drink .l{font:500 calc(.82*var(--u))/1.2 var(--label);letter-spacing:.1em;color:var(--brass);text-transform:lowercase;text-align:right}
-.mb-drink .d{color:var(--muted);font-size:calc(.96*var(--u));line-height:1.2;margin-top:calc(.08*var(--u))}
+.mb-drink .d{color:var(--muted);font-size:calc(.93*var(--u));line-height:1.2;margin-top:calc(.08*var(--u))}
 .mb-bean{border-top:1px solid var(--rule);padding:calc(.6*var(--u)) 0 calc(.5*var(--u))}
 .mb-bean h3{font:400 calc(1.75*var(--u))/1.1 var(--display);margin:0}
 .mb-pill{font:700 calc(.75*var(--u))/1 var(--label);letter-spacing:.12em;text-transform:lowercase;color:var(--brass);border:1px solid var(--brass);border-radius:999px;padding:calc(.35*var(--u)) calc(.7*var(--u))}
@@ -642,7 +648,11 @@ function renderMenuBoard(){
       el("div",{class:"d",text:d.note}));
   tvItems.filter(d => d.section !== "dessert").forEach(d => drinks.append(mbItem(d)));
   const tvDessert = tvItems.filter(d => d.section === "dessert");
-  if (tvDessert.length) { drinks.append(el("h2",{class:"mb-sub2",text:"Dessert"})); tvDessert.forEach(d => drinks.append(mbItem(d))); }
+  if (tvDessert.length) {
+    const g = el("div",{class:"mb-dessert"});
+    tvDessert.forEach(d => g.append(el("div",{class:"mb-dz"}, el("div",{class:"n",text:d.name}), el("div",{class:"l",text:d.line}))));
+    drinks.append(el("h2",{class:"mb-sub2",text:"Dessert"}), g);
+  }
   const coffees = el("section",{class:"mb-coffees"}, el("h2",{text:"Our coffees"}));
   M.beans.filter(b => b.status !== "out").sort((a,b) => ({bar:0,press:1}[a.status] - {bar:0,press:1}[b.status])).forEach(b => {
     const meta = [b.roaster, b.origin !== "Blend" ? b.origin : b.type, b.process !== "Blended" ? b.process : null, b.roastLevel ? b.roastLevel + " roast" : null].filter(Boolean).join(" · ");
@@ -680,7 +690,7 @@ function renderBoard(){
   bItems.filter(d => d.section !== "dessert").forEach(d => list.append(bItem(d)));
   left.append(list);
   const bDessert = bItems.filter(d => d.section === "dessert");
-  if (bDessert.length) { const dl = el("ul",{class:"drinks"}); bDessert.forEach(d => dl.append(bItem(d))); left.append(el("h2",{class:"sub2",text:"Dessert"}), dl); }
+  if (bDessert.length) { const dl = el("div",{class:"bdessert"}); bDessert.forEach(d => dl.append(el("div",{class:"n",text:d.name}))); left.append(el("h2",{class:"sub2",text:"Dessert"}), dl); }
 
   const mid = el("div",null, el("h2",{text:"Our coffees"}));
   M.beans.filter(b => b.status !== "out").forEach(b => mid.append(

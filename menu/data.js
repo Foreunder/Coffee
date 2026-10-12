@@ -95,9 +95,11 @@ window.FOREUNDER = {
     { id: "flatwhite", name: "Flat White", uses: "espresso", milk: true, iced: false, line: "Double shot · silky milk", note: "The house favorite. Velvety, about 6 oz." },
     { id: "latte", name: "Latte", uses: "espresso", milk: true, iced: true, line: "Double shot · steamed milk", note: "Milder and milkier, about 10 oz." },
     { id: "mocha", name: "Mocha", uses: "espresso", milk: true, iced: false, chocolate: true, line: "Double shot · dark chocolate · milk", note: "Real dark chocolate melted in, no sugar added." },
-    { id: "affogato", name: "Affogato", section: "dessert", uses: "espresso", milk: false, iced: false, line: "Double shot · vanilla ice cream", note: "A hot double shot poured over a scoop of vanilla ice cream." },
     { id: "press", name: "French Press", uses: "press", milk: false, iced: false, line: "Full immersion · serves two", note: "Full-bodied and slow. Takes about 6 minutes." },
-    { id: "hotchoc", tv: false, name: "Hot Chocolate", uses: "none", milk: true, iced: false, chocolate: true, line: "Dark chocolate · steamed milk", note: "No coffee. Rich, not sweet." }
+    { id: "affogato", name: "Affogato", section: "dessert", uses: "espresso", milk: false, iced: false, line: "Double shot · vanilla ice cream", note: "A hot double shot poured over a scoop of vanilla ice cream." },
+    { id: "conpanna", name: "Espresso con Panna", section: "dessert", uses: "espresso", milk: false, iced: false, line: "Double shot · whipped cream", note: "A double shot crowned with a spoonful of fresh whipped cream." },
+    { id: "bombon", name: "Café Bombón", section: "dessert", uses: "espresso", milk: false, iced: false, line: "Double shot · sweetened condensed milk", note: "Spanish-style. Espresso layered over condensed milk in clear glass. Stir before sipping." },
+    { id: "hotchoc", name: "Hot Chocolate", section: "dessert", uses: "none", milk: true, iced: false, chocolate: true, line: "Dark chocolate · steamed milk", note: "No coffee. Real dark chocolate, rich, not sweet." }
   ],
 
   milks: ["Half & half", "Whole milk", "Oat milk"],
