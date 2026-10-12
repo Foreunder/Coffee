@@ -171,6 +171,9 @@ body.board{--u:min(1vw,1.7778vh);padding-block:0;overflow:hidden;font-size:clamp
 /* ===== Bar view ===== */
 .alertbtn{margin:0 0 14px}
 .newbanner{position:fixed;inset:auto 16px 20px 16px;background:var(--brass);color:#1a1408;border-radius:10px;padding:18px 20px;box-shadow:0 10px 30px rgba(0,0,0,.5);display:none;flex-direction:column;gap:4px;z-index:20;cursor:pointer;font-size:18px}
+body.board .newbanner{inset:auto calc(25*var(--u)) calc(3*var(--u)) calc(25*var(--u));padding:calc(1.6*var(--u)) calc(2*var(--u));font-size:calc(1.6*var(--u))}
+body.board .newbanner .nb-name{font-size:calc(3.2*var(--u))}
+.boardnav .alertbtn{margin:0}
 .newbanner.show{display:flex;animation:pulse 1s ease-in-out 3}
 .newbanner .label{color:#1a1408}
 .newbanner .nb-name{font:400 30px/1.1 var(--display)}
@@ -598,8 +601,42 @@ function renderBoard(){
   const fs = el("button",{type:"button",text:"full screen",onclick:()=>{ const d=document.documentElement; (d.requestFullscreen||d.webkitRequestFullscreen||function(){}).call(d); }});
   const nav = el("nav",{class:"boardnav"}, el("a",{href:"./",text:"menu"}), el("a",{href:"#bar",text:"orders"}), el("a",{href:"links.html",text:"links"}), fs);
   document.body.append(nav);
-  let t; const show = () => { nav.classList.add("show"); clearTimeout(t); t = setTimeout(() => nav.classList.remove("show"), 3000); };
+  const sbtn = attachOrderAlerts(nav, "sound on");
+  sbtn.classList.remove("solid");
+  // Until sound is turned on, keep the bar visible so the one required click is easy to find.
+  let t; const show = () => { nav.classList.add("show"); clearTimeout(t); t = setTimeout(() => { if (sbtn.disabled) nav.classList.remove("show"); }, 3000); };
+  nav.classList.add("show");
+  sbtn.addEventListener("click", () => setTimeout(() => nav.classList.remove("show"), 1500));
   ["mousemove","touchstart","keydown"].forEach(ev => document.addEventListener(ev, show, {passive:true}));
+}
+
+/* New-order alerts (order screen and TV board): chime + vibration + banner + tab title.
+   Browsers only allow sound after a click or tap, so a button unlocks it. */
+function attachOrderAlerts(host, label){
+  const alertBtn = el("button",{class:"btn solid alertbtn",type:"button",text:label});
+  alertBtn.addEventListener("click", () => { unlockChime(); orderChime(); alertBtn.textContent = "order sound on"; alertBtn.disabled = true; alertBtn.classList.add("on"); });
+  const banner = el("div",{class:"newbanner",role:"alert"});
+  const baseTitle = document.title;
+  let hideT;
+  const hide = () => { banner.classList.remove("show"); document.title = baseTitle; };
+  banner.addEventListener("click", hide);
+  host.append(alertBtn);
+  document.body.append(banner);
+  const loadedAt = Date.now()/1000 - 5, seen = new Set();
+  listeners.push(() => {
+    for (const o of orders.values()){
+      if (seen.has(o.id)) continue;
+      seen.add(o.id);
+      if (o.time < loadedAt) continue;          // history replayed on connect: no alert
+      orderChime();
+      try{ if (navigator.vibrate) navigator.vibrate([300,150,300]); }catch(e){}
+      banner.replaceChildren(el("div",{class:"label",text:"new order"}), el("div",{class:"nb-name",text:o.name}), el("div",{text:o.what}), el("div",{class:"nb-tap",text:"tap to dismiss"}));
+      banner.classList.add("show");
+      document.title = "🔔 New order: " + o.name;
+      clearTimeout(hideT); hideT = setTimeout(hide, 60000);
+    }
+  });
+  return alertBtn;
 }
 
 /* ---------- BAR VIEW (iPad) ---------- */
@@ -613,25 +650,7 @@ function renderBar(){
     el("p",{class:"sub",text:"New orders appear here. Tap Making when you start and Ready when it's done. Guests see the change on their phones and the TV."}),
     el("label",{for:"show-ready",class:"label",style:"display:flex;gap:8px;align-items:center;margin-bottom:12px"}, showAll, "show ready orders"),
   );
-  // New-order alerts on this screen: chime + vibration + banner + tab title. Phones and iPads only allow sound after a tap.
-  const alertBtn = el("button",{class:"btn solid alertbtn",type:"button",text:"turn on order sound"});
-  alertBtn.addEventListener("click", () => { unlockChime(); orderChime(); alertBtn.textContent = "order sound on"; alertBtn.disabled = true; });
-  const banner = el("div",{class:"newbanner",role:"alert"});
-  banner.addEventListener("click", () => { banner.classList.remove("show"); document.title = baseTitle; });
-  app.append(alertBtn, banner);
-  const baseTitle = document.title, loadedAt = Date.now()/1000 - 5, seen = new Set();
-  listeners.push(() => {
-    for (const o of orders.values()){
-      if (seen.has(o.id)) continue;
-      seen.add(o.id);
-      if (o.time < loadedAt) continue;          // history replayed on connect: no alert
-      orderChime();
-      try{ if (navigator.vibrate) navigator.vibrate([300,150,300]); }catch(e){}
-      banner.replaceChildren(el("div",{class:"label",text:"new order"}), el("div",{class:"nb-name",text:o.name}), el("div",{text:o.what}), el("div",{class:"nb-tap",text:"tap to dismiss"}));
-      banner.classList.add("show");
-      document.title = "🔔 New order: " + o.name;
-    }
-  });
+  attachOrderAlerts(app, "turn on order sound");
   const box = el("div",{class:"tickets"});
   app.append(box,
     el("div",{class:"help"},
