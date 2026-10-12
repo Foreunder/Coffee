@@ -55,7 +55,7 @@ header.crest{text-align:center;padding-block:28px 20px;display:flex;flex-directi
 
 .crest .logo{width:min(320px,78vw);aspect-ratio:1;display:block;-webkit-mask-image:radial-gradient(circle at 50% 50%,#000 66%,transparent 76%);mask-image:radial-gradient(circle at 50% 50%,#000 66%,transparent 76%)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.board .logo{width:calc(17*var(--u));aspect-ratio:1;display:block;margin:calc(-1*var(--u)) 0 calc(-.5*var(--u)) calc(-1*var(--u));-webkit-mask-image:radial-gradient(circle,#000 66%,transparent 76%);mask-image:radial-gradient(circle,#000 66%,transparent 76%)}
+.board .logo{width:calc(12*var(--u));aspect-ratio:1;display:block;margin:calc(-1*var(--u)) 0 calc(-.5*var(--u)) calc(-1*var(--u));-webkit-mask-image:radial-gradient(circle,#000 66%,transparent 76%);mask-image:radial-gradient(circle,#000 66%,transparent 76%)}
 section{padding-block:22px}
 h2{font:400 26px/1.15 var(--display);letter-spacing:.04em;margin:0 0 4px;text-wrap:balance}
 .sub{color:var(--muted);margin:0 0 16px;font-style:italic}
@@ -145,13 +145,13 @@ body.board{--u:min(1vw,1.7778vh);padding-block:0;overflow:hidden;font-size:clamp
 .board h1{font:400 calc(4.4*var(--u))/1 var(--display);letter-spacing:.06em;margin:0}
 .board .house{font:italic 400 calc(1.6*var(--u))/1.2 var(--italic);color:var(--brass)}
 .board h2{font-size:calc(1.9*var(--u));color:var(--brass);margin:0}
-.board .drinks .n{font-size:calc(1.75*var(--u))}
+.board .drinks .n{font-size:calc(1.6*var(--u))}
 .board .drinks .l{font-size:calc(.95*var(--u))}
 .board .drinks .d{display:none}
 .board .drinks .n{white-space:nowrap}
 .board .drinks .l{text-align:right}
 .board .queue{overflow:hidden;min-height:0;flex:1 1 auto}
-.board .drink{padding-block:calc(.42*var(--u))}
+.board .drink{padding-block:calc(.32*var(--u))}
 .bboard-bean{border-bottom:1px solid var(--rule);padding-bottom:calc(1*var(--u));display:flex;flex-direction:column;gap:calc(.3*var(--u))}
 .bboard-bean h3{font:400 calc(1.8*var(--u))/1.15 var(--display);margin:0}
 .bboard-bean .meta{font:500 calc(.95*var(--u))/1.3 var(--label);letter-spacing:.1em;color:var(--brass);text-transform:lowercase}
@@ -187,10 +187,12 @@ body.mb{display:flex;flex-direction:column}
 .mb-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:calc(3.5*var(--u));padding:0 calc(3*var(--u)) calc(1*var(--u));flex:1;min-height:0;overflow:hidden}
 .mb h2{font-size:calc(1.8*var(--u));color:var(--brass);margin:0 0 calc(.3*var(--u))}
 .mb-row{display:flex;justify-content:space-between;align-items:baseline;gap:calc(1*var(--u))}
-.mb-drink{border-top:1px solid var(--rule);padding:calc(.22*var(--u)) 0}
+.mb-drinks h2.mb-sub2{margin-top:calc(.8*var(--u))}
+.board h2.sub2{margin-top:calc(.9*var(--u))}
+.mb-drink{border-top:1px solid var(--rule);padding:calc(.15*var(--u)) 0}
 .mb-drink .n{font:400 calc(1.42*var(--u))/1.1 var(--display);letter-spacing:.03em;white-space:nowrap}
 .mb-drink .l{font:500 calc(.82*var(--u))/1.2 var(--label);letter-spacing:.1em;color:var(--brass);text-transform:lowercase;text-align:right}
-.mb-drink .d{color:var(--muted);font-size:calc(.96*var(--u));line-height:1.25;margin-top:calc(.1*var(--u))}
+.mb-drink .d{color:var(--muted);font-size:calc(.96*var(--u));line-height:1.2;margin-top:calc(.08*var(--u))}
 .mb-bean{border-top:1px solid var(--rule);padding:calc(.6*var(--u)) 0 calc(.5*var(--u))}
 .mb-bean h3{font:400 calc(1.75*var(--u))/1.1 var(--display);margin:0}
 .mb-pill{font:700 calc(.75*var(--u))/1 var(--label);letter-spacing:.12em;text-transform:lowercase;color:var(--brass);border:1px solid var(--brass);border-radius:999px;padding:calc(.35*var(--u)) calc(.7*var(--u))}
@@ -368,10 +370,11 @@ function renderMenu(){
 
   // Drinks
   const list = el("ul",{class:"drinks"});
+  const dessertList = el("ul",{class:"drinks"});
   M.drinks.forEach(d => {
     const available = d.uses === "none" || beansFor(d).length > 0;
     if (!available) return;
-    list.append(el("li",{class:"drink" + (d.signature ? " signature" : "")},
+    (d.section === "dessert" ? dessertList : list).append(el("li",{class:"drink" + (d.signature ? " signature" : "")},
       d.signature ? el("div",{class:"sig",text:"house signature"}) : null,
       el("div",{class:"n",text:d.name}),
       el("div",{class:"l",text:d.line}),
@@ -384,6 +387,10 @@ function renderMenu(){
     el("p",{class:"sub",text:"Every espresso drink is a double shot, pulled to order."}),
     list,
     el("p",{class:"decaf",text:M.decafNote})
+  ));
+  if (dessertList.children.length) app.append(el("section",{id:"dessert"},
+    el("h2",{text:"Dessert"}),
+    dessertList
   ));
 
   // Beans
@@ -629,11 +636,13 @@ function renderMenuBoard(){
     el("div",{class:"mb-qr"}, el("div",{class:"qrbox",id:"qr"}), el("div",{class:"mb-scan",text:"Scan to read it on your phone."}))
   );
   const drinks = el("section",{class:"mb-drinks"}, el("h2",{text:"Drinks"}));
-  M.drinks.filter(d => d.tv !== false && (d.uses === "none" || beansFor(d).length)).forEach(d => drinks.append(
-    el("div",{class:"mb-drink"},
+  const tvItems = M.drinks.filter(d => d.tv !== false && (d.uses === "none" || beansFor(d).length));
+  const mbItem = d => el("div",{class:"mb-drink"},
       el("div",{class:"mb-row"}, el("span",{class:"n",text:d.name}), el("span",{class:"l",text:d.line})),
-      el("div",{class:"d",text:d.note})
-    )));
+      el("div",{class:"d",text:d.note}));
+  tvItems.filter(d => d.section !== "dessert").forEach(d => drinks.append(mbItem(d)));
+  const tvDessert = tvItems.filter(d => d.section === "dessert");
+  if (tvDessert.length) { drinks.append(el("h2",{class:"mb-sub2",text:"Dessert"})); tvDessert.forEach(d => drinks.append(mbItem(d))); }
   const coffees = el("section",{class:"mb-coffees"}, el("h2",{text:"Our coffees"}));
   M.beans.filter(b => b.status !== "out").sort((a,b) => ({bar:0,press:1}[a.status] - {bar:0,press:1}[b.status])).forEach(b => {
     const meta = [b.roaster, b.origin !== "Blend" ? b.origin : b.type, b.process !== "Blended" ? b.process : null, b.roastLevel ? b.roastLevel + " roast" : null].filter(Boolean).join(" · ");
@@ -666,8 +675,12 @@ function renderBoard(){
     el("h2",{text:"Drinks"})
   );
   const list = el("ul",{class:"drinks"});
-  M.drinks.filter(d => d.tv !== false && (d.uses === "none" || beansFor(d).length)).forEach(d => list.append(el("li",{class:"drink" + (d.signature ? " signature" : "")}, el("div",{class:"n",text:d.name}), el("div",{class:"l",text: d.signature ? "house signature · " + d.line : d.line}))));
+  const bItem = d => el("li",{class:"drink" + (d.signature ? " signature" : "")}, el("div",{class:"n",text:d.name}), el("div",{class:"l",text: d.signature ? "house signature · " + d.line : d.line}));
+  const bItems = M.drinks.filter(d => d.tv !== false && (d.uses === "none" || beansFor(d).length));
+  bItems.filter(d => d.section !== "dessert").forEach(d => list.append(bItem(d)));
   left.append(list);
+  const bDessert = bItems.filter(d => d.section === "dessert");
+  if (bDessert.length) { const dl = el("ul",{class:"drinks"}); bDessert.forEach(d => dl.append(bItem(d))); left.append(el("h2",{class:"sub2",text:"Dessert"}), dl); }
 
   const mid = el("div",null, el("h2",{text:"Our coffees"}));
   M.beans.filter(b => b.status !== "out").forEach(b => mid.append(
