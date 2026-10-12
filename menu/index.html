@@ -196,7 +196,6 @@ body.mb{display:flex;flex-direction:column}
 .bdessert{display:grid;grid-template-columns:1fr 1fr;column-gap:calc(2*var(--u));border-top:1px solid var(--rule)}
 .bdessert .n{font:400 calc(1.6*var(--u))/1.2 var(--display);letter-spacing:.03em;white-space:nowrap;border-bottom:1px solid var(--rule);padding:calc(.32*var(--u)) 0}
 .mb-lately{font:500 calc(.7*var(--u))/1 var(--label);letter-spacing:.12em;text-transform:lowercase;color:var(--ink);background:var(--oxblood);border-radius:999px;padding:calc(.25*var(--u)) calc(.6*var(--u));margin-left:calc(.8*var(--u));vertical-align:middle;position:relative;top:calc(-.15*var(--u))}
-.lately{font:500 11px/1 var(--label);letter-spacing:.12em;text-transform:lowercase;color:var(--ink);background:var(--oxblood);border-radius:999px;padding:4px 8px;margin-left:8px;vertical-align:middle}
 .mb-drink{border-top:1px solid var(--rule);padding:calc(.1*var(--u)) 0}
 .mb-drink .n{font:400 calc(1.36*var(--u))/1.1 var(--display);letter-spacing:.03em;white-space:nowrap}
 .mb-drink .l{font:500 calc(.82*var(--u))/1.2 var(--label);letter-spacing:.1em;color:var(--brass);text-transform:lowercase;text-align:right}
@@ -378,7 +377,6 @@ function renderMenu(){
   );
 
   // Drinks
-  const lately = notMadeLately(3);
   const list = el("ul",{class:"drinks"});
   const dessertList = el("ul",{class:"drinks"});
   M.drinks.forEach(d => {
@@ -386,7 +384,7 @@ function renderMenu(){
     if (!available) return;
     (d.section === "dessert" ? dessertList : list).append(el("li",{class:"drink" + (d.signature ? " signature" : "")},
       d.signature ? el("div",{class:"sig",text:"house signature"}) : null,
-      el("div",{class:"n"}, d.name, lately.has(d.id) ? el("span",{class:"lately",text:"not made lately"}) : null),
+      el("div",{class:"n",text:d.name}),
       el("div",{class:"l",text:d.line}),
       el("div",{class:"d",text:d.note}),
       ORDERING ? el("button",{class:"btn",type:"button","aria-label":"Order a " + d.name,onclick:()=>openOrder(d.id),text:"order"}) : null

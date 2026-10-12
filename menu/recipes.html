@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Bar Recipes">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="icon" href="icon.png">
+<title>Bar Recipes · Foreunder Coffee House</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=IM+Fell+English:ital@0;1&family=Alegreya:ital,wght@0,400;0,500;1,400&family=Alegreya+Sans+SC:wght@500&display=swap">
+<style>
+:root{--ground:#0f1c16;--panel:#16271f;--ink:#f0e7d3;--muted:#b9ad90;--brass:#c9a24f;--oxblood:#8a2a35;--rule:rgba(201,162,79,.28)}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--ground);color:var(--ink);font:17px/1.5 "Alegreya","Iowan Old Style",Georgia,serif;-webkit-font-smoothing:antialiased}
+.band{height:8px;background:repeating-linear-gradient(90deg,var(--ground) 0 26px,var(--brass) 26px 28px,var(--ground) 28px 48px,var(--oxblood) 48px 54px)}
+main{max-width:760px;margin:0 auto;padding:12px 16px 56px}
+.back{display:inline-block;font:500 13px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.14em;text-transform:lowercase;color:var(--brass);text-decoration:none;padding:10px 0}
+header{display:flex;align-items:center;gap:16px;margin:4px 0 8px}
+header img{width:76px;height:76px;-webkit-mask-image:radial-gradient(circle,#000 66%,transparent 76%);mask-image:radial-gradient(circle,#000 66%,transparent 76%)}
+h1{font:400 clamp(32px,8vw,44px)/1.05 "IM Fell English SC",Georgia,serif;letter-spacing:.04em;margin:0}
+.kicker{font:italic 18px/1.3 "IM Fell English",Georgia,serif;color:var(--brass);margin:2px 0 0}
+nav.jump{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 4px;position:sticky;top:0;background:var(--ground);padding:8px 0;z-index:2;border-bottom:1px solid var(--rule)}
+nav.jump a{font:500 13px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.12em;text-transform:lowercase;color:var(--brass);text-decoration:none;border:1px solid var(--rule);border-radius:999px;padding:9px 13px}
+h2{font:400 28px/1.15 "IM Fell English SC",Georgia,serif;letter-spacing:.03em;color:var(--brass);margin:34px 0 4px;scroll-margin-top:64px}
+.lead{color:var(--muted);margin:0 0 14px}
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:14px 16px;margin-bottom:10px;break-inside:avoid}
+.card h3{font:400 23px/1.15 "IM Fell English SC",Georgia,serif;letter-spacing:.02em;margin:0}
+.top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.tag{font:500 11px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.12em;text-transform:lowercase;border-radius:999px;padding:5px 9px;white-space:nowrap}
+.tag.mine{background:var(--brass);color:#1a140a}
+.tag.std{border:1px solid var(--muted);color:var(--muted)}
+.meta{font:500 13px/1.4 "Alegreya Sans SC",sans-serif;letter-spacing:.1em;text-transform:lowercase;color:var(--brass);margin:4px 0 8px}
+ol{margin:0;padding-left:22px}
+ol li{margin:3px 0}
+.recipe{font:500 20px/1.3 "Alegreya",Georgia,serif;margin:6px 0 2px}
+.log{margin-top:8px;padding-top:8px;border-top:1px solid var(--rule);color:var(--muted);font-size:15px}
+.log b{font:500 12px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.12em;text-transform:lowercase;color:var(--brass);font-weight:500}
+.pill{font:500 11px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.12em;text-transform:lowercase;border:1px solid var(--brass);color:var(--brass);border-radius:999px;padding:4px 8px}
+dl.kv{display:grid;grid-template-columns:max-content 1fr;gap:6px 16px;margin:0}
+dl.kv dt{font:500 13px/1.5 "Alegreya Sans SC",sans-serif;letter-spacing:.1em;text-transform:lowercase;color:var(--brass)}
+dl.kv dd{margin:0}
+.grid{display:grid;grid-template-columns:1fr;gap:10px}
+@media (min-width:700px){.grid{grid-template-columns:1fr 1fr}.grid .card{margin:0}}
+.foot{color:var(--muted);font-size:14px;border-top:1px solid var(--rule);margin-top:32px;padding-top:12px}
+@media print{
+  :root{--ground:#fff;--panel:#fff;--ink:#111;--muted:#444;--brass:#6b4e12;--rule:#bbb}
+  .band,.back,nav.jump{display:none}
+  body{font-size:12px} .card{padding:8px 10px} h2{margin-top:16px}
+}
+</style>
+</head>
+<body>
+<div class="band"></div>
+<main>
+  <a class="back" href="links.html">‹ links</a>
+  <header>
+    <img src="logo.jpg" alt="">
+    <div><h1>Bar Recipes</h1><p class="kicker">How we make every drink, and where each coffee is dialed.</p></div>
+  </header>
+  <nav class="jump"><a href="#machine">machine</a><a href="#coffees">coffees</a><a href="#drinks">drinks</a><a href="#dessert">dessert</a><a href="#milk">milk</a></nav>
+
+  <h2 id="machine">The Machine</h2>
+  <p class="lead">Baseline for every shot unless a coffee says otherwise.</p>
+  <div class="card"><dl class="kv">
+    <dt>Dose</dt><dd>18 g, Creamore 18 g basket</dd>
+    <dt>Yield</dt><dd>36 g (1:2), brew-by-weight on the BOOKOO</dd>
+    <dt>Time</dt><dd>About 26–30 s. Jamey's sweet spot is about 28 s.</dd>
+    <dt>Profile</dt><dd>Foreunder profile on GaggiMate</dd>
+    <dt>Brew temp</dt><dd>93 °C (offset 8 is calibration, leave it)</dd>
+    <dt>Warm-up</dt><dd>At least 20 minutes. A cold machine runs slow; the first Swilcan ran 32.7 s from an 82 °C start.</dd>
+    <dt>Prep</dt><dd>WDT, distribute, tamp level, puck screen</dd>
+    <dt>Grinder</dt><dd>DF64. Lower number is finer and slower; one step is about 5 s.</dd>
+  </dl></div>
+
+  <h2 id="coffees">Our Coffees</h2>
+  <p class="lead">Current dial-in for each bag. The Shot Log line updates every time a pull is logged.</p>
+  <div id="coffeeList"></div>
+
+  <h2 id="drinks">Drinks</h2>
+  <p class="lead"><span class="tag mine">my recipe</span> is how Jamey makes it. <span class="tag std">starting point</span> is the classic method, to be tuned.</p>
+  <div id="drinkList" class="grid"></div>
+
+  <h2 id="dessert">Dessert</h2>
+  <div id="dessertList" class="grid"></div>
+
+  <h2 id="milk">Steaming Milk</h2>
+  <div class="card"><ol>
+    <li>Start with cold milk and a cold pitcher (12 oz Amrules). Fill below the spout notch.</li>
+    <li>Purge the wand. Use the single-hole tip.</li>
+    <li>Tip just under the surface to stretch (paper-tearing sound). Longer stretch for cappuccino, short for flat white, almost none for cortado.</li>
+    <li>Sink the tip and spin the milk to 140–150 °F on the CDN thermometer. Stop before 155 °F.</li>
+    <li>Wipe and purge the wand. Tap and swirl until glossy, then pour.</li>
+    <li>Half & half and heavy cream steam richer and foam less. Oat milk foams loosely; keep the stretch short.</li>
+  </ol></div>
+
+  <p class="foot">Recipes live in the menu data, and dial-ins come from the Shot Log, so this page stays current on its own.</p>
+</main>
+<script src="data.js"></script>
+<script src="../data/shots.js" onerror="window.SHOTS=[]"></script>
+<script>
+(function(){
+  var M = window.FOREUNDER, SHOTS = window.SHOTS || [];
+  function el(tag, attrs){ var e=document.createElement(tag); attrs=attrs||{};
+    for (var k in attrs){ if(k==="text") e.textContent=attrs[k]; else e.setAttribute(k,attrs[k]); }
+    for (var i=2;i<arguments.length;i++){ var c=arguments[i]; if(c==null) continue; e.append(c.nodeType?c:document.createTextNode(c)); }
+    return e; }
+  function fmt(d){ var p=d.split("-"); return ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][+p[1]-1]+" "+(+p[2]); }
+  function latestDial(b){
+    var hits = SHOTS.filter(function(s){ return s.dialed && s.dialed.indexOf("→") !== -1 && s.bean && s.bean.indexOf(b.name) !== -1; });
+    hits.sort(function(a,c){ return a.n - c.n; });
+    return hits[hits.length-1] || null;
+  }
+  var order = {bar:0, press:1, out:2};
+  var cl = document.getElementById("coffeeList");
+  M.beans.slice().sort(function(a,b){ return order[a.status]-order[b.status]; }).forEach(function(b){
+    var dial = latestDial(b);
+    var status = b.status === "press" ? "french press" : b.status === "out" ? "finished" : "espresso";
+    cl.append(el("div",{class:"card"},
+      el("div",{class:"top"}, el("h3",{text:b.name}), el("span",{class:"pill",text:status})),
+      el("div",{class:"meta",text:[b.roaster, b.roastLevel ? b.roastLevel + " roast" : null].filter(Boolean).join(" · ")}),
+      b.recipe ? el("div",{class:"recipe",text:b.recipe}) : null,
+      dial ? el("div",{class:"log"}, el("b",{text:"shot log · " + fmt(dial.date) + " · "}), dial.dialed.replace(/^[^:]+:\s*/,"")) : null
+    ));
+  });
+  function card(d){
+    return el("div",{class:"card"},
+      el("div",{class:"top"}, el("h3",{text:d.name}), el("span",{class:"tag " + (d.mine ? "mine" : "std"), text: d.mine ? "my recipe" : "starting point"})),
+      el("div",{class:"meta",text:[d.line, d.cup].filter(Boolean).join(" · ")}),
+      el.apply(null, ["ol",{}].concat((d.how||[]).map(function(s){ return el("li",{text:s}); })))
+    );
+  }
+  M.drinks.forEach(function(d){
+    document.getElementById(d.section === "dessert" ? "dessertList" : "drinkList").append(card(d));
+  });
+})();
+</script>
+</body>
+</html>
