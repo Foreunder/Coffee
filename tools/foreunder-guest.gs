@@ -72,5 +72,16 @@ function json(o) {
 /** Run once from the editor to approve Drive and Sheets access before deploying. */
 function setup() {
   folder();
-  SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Ratings');
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const tabs = {
+    Ratings: ['Time', 'Coffee ID', 'Rating', 'Rating name', 'Guest name', 'Device'],
+    Photos: ['Time', 'Drink', 'Guest name', 'Photo link', 'File ID', 'Status', 'Device']
+  };
+  Object.keys(tabs).forEach(function (name) {
+    const sh = ss.getSheetByName(name) || ss.insertSheet(name);
+    if (!sh.getRange(1, 1).getValue()) {
+      sh.getRange(1, 1, 1, tabs[name].length).setValues([tabs[name]]).setFontWeight('bold');
+      sh.setFrozenRows(1);
+    }
+  });
 }
