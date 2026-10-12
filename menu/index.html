@@ -195,6 +195,8 @@ body.mb{display:flex;flex-direction:column}
 .mb-dz .l{font:500 calc(.78*var(--u))/1.3 var(--label);letter-spacing:.1em;color:var(--brass);text-transform:lowercase}
 .bdessert{display:grid;grid-template-columns:1fr 1fr;column-gap:calc(2*var(--u));border-top:1px solid var(--rule)}
 .bdessert .n{font:400 calc(1.6*var(--u))/1.2 var(--display);letter-spacing:.03em;white-space:nowrap;border-bottom:1px solid var(--rule);padding:calc(.32*var(--u)) 0}
+.mb-lately{font:500 calc(.7*var(--u))/1 var(--label);letter-spacing:.12em;text-transform:lowercase;color:var(--ink);background:var(--oxblood);border-radius:999px;padding:calc(.25*var(--u)) calc(.6*var(--u));margin-left:calc(.8*var(--u));vertical-align:middle;position:relative;top:calc(-.15*var(--u))}
+.lately{font:500 11px/1 var(--label);letter-spacing:.12em;text-transform:lowercase;color:var(--ink);background:var(--oxblood);border-radius:999px;padding:4px 8px;margin-left:8px;vertical-align:middle}
 .mb-drink{border-top:1px solid var(--rule);padding:calc(.1*var(--u)) 0}
 .mb-drink .n{font:400 calc(1.36*var(--u))/1.1 var(--display);letter-spacing:.03em;white-space:nowrap}
 .mb-drink .l{font:500 calc(.82*var(--u))/1.2 var(--label);letter-spacing:.1em;color:var(--brass);text-transform:lowercase;text-align:right}
@@ -269,6 +271,7 @@ body.table{overflow:hidden}
 
 <script src="qrcode.js"></script>
 <script src="data.js"></script>
+<script src="../data/shots.js" onerror="window.SHOTS=[]"></script>
 <script>
 (function(){
 "use strict";
@@ -375,6 +378,7 @@ function renderMenu(){
   );
 
   // Drinks
+  const lately = notMadeLately(3);
   const list = el("ul",{class:"drinks"});
   const dessertList = el("ul",{class:"drinks"});
   M.drinks.forEach(d => {
@@ -382,7 +386,7 @@ function renderMenu(){
     if (!available) return;
     (d.section === "dessert" ? dessertList : list).append(el("li",{class:"drink" + (d.signature ? " signature" : "")},
       d.signature ? el("div",{class:"sig",text:"house signature"}) : null,
-      el("div",{class:"n",text:d.name}),
+      el("div",{class:"n"}, d.name, lately.has(d.id) ? el("span",{class:"lately",text:"not made lately"}) : null),
       el("div",{class:"l",text:d.line}),
       el("div",{class:"d",text:d.note}),
       ORDERING ? el("button",{class:"btn",type:"button","aria-label":"Order a " + d.name,onclick:()=>openOrder(d.id),text:"order"}) : null
@@ -632,6 +636,24 @@ function showSent(id, name, line, note, ok){
 
 /* ---------- TV BOARD ---------- */
 /* ---------- TV MENU BOARD (simple version): full descriptions, a conversation piece ---------- */
+// "Not made lately": reads the Shot Log mirror and flags the everyday espresso drinks made least recently.
+const DRINK_MATCH = [
+  ["groundscrew", /grounds crew|swilcan/i], ["mocha", /mocha/i], ["flatwhite", /flat white/i],
+  ["cappuccino", /cappuccino/i], ["cortado", /cortado/i], ["macchiato", /macchiato/i],
+  ["americano", /americano/i], ["latte", /\blatte\b(?! art)/i], ["espresso", /straight espresso|^espresso\b/i]
+];
+function notMadeLately(n){
+  const last = {};
+  (window.SHOTS || []).forEach(sh => {
+    const hit = DRINK_MATCH.find(([, re]) => re.test(sh.drink || ""));
+    if (hit && sh.date && (!last[hit[0]] || sh.date > last[hit[0]])) last[hit[0]] = sh.date;
+  });
+  if (!Object.keys(last).length) return new Set();
+  const pool = M.drinks.filter(d => d.uses === "espresso" && d.section !== "dessert" && d.tv !== false && beansFor(d).length);
+  pool.sort((a, b) => (last[a.id] || "") < (last[b.id] || "") ? -1 : (last[a.id] || "") > (last[b.id] || "") ? 1 : 0);
+  return new Set(pool.slice(0, n).map(d => d.id));
+}
+
 function renderMenuBoard(){
   document.body.className = "board mb";
   app.className = "";
@@ -643,8 +665,9 @@ function renderMenuBoard(){
   );
   const drinks = el("section",{class:"mb-drinks"}, el("h2",{text:"Drinks"}));
   const tvItems = M.drinks.filter(d => d.tv !== false && (d.uses === "none" || beansFor(d).length));
+  const lately = notMadeLately(3);
   const mbItem = d => el("div",{class:"mb-drink"},
-      el("div",{class:"mb-row"}, el("span",{class:"n",text:d.name}), el("span",{class:"l",text:d.line})),
+      el("div",{class:"mb-row"}, el("span",{class:"n"}, d.name, lately.has(d.id) ? el("span",{class:"mb-lately",text:"not made lately"}) : null), el("span",{class:"l",text:d.line})),
       el("div",{class:"d",text:d.note}));
   tvItems.filter(d => d.section !== "dessert").forEach(d => drinks.append(mbItem(d)));
   const tvDessert = tvItems.filter(d => d.section === "dessert");
@@ -668,6 +691,7 @@ function renderMenuBoard(){
   app.append(head, el("div",{class:"mb-grid"}, drinks, coffees));
   makeQR(document.getElementById("qr"));
   keepAwake();
+  setTimeout(() => location.reload(), 30 * 60 * 1000);
   const fs = el("button",{type:"button",text:"full screen",onclick:()=>{ const d=document.documentElement; (d.requestFullscreen||d.webkitRequestFullscreen||function(){}).call(d); }});
   const nav = el("nav",{class:"boardnav"}, el("a",{href:"./" + MODE_QS,text:"menu"}), el("a",{href:"links.html",text:"links"}), fs);
   document.body.append(nav);
