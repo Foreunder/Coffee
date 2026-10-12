@@ -317,7 +317,8 @@ async function publish(topic, title, message){
 /* ---------- PHONE MENU ---------- */
 // Ordering is off: the menu is for browsing, and Jamey serves everyone in the room.
 // Set ordering: true in data.js to bring back phone ordering, the order screen and the TV queue.
-const ORDERING = M.ordering === true;
+// Test mode: add ?test to any page URL to use ordering privately while it is off for guests.
+const ORDERING = M.ordering === true || /[?&]test\b/.test(location.search);
 const SCAN_LINE = ORDERING ? "Scan to see our coffees and order." : "Scan to see our coffees.";
 
 function renderMenu(){
