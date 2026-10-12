@@ -32,14 +32,16 @@ h1{font:400 34pt/1 "IM Fell English SC",Georgia,serif;letter-spacing:.06em;margi
   <img class="logo" src="logo-print.jpg" alt="Foreunder Coffee House">
   <div id="qr" aria-label="QR code for the coffee menu"></div>
   <div style="display:flex;flex-direction:column;gap:8px;align-items:center">
-    <div class="scan">Scan to see our coffees.</div>
+    <div class="scan" id="scanline">Scan to see our coffees.</div>
     <div class="url">foreunder.github.io/coffee/menu</div>
   </div>
 </div>
 <script src="qrcode.js"></script>
 <script src="data.js"></script>
 <script>
-var q = qrcode(0, "M"); q.addData(window.FOREUNDER.siteUrl); q.make();
+var ORDER=/[?&]order\b/.test(location.search); var URL=window.FOREUNDER.siteUrl+(ORDER?"?order":"");
+if(ORDER){document.getElementById("scanline").textContent="Scan to see our coffees and order.";document.title="Foreunder Table Card (ordering)";}
+var q = qrcode(0, "M"); q.addData(URL); q.make();
 document.getElementById("qr").innerHTML = q.createSvgTag({cellSize: 8, margin: 0, scalable: true}).replace(/fill="white"/g, 'fill="#f3ead6"').replace(/fill="black"/g, 'fill="#14231b"');
 </script>
 </body>

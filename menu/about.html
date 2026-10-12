@@ -43,7 +43,7 @@ p{margin:0 0 16px}
 <body>
 <div class="band"></div>
 <main>
-  <a class="back" href="./">‹ back to the menu</a>
+  <a class="back" id="back" href="./">‹ back to the menu</a>
   <img class="logo" src="logo.jpg" alt="Foreunder Coffee House crest">
   <h1>Why a Thistle?</h1>
   <p class="kicker">our story</p>
@@ -84,9 +84,10 @@ p{margin:0 0 16px}
   <div class="sign">
     <div class="n">FOREUNDER COFFEE HOUSE</div>
     <div class="t">A Good Round Starts Here.<br>Great Coffee. Better Grounds.</div>
-    <a class="cta" href="./">see our coffees</a>
+    <a class="cta" id="cta" href="./">see our coffees</a>
     <img src="icon.png" alt="">
   </div>
 </main>
+<script>if(/[?&](order|test)\b/.test(location.search)){var c=document.getElementById("cta");c.href="./?order#order";c.textContent="order a coffee";document.getElementById("back").href="./?order";}</script>
 </body>
 </html>

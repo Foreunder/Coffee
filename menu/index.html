@@ -317,8 +317,12 @@ async function publish(topic, title, message){
 /* ---------- PHONE MENU ---------- */
 // Ordering is off: the menu is for browsing, and Jamey serves everyone in the room.
 // Set ordering: true in data.js to bring back phone ordering, the order screen and the TV queue.
-// Test mode: add ?test to any page URL to use ordering privately while it is off for guests.
-const ORDERING = M.ordering === true || /[?&]test\b/.test(location.search);
+// Two versions of the same site: the simple menu (default) and the ordering version (?order).
+// Each has its own QR code, so the table card decides which one guests get. ?test works the same as ?order.
+const ORDER_MODE = /[?&](order|test)\b/.test(location.search);
+const ORDERING = M.ordering === true || ORDER_MODE;
+const MODE_QS = ORDER_MODE ? "?order" : "";
+const QR_URL = M.siteUrl + (ORDERING && M.ordering !== true ? "?order" : "");
 const SCAN_LINE = ORDERING ? "Scan to see our coffees and order." : "Scan to see our coffees.";
 
 function renderMenu(){
@@ -363,14 +367,14 @@ function renderMenu(){
   ));
 
   if (!ORDERING){
-    app.append(el("footer",null, el("a",{href:"about.html",text:"Why a thistle? Read our story"}), el("div",{text:"Foreunder · Omaha, Nebraska"})));
+    app.append(el("footer",null, el("a",{href:"about.html" + MODE_QS,text:"Why a thistle? Read our story"}), el("div",{text:"Foreunder · Omaha, Nebraska"})));
     document.body.classList.add("noorder");
     return;
   }
   // Order
   app.append(el("section",{id:"order"}, el("h2",{text:"Place your order"}), el("p",{class:"sub",text:"Pick a drink and a bean. Your order goes straight to Jamey."}), orderForm()));
 
-  app.append(el("footer",null, el("a",{href:"about.html",text:"Why a thistle? Read our story"}), el("div",{text:"Foreunder · Omaha, Nebraska"})));
+  app.append(el("footer",null, el("a",{href:"about.html" + MODE_QS,text:"Why a thistle? Read our story"}), el("div",{text:"Foreunder · Omaha, Nebraska"})));
   const bar = el("div",{class:"orderbar"}, el("button",{class:"btn solid",type:"button",onclick:()=>openOrder(),text:"order a drink"}));
   app.append(bar);
   // Hide the floating button once the order form is on screen.
@@ -617,7 +621,7 @@ function renderBoard(){
   keepAwake();
   // Controls stay hidden on the TV; move the mouse or tap to show them for a few seconds.
   const fs = el("button",{type:"button",text:"full screen",onclick:()=>{ const d=document.documentElement; (d.requestFullscreen||d.webkitRequestFullscreen||function(){}).call(d); }});
-  const nav = el("nav",{class:"boardnav"}, el("a",{href:"./",text:"menu"}), ORDERING ? el("a",{href:"#bar",text:"orders"}) : null, el("a",{href:"links.html",text:"links"}), fs);
+  const nav = el("nav",{class:"boardnav"}, el("a",{href:"./" + MODE_QS,text:"menu"}), ORDERING ? el("a",{href:MODE_QS + "#bar",text:"orders"}) : null, el("a",{href:"links.html",text:"links"}), fs);
   document.body.append(nav);
   const sbtn = ORDERING ? attachOrderAlerts(nav, "sound on") : { disabled: true, classList: { remove(){} }, addEventListener(){} };
   sbtn.classList.remove("solid");
@@ -673,7 +677,7 @@ function renderBar(){
   app.append(box,
     el("div",{class:"help"},
       el("p",null,"Keep this screen open and tap \u201cturn on order sound\u201d each time you open it. Optional phone alerts: the free ntfy app, topic ", el("code",{text:ORDERS}), "."),
-      el("p",null,"Guest menu: ", el("code",{text:M.siteUrl}), " · TV board: ", el("code",{text:M.siteUrl + "#board"}), " · Table iPad: ", el("code",{text:M.siteUrl + "#table"}))
+      el("p",null,"Ordering menu: ", el("code",{text:QR_URL}), " · TV board: ", el("code",{text:QR_URL + "#board"}))
     )
   );
   showAll.addEventListener("change", draw);
@@ -731,8 +735,8 @@ function renderTable(){
 }
 
 function makeQR(node){
-  if (typeof qrcode !== "function"){ node.append(el("div",{style:"color:#111;font-size:14px;max-width:200px",text:M.siteUrl})); return; }
-  const q = qrcode(0, "M"); q.addData(M.siteUrl); q.make();
+  if (typeof qrcode !== "function"){ node.append(el("div",{style:"color:#111;font-size:14px;max-width:200px",text:QR_URL})); return; }
+  const q = qrcode(0, "M"); q.addData(QR_URL); q.make();
   node.innerHTML = q.createSvgTag({cellSize:8, margin:0, scalable:true}).replace(/fill="white"/g,'fill="#f0e7d3"').replace(/fill="black"/g,'fill="#0f1c16"');
 }
 async function keepAwake(){ try{ if (navigator.wakeLock) await navigator.wakeLock.request("screen"); }catch(e){} }
