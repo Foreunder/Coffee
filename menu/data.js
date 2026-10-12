@@ -5,6 +5,8 @@ window.FOREUNDER = {
   // Orders are relayed through ntfy.sh on this topic. Anyone who knows the topic name can read it,
   // so it is long and random. Install the ntfy app and subscribe to it for phone alerts.
   ntfyTopic: "foreunder-bar-q7m4x2k9vz",
+  // Phone ordering, order screen and TV queue. Off: guests browse, Jamey serves the room.
+  ordering: false,
   minutesPerDrink: 4,
   decafNote: "No decaf right now. Ask Jamey and he'll sort you out.",
 

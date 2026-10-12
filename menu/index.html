@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0f1c16">
 <meta property="og:title" content="Foreunder Coffee House">
-<meta property="og:description" content="See our coffees and order from your phone.">
+<meta property="og:description" content="See our coffees on your phone.">
 <meta property="og:image" content="https://foreunder.github.io/Coffee/menu/logo.jpg">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
@@ -168,6 +168,10 @@ body.board{--u:min(1vw,1.7778vh);padding-block:0;overflow:hidden;font-size:clamp
 .boardnav{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:10px;background:rgba(15,28,22,.92);border:1px solid var(--rule);border-radius:999px;padding:8px 10px;opacity:0;pointer-events:none;transition:opacity .3s;z-index:10}
 .boardnav.show{opacity:1;pointer-events:auto}
 .boardnav a,.boardnav button{color:var(--brass);background:none;border:0;font:700 13px/1 var(--label);letter-spacing:.12em;text-transform:lowercase;text-decoration:none;padding:8px 12px;cursor:pointer}
+body.noorder{padding-bottom:32px}
+.board .browse .qrbox svg{width:calc(17*var(--u));height:calc(17*var(--u))}
+.board .browse .tagline{font:italic 400 calc(1.9*var(--u))/1.2 var(--italic);color:var(--brass);margin-top:calc(2*var(--u))}
+.board .browse .tagline2{font:500 calc(1*var(--u))/1.2 var(--label);letter-spacing:.16em;text-transform:lowercase;color:var(--muted)}
 /* ===== Bar view ===== */
 .alertbtn{margin:0 0 14px}
 .newbanner{position:fixed;inset:auto 16px 20px 16px;background:var(--brass);color:#1a1408;border-radius:10px;padding:18px 20px;box-shadow:0 10px 30px rgba(0,0,0,.5);display:none;flex-direction:column;gap:4px;z-index:20;cursor:pointer;font-size:18px}
@@ -311,6 +315,11 @@ async function publish(topic, title, message){
 }
 
 /* ---------- PHONE MENU ---------- */
+// Ordering is off: the menu is for browsing, and Jamey serves everyone in the room.
+// Set ordering: true in data.js to bring back phone ordering, the order screen and the TV queue.
+const ORDERING = M.ordering === true;
+const SCAN_LINE = ORDERING ? "Scan to see our coffees and order." : "Scan to see our coffees.";
+
 function renderMenu(){
   document.body.className = "";
   app.replaceChildren();
@@ -333,7 +342,7 @@ function renderMenu(){
       el("div",{class:"n",text:d.name}),
       el("div",{class:"l",text:d.line}),
       el("div",{class:"d",text:d.note}),
-      el("button",{class:"btn",type:"button","aria-label":"Order a " + d.name,onclick:()=>openOrder(d.id),text:"order"})
+      ORDERING ? el("button",{class:"btn",type:"button","aria-label":"Order a " + d.name,onclick:()=>openOrder(d.id),text:"order"}) : null
     ));
   });
   app.append(el("section",{id:"drinks"},
@@ -352,6 +361,11 @@ function renderMenu(){
     beansWrap
   ));
 
+  if (!ORDERING){
+    app.append(el("footer",null, el("a",{href:"about.html",text:"Why a thistle? Read our story"}), el("div",{text:"Foreunder · Omaha, Nebraska"})));
+    document.body.classList.add("noorder");
+    return;
+  }
   // Order
   app.append(el("section",{id:"order"}, el("h2",{text:"Place your order"}), el("p",{class:"sub",text:"Pick a drink and a bean. Your order goes straight to Jamey."}), orderForm()));
 
@@ -581,11 +595,14 @@ function renderBoard(){
 
   const qr = el("div",{class:"qrbox",id:"qr"});
   const queue = el("div",{class:"queue",id:"queue"});
-  const right = el("div",null, el("h2",{text:"Order from your phone"}), qr, el("div",{class:"scan",text:"Scan to see our coffees and order."}), el("h2",{text:"The queue"}), queue, el("div",{class:"wait",id:"wait"}));
+  const right = ORDERING
+    ? el("div",null, el("h2",{text:"Order from your phone"}), qr, el("div",{class:"scan",text:SCAN_LINE}), el("h2",{text:"The queue"}), queue, el("div",{class:"wait",id:"wait"}))
+    : el("div",{class:"browse"}, el("h2",{text:"On your phone"}), qr, el("div",{class:"scan",text:SCAN_LINE}), el("div",{class:"tagline",text:"A good round starts here."}), el("div",{class:"tagline2",text:"Great coffee. Better grounds."}));
   app.append(el("div",{class:"board-grid"}, left, mid, right));
   makeQR(qr);
-  connect();
+  if (ORDERING) connect();
   const draw = () => {
+    if (!ORDERING) return;
     const q = activeQueue();
     queue.replaceChildren(...(q.length ? q.slice(-8).map(o => {
       const st = stateOf(o.id);
@@ -599,13 +616,13 @@ function renderBoard(){
   keepAwake();
   // Controls stay hidden on the TV; move the mouse or tap to show them for a few seconds.
   const fs = el("button",{type:"button",text:"full screen",onclick:()=>{ const d=document.documentElement; (d.requestFullscreen||d.webkitRequestFullscreen||function(){}).call(d); }});
-  const nav = el("nav",{class:"boardnav"}, el("a",{href:"./",text:"menu"}), el("a",{href:"#bar",text:"orders"}), el("a",{href:"links.html",text:"links"}), fs);
+  const nav = el("nav",{class:"boardnav"}, el("a",{href:"./",text:"menu"}), ORDERING ? el("a",{href:"#bar",text:"orders"}) : null, el("a",{href:"links.html",text:"links"}), fs);
   document.body.append(nav);
-  const sbtn = attachOrderAlerts(nav, "sound on");
+  const sbtn = ORDERING ? attachOrderAlerts(nav, "sound on") : { disabled: true, classList: { remove(){} }, addEventListener(){} };
   sbtn.classList.remove("solid");
   // Until sound is turned on, keep the bar visible so the one required click is easy to find.
   let t; const show = () => { nav.classList.add("show"); clearTimeout(t); t = setTimeout(() => { if (sbtn.disabled) nav.classList.remove("show"); }, 3000); };
-  nav.classList.add("show");
+  if (ORDERING) nav.classList.add("show");
   sbtn.addEventListener("click", () => setTimeout(() => nav.classList.remove("show"), 1500));
   ["mousemove","touchstart","keydown"].forEach(ev => document.addEventListener(ev, show, {passive:true}));
 }
@@ -698,9 +715,10 @@ function renderTable(){
   const wait = el("div",{class:"wait"});
   app.append(el("div",{class:"tstand"},
     el("img",{class:"logo",src:"logo.jpg",alt:"Foreunder Coffee House"}),
-    el("div",{class:"side"}, qr, el("div",{class:"scan",text:"Scan to see our coffees and order."}), wait)
+    el("div",{class:"side"}, qr, el("div",{class:"scan",text:SCAN_LINE}), wait)
   ));
   makeQR(qr);
+  if (!ORDERING){ keepAwake(); return; }
   connect();
   const draw = () => {
     const n = activeQueue().filter(o => stateOf(o.id) !== "ready").length;
@@ -724,9 +742,9 @@ function route(){
   listeners = [];
   const h = location.hash.replace("#","");
   if (h === "board") renderBoard();
-  else if (h === "bar") renderBar();
+  else if (h === "bar" && ORDERING) renderBar();
   else if (h === "table") renderTable();
-  else { renderMenu(); if (h === "order") openOrder(); }
+  else { renderMenu(); if (h === "order" && ORDERING) openOrder(); }
 }
 window.addEventListener("hashchange", () => location.reload());
 route();
