@@ -55,7 +55,7 @@ header.crest{text-align:center;padding-block:28px 20px;display:flex;flex-directi
 
 .crest .logo{width:min(320px,78vw);aspect-ratio:1;display:block;-webkit-mask-image:radial-gradient(circle at 50% 50%,#000 66%,transparent 76%);mask-image:radial-gradient(circle at 50% 50%,#000 66%,transparent 76%)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.board .logo{width:17vw;aspect-ratio:1;display:block;margin:-1vw 0 -.5vw -1vw;-webkit-mask-image:radial-gradient(circle,#000 66%,transparent 76%);mask-image:radial-gradient(circle,#000 66%,transparent 76%)}
+.board .logo{width:calc(17*var(--u));aspect-ratio:1;display:block;margin:calc(-1*var(--u)) 0 calc(-.5*var(--u)) calc(-1*var(--u));-webkit-mask-image:radial-gradient(circle,#000 66%,transparent 76%);mask-image:radial-gradient(circle,#000 66%,transparent 76%)}
 section{padding-block:22px}
 h2{font:400 26px/1.15 var(--display);letter-spacing:.04em;margin:0 0 4px;text-wrap:balance}
 .sub{color:var(--muted);margin:0 0 16px;font-style:italic}
@@ -137,31 +137,37 @@ textarea{resize:vertical;min-height:64px}
 footer{color:var(--muted);text-align:center;font-size:14px;padding-block:28px 8px;font-style:italic}
 
 /* ===== TV board ===== */
-body.board{padding-block:0;overflow:hidden;font-size:clamp(16px,1.35vw,26px);height:100vh}
-.board-grid{display:grid;grid-template-columns:1.25fr 1.25fr .9fr;gap:3vw;padding:2.5vw 3vw;height:calc(100vh - 10px)}
-.board-grid > div{min-width:0;display:flex;flex-direction:column;gap:1.2vw}
-.board h1{font:400 4.4vw/1 var(--display);letter-spacing:.06em;margin:0}
-.board .house{font:italic 400 1.6vw/1.2 var(--italic);color:var(--brass)}
-.board h2{font-size:1.9vw;color:var(--brass);margin:0}
-.board .drinks .n{font-size:1.75vw}
-.board .drinks .l{font-size:.95vw}
+body.board{--u:min(1vw,1.7778vh);padding-block:0;overflow:hidden;font-size:clamp(16px,calc(1.35*var(--u)),26px);height:100vh}
+.board-grid{display:grid;grid-template-columns:1.25fr 1.25fr .9fr;gap:calc(3*var(--u));padding:calc(2.5*var(--u)) calc(3*var(--u));height:calc(100vh - 10px);box-sizing:border-box}
+.board-grid > div{min-width:0;display:flex;flex-direction:column;gap:calc(1.2*var(--u))}
+.board h1{font:400 calc(4.4*var(--u))/1 var(--display);letter-spacing:.06em;margin:0}
+.board .house{font:italic 400 calc(1.6*var(--u))/1.2 var(--italic);color:var(--brass)}
+.board h2{font-size:calc(1.9*var(--u));color:var(--brass);margin:0}
+.board .drinks .n{font-size:calc(1.75*var(--u))}
+.board .drinks .l{font-size:calc(.95*var(--u))}
 .board .drinks .d{display:none}
-.board .drink{padding-block:.55vw}
-.bboard-bean{border-bottom:1px solid var(--rule);padding-bottom:1vw;display:flex;flex-direction:column;gap:.3vw}
-.bboard-bean h3{font:400 1.8vw/1.15 var(--display);margin:0}
-.bboard-bean .meta{font:500 .95vw/1.3 var(--label);letter-spacing:.1em;color:var(--brass);text-transform:lowercase}
-.bboard-bean p{margin:0;color:var(--muted);font-size:1.1vw}
-.qrbox{background:var(--ink);padding:1vw;border-radius:6px;align-self:flex-start}
-.qrbox svg{display:block;width:13vw;height:13vw}
-.scan{font:italic 400 1.5vw/1.3 var(--italic)}
-.queue{display:flex;flex-direction:column;gap:.6vw}
-.q{display:flex;justify-content:space-between;gap:1vw;border-bottom:1px solid var(--rule);padding-bottom:.5vw}
-.q .nm{font:400 1.5vw/1.2 var(--display)}
-.q .dr{color:var(--muted);font-size:1vw}
-.q .st{font:700 .9vw/1 var(--label);letter-spacing:.12em;text-transform:lowercase;align-self:center}
+.board .drinks .n{white-space:nowrap}
+.board .drinks .l{text-align:right}
+.board .queue{overflow:hidden;min-height:0;flex:1 1 auto}
+.board .drink{padding-block:calc(.55*var(--u))}
+.bboard-bean{border-bottom:1px solid var(--rule);padding-bottom:calc(1*var(--u));display:flex;flex-direction:column;gap:calc(.3*var(--u))}
+.bboard-bean h3{font:400 calc(1.8*var(--u))/1.15 var(--display);margin:0}
+.bboard-bean .meta{font:500 calc(.95*var(--u))/1.3 var(--label);letter-spacing:.1em;color:var(--brass);text-transform:lowercase}
+.bboard-bean p{margin:0;color:var(--muted);font-size:calc(1.1*var(--u))}
+.qrbox{background:var(--ink);padding:calc(1*var(--u));border-radius:6px;align-self:flex-start}
+.qrbox svg{display:block;width:calc(13*var(--u));height:calc(13*var(--u))}
+.scan{font:italic 400 calc(1.5*var(--u))/1.3 var(--italic)}
+.queue{display:flex;flex-direction:column;gap:calc(.6*var(--u))}
+.q{display:flex;justify-content:space-between;gap:calc(1*var(--u));border-bottom:1px solid var(--rule);padding-bottom:calc(.5*var(--u))}
+.q .nm{font:400 calc(1.5*var(--u))/1.2 var(--display)}
+.q .dr{color:var(--muted);font-size:calc(1*var(--u))}
+.q .st{white-space:nowrap;font:700 calc(.9*var(--u))/1 var(--label);letter-spacing:.12em;text-transform:lowercase;align-self:center}
 .st.queued{color:var(--muted)}.st.making{color:var(--brass)}.st.ready{color:var(--ok)}
-.wait{font:500 1vw/1.3 var(--label);letter-spacing:.1em;color:var(--muted);text-transform:lowercase}
+.wait{font:500 calc(1*var(--u))/1.3 var(--label);letter-spacing:.1em;color:var(--muted);text-transform:lowercase}
 
+.boardnav{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:10px;background:rgba(15,28,22,.92);border:1px solid var(--rule);border-radius:999px;padding:8px 10px;opacity:0;pointer-events:none;transition:opacity .3s;z-index:10}
+.boardnav.show{opacity:1;pointer-events:auto}
+.boardnav a,.boardnav button{color:var(--brass);background:none;border:0;font:700 13px/1 var(--label);letter-spacing:.12em;text-transform:lowercase;text-decoration:none;padding:8px 12px;cursor:pointer}
 /* ===== Bar view ===== */
 .barhead{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding-block:20px 8px}
 .barhead h1{font:400 32px/1 var(--display);margin:0}
@@ -263,6 +269,7 @@ function ingest(m){
   if (!m || m.event !== "message") return;
   if (m.topic === ORDERS){
     if (orders.has(m.id)) return;
+    if (!(m.tags || []).includes("coffee")) return; // only orders sent from the menu
     const lines = String(m.message||"").split("\n");
     orders.set(m.id, { id:m.id, time:m.time, name:m.title || "Guest", what:lines[0] || "", note:(lines.slice(1).join(" ").replace(/^Note:\s*/,"")) });
   } else if (m.topic === STATUS){
@@ -572,6 +579,12 @@ function renderBoard(){
   listeners.push(draw); draw();
   setInterval(draw, 30000);
   keepAwake();
+  // Controls stay hidden on the TV; move the mouse or tap to show them for a few seconds.
+  const fs = el("button",{type:"button",text:"full screen",onclick:()=>{ const d=document.documentElement; (d.requestFullscreen||d.webkitRequestFullscreen||function(){}).call(d); }});
+  const nav = el("nav",{class:"boardnav"}, el("a",{href:"./",text:"menu"}), el("a",{href:"#bar",text:"orders"}), el("a",{href:"links.html",text:"links"}), fs);
+  document.body.append(nav);
+  let t; const show = () => { nav.classList.add("show"); clearTimeout(t); t = setTimeout(() => nav.classList.remove("show"), 3000); };
+  ["mousemove","touchstart","keydown"].forEach(ev => document.addEventListener(ev, show, {passive:true}));
 }
 
 /* ---------- BAR VIEW (iPad) ---------- */
