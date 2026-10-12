@@ -12,82 +12,45 @@
 <title>The Scorecard · Foreunder Coffee House</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=IM+Fell+English:ital@0;1&family=Alegreya:ital,wght@0,400;0,500;1,400&family=Alegreya+Sans+SC:wght@500;700&display=swap">
 <style>
-:root{--ground:#0f1c16;--ink:#f0e7d3;--muted:#b9ad90;--brass:#c9a24f;--oxblood:#8a2a35;--rule:rgba(201,162,79,.28);
-  --card:#f3ead6;--cardink:#14231b;--cardmuted:#5b5440;--cardrule:#c9b993;--green:#1f4a2c}
+:root{--ground:#0f1c16;--panel:#16271f;--ink:#f0e7d3;--muted:#b9ad90;--brass:#c9a24f;--oxblood:#8a2a35;--rule:rgba(201,162,79,.28);
+  --card:#f3ead6;--cardink:#14231b;--cardmuted:#5b5440;--cardrule:#d6c8a4;--green:#1f4a2c}
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--ground);color:var(--ink);font:17px/1.5 "Alegreya","Iowan Old Style",Georgia,serif;-webkit-font-smoothing:antialiased}
 .band{height:8px;background:repeating-linear-gradient(90deg,var(--ground) 0 26px,var(--brass) 26px 28px,var(--ground) 28px 48px,var(--oxblood) 48px 54px)}
-main{max-width:720px;margin:0 auto;padding:12px 16px 56px}
+main{max-width:640px;margin:0 auto;padding:12px 16px 56px}
 .back{display:inline-block;font:500 13px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.14em;text-transform:lowercase;color:var(--brass);text-decoration:none;padding:10px 0}
-header{display:flex;align-items:center;gap:14px;margin:4px 0 14px}
-header img{width:72px;height:72px;flex:none;-webkit-mask-image:radial-gradient(circle,#000 66%,transparent 76%);mask-image:radial-gradient(circle,#000 66%,transparent 76%)}
-h1{font:400 clamp(32px,8.5vw,46px)/1.02 "IM Fell English SC",Georgia,serif;letter-spacing:.04em;margin:0}
+header{display:flex;align-items:center;gap:14px;margin:4px 0 12px}
+header img{width:68px;height:68px;flex:none;-webkit-mask-image:radial-gradient(circle,#000 66%,transparent 76%);mask-image:radial-gradient(circle,#000 66%,transparent 76%)}
+h1{font:400 clamp(32px,8.5vw,44px)/1.02 "IM Fell English SC",Georgia,serif;letter-spacing:.04em;margin:0}
 .kicker{font:italic 18px/1.35 "IM Fell English",Georgia,serif;color:var(--brass);margin:4px 0 0}
-
-/* The card itself: cream stock, green ink, like a clubhouse scorecard */
-.card{background:var(--card);color:var(--cardink);border-radius:6px;box-shadow:0 10px 30px rgba(0,0,0,.35);overflow:hidden}
-.card .top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;background:var(--green);color:var(--card);padding:10px 14px}
-.card .top b{font:400 20px/1 "IM Fell English SC",Georgia,serif;letter-spacing:.06em}
-.card .top span{font:500 12px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.16em;text-transform:lowercase;color:#e5d6a8;white-space:nowrap}
-table{width:100%;border-collapse:collapse}
-th{font:700 11px/1.1 "Alegreya Sans SC",sans-serif;letter-spacing:.14em;text-transform:lowercase;color:var(--cardmuted);text-align:center;padding:9px 4px;border-bottom:2px solid var(--green)}
-th.l{text-align:left;padding-left:12px}
-td{border-bottom:1px solid var(--cardrule);padding:10px 4px;text-align:center;vertical-align:middle}
-td.hole{font:400 22px/1 "IM Fell English SC",Georgia,serif;color:var(--green);width:44px;border-right:1px solid var(--cardrule)}
-td.cf{text-align:left;padding-left:12px}
-.cf .nm{font:500 18px/1.2 "Alegreya",Georgia,serif}
-.cf .mt{font:500 11px/1.4 "Alegreya Sans SC",sans-serif;letter-spacing:.1em;text-transform:lowercase;color:var(--cardmuted)}
-.cf .nt{font:italic 14px/1.35 "Alegreya",Georgia,serif;color:var(--cardmuted);margin-top:2px}
-.cf .oh{display:inline-block;font:700 10px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.12em;text-transform:lowercase;color:var(--card);background:var(--green);border-radius:999px;padding:3px 7px;margin-left:6px;vertical-align:2px}
-td.par{font:400 18px/1 "Alegreya",Georgia,serif;color:var(--cardmuted);width:40px}
-td.sc{width:58px}
-/* Score marks: circle under par, square over par, the way golfers mark a card */
-.mk{display:inline-grid;place-items:center;width:36px;height:36px;font:500 19px/1 "Alegreya",Georgia,serif;position:relative}
-.mk.e,.mk.b{border:1.5px solid var(--oxblood);border-radius:50%;color:var(--oxblood)}
-.mk.e::after{content:"";position:absolute;inset:3px;border:1.5px solid var(--oxblood);border-radius:50%}
-.mk.g,.mk.d{border:1.5px solid var(--cardink)}
-.mk.d::after{content:"";position:absolute;inset:3px;border:1.5px solid var(--cardink)}
-.mk.n{color:var(--cardmuted)}
-.you{position:relative;display:inline-block}
-.you select{position:absolute;inset:0;opacity:0;width:100%;height:100%;font-size:16px;cursor:pointer}
-.you .mk.n{border:1.5px dashed var(--cardrule);border-radius:6px}
-tfoot td{font:700 12px/1.2 "Alegreya Sans SC",sans-serif;letter-spacing:.14em;text-transform:lowercase;color:var(--green);border-top:2px solid var(--green);border-bottom:0;padding:12px 4px}
-tfoot td.tot{font:500 20px/1 "Alegreya",Georgia,serif;letter-spacing:0;text-transform:none;color:var(--cardink)}
-.summary{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}
-.sum{border:1px solid var(--rule);border-radius:10px;padding:12px 14px;background:#16271f}
+.how{background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:12px 16px;margin:6px 0 18px}
+.how ol{margin:0;padding-left:20px}
+.how li{margin:3px 0}
+.hole{background:var(--card);color:var(--cardink);border-radius:10px;padding:14px 14px 16px;margin-bottom:14px;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.hole .hn{font:700 11px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.18em;text-transform:lowercase;color:var(--green)}
+.hole h2{font:400 25px/1.15 "IM Fell English SC",Georgia,serif;letter-spacing:.02em;margin:4px 0 2px}
+.hole .mt{font:500 12px/1.4 "Alegreya Sans SC",sans-serif;letter-spacing:.1em;text-transform:lowercase;color:var(--cardmuted)}
+.oh{display:inline-block;font:700 10px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.12em;text-transform:lowercase;color:var(--card);background:var(--green);border-radius:999px;padding:4px 8px;margin-left:6px;vertical-align:4px}
+.who{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.who > div{border:1px solid var(--cardrule);border-radius:8px;padding:8px 10px}
+.who .k{font:700 11px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.14em;text-transform:lowercase;color:var(--cardmuted)}
+.who .v{font:500 18px/1.25 "Alegreya",Georgia,serif;margin-top:4px}
+.who .s{font-size:13px;color:var(--cardmuted)}
+.nt{font:italic 15px/1.4 "Alegreya",Georgia,serif;color:var(--cardmuted);margin:0 0 10px}
+.yl{font:700 12px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.14em;text-transform:lowercase;color:var(--green);margin:4px 0 8px}
+.opts{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.opts button{border:1.5px solid var(--cardrule);background:#fffaf0;color:var(--cardink);border-radius:10px;min-height:54px;padding:6px 2px;cursor:pointer;font:700 12px/1.15 "Alegreya Sans SC",sans-serif;letter-spacing:.04em;text-transform:lowercase;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.opts button span{font:400 10.5px/1.1 "Alegreya",Georgia,serif;letter-spacing:0;text-transform:none;color:var(--cardmuted)}
+.opts button.on{background:var(--green);border-color:var(--green);color:var(--card)}
+.opts button.on span{color:#d9cfae}
+.saved{font-size:13px;color:var(--green);min-height:18px;margin-top:6px}
+.summary{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:6px 0 4px}
+.sum{border:1px solid var(--rule);border-radius:10px;padding:12px 14px;background:var(--panel)}
 .sum .k{font:500 12px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.16em;text-transform:lowercase;color:var(--brass)}
-.sum .v{font:400 26px/1.15 "IM Fell English SC",Georgia,serif;margin-top:6px}
-.sum .s{color:var(--muted);font-size:14px}
-h2{font:400 26px/1.15 "IM Fell English SC",Georgia,serif;color:var(--brass);margin:30px 0 8px}
-.key{display:grid;gap:8px}
-.key div{display:grid;grid-template-columns:48px 1fr;align-items:center;gap:10px}
-.key .mk{background:var(--card);border-radius:6px;color:var(--cardink)}
-.key .mk.e,.key .mk.b{color:var(--oxblood)}
-.key .mk.e,.key .mk.b{border-radius:50%}
-.key b{font:500 16px/1.2 "Alegreya",Georgia,serif}
-.key span{color:var(--muted);font-size:15px}
-.foot{color:var(--muted);font-size:14px;border-top:1px solid var(--rule);margin-top:28px;padding-top:12px}
-.reset{background:none;border:1px solid var(--rule);color:var(--muted);border-radius:999px;padding:8px 14px;font:500 13px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.1em;cursor:pointer;margin-top:10px}
-@media (max-width:420px){td.sc{width:48px}.mk{width:32px;height:32px;font-size:17px}td.hole{width:34px;font-size:19px}.cf .nt{display:none}}
-.rt{display:inline-block;font:700 11px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.12em;text-transform:lowercase;border-radius:999px;padding:6px 9px;white-space:nowrap;border:1.5px solid currentColor}
-.rt.e{background:var(--oxblood);border-color:var(--oxblood);color:var(--card)}
-.rt.b{color:var(--oxblood)}
-.rt.p{color:var(--green)}
-.rt.g{color:var(--cardmuted)}
-.rt.d{color:var(--cardmuted);border-style:dotted}
-.rt.n{color:var(--cardrule);border-style:dashed}
-.you{position:relative;display:inline-block}
-.you select{position:absolute;inset:0;opacity:0;width:100%;height:100%;font-size:16px;cursor:pointer}
-td.sc{width:82px}
-.key .rt{justify-self:start;background:var(--card)}
-.key .rt.e{background:var(--oxblood)}
-.key div{grid-template-columns:118px 1fr!important}
-.key .rt.n{display:none}
-.fc{display:flex;flex-direction:column;align-items:center;gap:3px}
-.fc small{font:500 10px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.1em;color:var(--cardmuted)}
-body:not(.live) .fam{display:none}
-@media (max-width:420px){td.sc{width:70px}.rt{padding:5px 6px;letter-spacing:.06em}}
-.sum .v{font-size:22px!important}
+.sum .v{font:400 20px/1.2 "IM Fell English SC",Georgia,serif;margin-top:6px}
+.foot{color:var(--muted);font-size:14px;border-top:1px solid var(--rule);margin-top:24px;padding-top:12px}
+.reset{background:none;border:1px solid var(--rule);color:var(--muted);border-radius:999px;padding:10px 16px;font:500 13px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.1em;cursor:pointer;margin-top:10px}
+@media (max-width:380px){.opts{grid-template-columns:repeat(5,1fr);gap:4px}.opts button{font-size:11px}.opts button span{display:none}}
 </style>
 </head>
 <body>
@@ -96,96 +59,84 @@ body:not(.live) .fam{display:none}
   <a class="back" id="back" href="./">‹ back to the menu</a>
   <header>
     <img src="logo.jpg" alt="">
-    <div><h1>The Scorecard</h1><p class="kicker">Every coffee we've played, rated in golf terms. A birdie beats a par.</p></div>
+    <div><h1>The Scorecard</h1><p class="kicker">Every coffee we've played, rated in golf terms.</p></div>
   </header>
-
-  <div class="card">
-    <div class="top"><b>Foreunder Coffee House</b><span>the coffee round</span></div>
-    <table>
-      <thead><tr><th>hole</th><th class="l">coffee</th><th>jamey</th><th class="fam">family</th><th>you</th></tr></thead>
-      <tbody id="rows"></tbody>
-    </table>
-  </div>
-
+  <div class="how"><ol>
+    <li>Find a coffee you've tried below.</li>
+    <li>Tap how it played for you, from <b>eagle</b> (one of the best) to <b>double</b> (not for you).</li>
+    <li>See how Jamey and the family rated it. Tap your rating again to undo it.</li>
+  </ol></div>
   <div class="summary">
-    <div class="sum"><div class="k">Jamey's round</div><div class="v" id="sJ"></div><div class="s" id="sJs"></div></div>
-    <div class="sum"><div class="k">Your round</div><div class="v" id="sY"></div><div class="s" id="sYs"></div></div>
+    <div class="sum"><div class="k">Jamey's round</div><div class="v" id="sJ"></div></div>
+    <div class="sum"><div class="k">Your round</div><div class="v" id="sY"></div></div>
   </div>
-
-  <h2>How to Score</h2>
-  <div class="key">
-    <div><span class="rt e">eagle</span><p style="margin:0"><span>One of the best cups you've had.</span></p></div>
-    <div><span class="rt b">birdie</span><p style="margin:0"><span>Really good. You'd buy it again.</span></p></div>
-    <div><span class="rt p">par</span><p style="margin:0"><span>Solid and enjoyable.</span></p></div>
-    <div><span class="rt g">bogey</span><p style="margin:0"><span>Fine, but you wouldn't go back for it.</span></p></div>
-    <div><span class="rt d">double bogey</span><p style="margin:0"><span>Not for you.</span></p></div>
-  </div>
-
-  <p class="foot">Tap "rate it" next to any coffee you've tried. Your ratings are saved on your phone and count toward the family column. A new hole is added every time a new bag goes on.<br><button class="reset" id="reset" type="button">clear my card</button></p>
+  <div id="holes" style="margin-top:16px"></div>
+  <p class="foot">Your ratings are saved on your phone and added to the family ratings. A new hole is added every time a new bag goes on.<br><button class="reset" id="reset" type="button">clear my ratings</button></p>
 </main>
 <script src="data.js"></script>
 <script src="../data/shots.js" onerror="window.SHOTS=[]"></script>
 <script src="guest.js"></script>
 <script>
 (function(){
-  var M = window.FOREUNDER, SHOTS = window.SHOTS || [], PAR = 4, KEY = "foreunder.scorecard";
+  var M = window.FOREUNDER, SHOTS = window.SHOTS || [], G = window.GUEST, KEY = "foreunder.scorecard";
   if (/[?&](order|test)\b/.test(location.search)) document.getElementById("back").href = "./?order";
+  var R = [[2,"eagle","best cup"],[3,"birdie","really good"],[4,"par","solid"],[5,"bogey","meh"],[6,"double","not for me"]];
+  var WORD = {2:"Eagle",3:"Birdie",4:"Par",5:"Bogey",6:"Double bogey"};
   function el(tag, attrs){ var e=document.createElement(tag); attrs=attrs||{};
-    for (var k in attrs){ if(k==="text") e.textContent=attrs[k]; else e.setAttribute(k,attrs[k]); }
+    for (var k in attrs){ if(k==="text") e.textContent=attrs[k]; else if(k==="onclick") e.addEventListener("click",attrs[k]); else e.setAttribute(k,attrs[k]); }
     for (var i=2;i<arguments.length;i++){ var c=arguments[i]; if(c==null) continue; e.append(c.nodeType?c:document.createTextNode(c)); }
     return e; }
-  var R = {2:["e","eagle"],3:["b","birdie"],4:["p","par"],5:["g","bogey"],6:["d","double bogey"]};
-  function tag(n){ var r = R[n]; return el("span",{class:"rt " + (r ? r[0] : "n")}, r ? r[1] : "rate it"); }
-  function tally(list){ var c = {}; list.forEach(function(n){ c[n]=(c[n]||0)+1; });
-    return [2,3,4,5,6].filter(function(n){ return c[n]; }).map(function(n){ var w=R[n][1]; return c[n] + " " + (c[n]>1 ? (w==="par"?"pars":w==="double bogey"?"double bogeys":w+"s") : w); }).join(" · "); }
+  function tally(list){ if (!list.length) return null; var c={}; list.forEach(function(n){ c[n]=(c[n]||0)+1; });
+    return [2,3,4,5,6].filter(function(n){ return c[n]; }).map(function(n){ var w=WORD[n].toLowerCase(); return c[n]+" "+(c[n]>1 ? (w==="par"?"pars":w+"s") : w); }).join(" · "); }
   var mine = {}; try { mine = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch(e) {}
   function save(){ try { localStorage.setItem(KEY, JSON.stringify(mine)); } catch(e) {} }
-
-  // Holes run in the order the coffees were first pulled.
+  var FAM = {}, live = !!(G && G.on);
   function firstPull(b){ var d = SHOTS.filter(function(s){ return s.bean && s.bean.indexOf(b.name) !== -1; }).map(function(s){ return s.date; }).sort()[0]; return d || b.opened || b.roastDate || "9999"; }
   var holes = M.beans.slice().sort(function(a,b){ return firstPull(a) < firstPull(b) ? -1 : firstPull(a) > firstPull(b) ? 1 : 0; });
-
-  var G = window.GUEST, FAM = {};
-  if (G && G.on){ document.body.classList.add("live"); G.ratings().then(function(r){ FAM = r || {}; draw(); }).catch(function(){}); }
-  function famCell(id){
-    var f = FAM[id]; if (!f || !f.count) return el("span",{class:"rt n"},"no votes");
+  function famText(id){
+    var f = FAM[id]; if (!f || !f.count) return ["No ratings yet", ""];
     var best = [2,3,4,5,6].reduce(function(a,n){ return f[n] > (f[a]||0) ? n : a; }, 4);
-    return el("div",{class:"fc"}, tag(best), el("small",null, f.count + (f.count === 1 ? " vote" : " votes")));
+    return [WORD[best], f.count + (f.count === 1 ? " rating" : " ratings")];
   }
   function draw(){
-    var rows = document.getElementById("rows"); rows.replaceChildren();
+    var wrap = document.getElementById("holes"); wrap.replaceChildren();
     var js = [], ys = [];
     holes.forEach(function(b, i){
       var you = mine[b.id] != null ? +mine[b.id] : null;
       if (b.score != null) js.push(b.score);
       if (you != null) ys.push(you);
-      var sel = el("select",{"aria-label":"Your rating for " + b.name},
-        el("option",{value:""},"Not tried"),
-        el("option",{value:"2"},"Eagle: one of the best"), el("option",{value:"3"},"Birdie: really good"), el("option",{value:"4"},"Par: solid"),
-        el("option",{value:"5"},"Bogey: wouldn't go back"), el("option",{value:"6"},"Double bogey: not for me"));
-      sel.value = you == null ? "" : String(you);
-      sel.addEventListener("change", function(){
-        if (sel.value === "") delete mine[b.id]; else mine[b.id] = +sel.value; save(); draw();
-        if (G && G.on) G.rate(b.id, +sel.value || 0).then(function(){ return G.ratings(); }).then(function(r){ FAM = r || FAM; draw(); }).catch(function(){});
+      var ft = famText(b.id), saved = el("div",{class:"saved"});
+      var opts = el("div",{class:"opts",role:"group","aria-label":"Your rating for " + b.name});
+      R.forEach(function(r){
+        opts.append(el("button",{type:"button",class: you === r[0] ? "on" : "","aria-pressed": String(you === r[0]),onclick:function(){
+          var val = you === r[0] ? 0 : r[0];
+          if (val) mine[b.id] = val; else delete mine[b.id];
+          save(); draw();
+          if (live) G.rate(b.id, val).then(function(){ return G.ratings(); }).then(function(x){ FAM = x || FAM; draw(); }).catch(function(){});
+        }}, r[1], el("span",null,r[2])));
       });
-      rows.append(el("tr",null,
-        el("td",{class:"hole"}, String(i+1)),
-        el("td",{class:"cf"},
-          el("div",{class:"nm"}, b.name, b.status !== "out" ? el("span",{class:"oh"},"on hand") : null),
-          el("div",{class:"mt"}, [b.roaster, b.origin && b.origin !== "Blend" ? b.origin : b.type].filter(Boolean).join(" · ")),
-          b.scoreNote ? el("div",{class:"nt"}, b.scoreNote) : null),
-        el("td",{class:"sc"}, b.score != null ? tag(b.score) : el("span",{class:"rt n"},"not yet")),
-        el("td",{class:"sc fam"}, famCell(b.id)),
-        el("td",{class:"sc"}, el("span",{class:"you"}, tag(you), sel))
+      wrap.append(el("section",{class:"hole"},
+        el("div",{class:"hn",text:"hole " + (i+1)}),
+        el("h2",null, b.name, b.status !== "out" ? el("span",{class:"oh"},"on hand") : null),
+        el("div",{class:"mt",text:[b.roaster, b.origin && b.origin !== "Blend" ? b.origin : b.type].filter(Boolean).join(" · ")}),
+        el("div",{class:"who"},
+          el("div",null, el("div",{class:"k",text:"jamey"}), el("div",{class:"v",text: b.score != null ? WORD[b.score] : "Not yet"})),
+          live ? el("div",null, el("div",{class:"k",text:"family"}), el("div",{class:"v",text:ft[0]}), ft[1] ? el("div",{class:"s",text:ft[1]}) : null)
+               : el("div",null, el("div",{class:"k",text:"you"}), el("div",{class:"v",text: you != null ? WORD[you] : "Not rated"}))),
+        b.scoreNote ? el("p",{class:"nt",text:"“" + b.scoreNote + "”"}) : null,
+        el("div",{class:"yl",text:"your rating"}),
+        opts
       ));
     });
-    document.getElementById("sJ").textContent = js.length ? tally(js) : "No ratings yet";
-    document.getElementById("sJs").textContent = js.length + " of " + holes.length + " coffees rated";
-    document.getElementById("sY").textContent = ys.length ? tally(ys) : "Tee it up";
-    document.getElementById("sYs").textContent = ys.length ? ys.length + " of " + holes.length + " coffees rated" : "Rate the coffees you've tried.";
+    document.getElementById("sJ").textContent = tally(js) || "No ratings yet";
+    document.getElementById("sY").textContent = tally(ys) || "Not started";
   }
-  document.getElementById("reset").addEventListener("click", function(){ mine = {}; save(); draw(); });
+  document.getElementById("reset").addEventListener("click", function(){
+    var ids = Object.keys(mine); mine = {}; save(); draw();
+    if (live) Promise.all(ids.map(function(id){ return G.rate(id, 0); })).then(function(){ return G.ratings(); }).then(function(x){ FAM = x || FAM; draw(); }).catch(function(){});
+  });
   draw();
+  if (live) G.ratings().then(function(r){ FAM = r || {}; draw(); }).catch(function(){});
 })();
 </script>
 </body>
