@@ -710,5 +710,34 @@
     "taste": "5 stars · Balanced",
     "time": 27.2,
     "yield": 35.8
+  },
+  {
+    "bean": "Hill of Beans India Monsooned Malabar",
+    "date": "2026-10-12",
+    "dose": 18,
+    "drink": "Cappuccino · thick foam cap",
+    "estimated": false,
+    "grind": 7,
+    "n": 50,
+    "notes": "35.7s, 1:2.04, peak 10.0 bar, avg pump flow 2.7 ml/s, 97.1 ml pumped, avg temp 96.6°C. 5 stars in GaggiMate. Ran about 7s long vs the 28s target at grind 7; first shot of the session, so likely a cold puck and group rather than grind (the next shot ran 28.5s at the same setting).",
+    "session": "Evening (GaggiMate shot #25, 8:33 PM, Foreunder profile)",
+    "taste": "5 stars",
+    "time": 35.7,
+    "yield": 36.7
+  },
+  {
+    "bean": "Hill of Beans India Monsooned Malabar",
+    "date": "2026-10-12",
+    "dialed": "Malabar: 18g → 36g · grind 7 · ~28s warm machine · 93°C",
+    "dose": 18,
+    "drink": "Flat white · latte art pour",
+    "estimated": false,
+    "grind": 7,
+    "n": 51,
+    "notes": "28.5s, 1:2.02, peak 9.9 bar, avg pump flow 2.8 ml/s, 80.9 ml pumped, avg temp 95.7°C (flat ~93°C, climbing to ~100°C late). 5 stars, GaggiMate: Balanced. Right on the 28s target at grind 7 once warm.",
+    "session": "Evening (GaggiMate shot #26, 8:36 PM, Foreunder profile)",
+    "taste": "5 stars · Balanced",
+    "time": 28.5,
+    "yield": 36.3
   }
 ]
