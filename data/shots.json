@@ -719,7 +719,7 @@
     "estimated": false,
     "grind": 7,
     "n": 50,
-    "notes": "35.7s, 1:2.04, peak 10.0 bar, avg pump flow 2.7 ml/s, 97.1 ml pumped, avg temp 96.6°C. 5 stars in GaggiMate. Ran about 7s long vs the 28s target at grind 7 with the machine already warm (Jamey confirmed), while the next shot ran 28.5s at the same setting. Likely first-shot-of-session causes: portafilter not heated in the group, or stale grounds retained in the DF64 from earlier. Milk: steamed too long, ran hot and lost its sweetness; foam came out stiff and dry. Stop at 140–145°F next time.",
+    "notes": "35.7s, 1:2.04, peak 10.0 bar, avg pump flow 2.7 ml/s, 97.1 ml pumped, avg temp 96.6°C. 5 stars in GaggiMate. Ran about 7s long vs the 28s target at grind 7. Machine was warm but the portafilter had not been warming in the group (Jamey confirmed), so the cold portafilter is the cause; the next shot ran 28.5s at the same grind. Milk: steamed too long, ran hot and lost its sweetness; foam came out stiff and dry. Stop at 140–145°F next time.",
     "session": "Evening (GaggiMate shot #25, 8:33 PM, Foreunder profile)",
     "taste": "5 stars",
     "time": 35.7,
