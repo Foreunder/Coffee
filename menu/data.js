@@ -51,7 +51,7 @@ window.FOREUNDER = {
       expect: "Green coffee left open to the monsoon winds on India's Malabar coast, which swells the beans and strips out acidity. Expect a heavy, syrupy body with earthy, spiced and nutty notes. FTCO certified.",
       take: "Thick and full of flavor, with real nuttiness. Outstanding in a mocha.",
       scale: { body: 5, acidity: 1, roast: 3 },
-      recipe: "18 g in · 36 g out · about 28 s", dialNote: "Grind 7 on a warm machine (28.5 s on 10/12). The first shot of a session runs long; pull a warm-up shot or flush first."
+      recipe: "18 g in · 36 g out · about 28 s", dialNote: "Grind 7 (28.5 s on 10/12). The first shot of a session has run long even on a warm machine: keep the portafilter locked in the group while it heats and purge 1–2 g from the grinder before dosing."
     },
     {
       id: "colombia", score: 4, scoreNote: "Friendly and sweet; better in the press than as espresso.",
