@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#0f1c16">
 <meta property="og:title" content="Foreunder Coffee House">
 <meta property="og:description" content="See our coffees on your phone.">
-<meta property="og:image" content="https://foreunder.github.io/Coffee/menu/logo.jpg">
+<meta property="og:image" content="https://foreunder.github.io/Coffee/menu/og.jpg">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
 <title>Foreunder Coffee House</title>
@@ -53,9 +53,9 @@ header.crest{text-align:center;padding-block:28px 20px;display:flex;flex-directi
 .crest .house{font:italic 400 20px/1.2 var(--italic);color:var(--brass)}
 .crest .rule{width:120px;height:1px;background:var(--rule);margin-top:10px}
 
-.crest .logo{width:min(260px,64vw);aspect-ratio:1;display:block;-webkit-mask-image:radial-gradient(circle at 50% 50%,#000 66%,transparent 76%);mask-image:radial-gradient(circle at 50% 50%,#000 66%,transparent 76%)}
+.crest .logo{width:min(220px,56vw);height:auto;display:block;filter:drop-shadow(0 6px 18px rgba(0,0,0,.45))}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.board .logo{width:calc(8*var(--u));aspect-ratio:1;display:block;margin:calc(-1*var(--u)) 0 calc(-.5*var(--u)) calc(-1*var(--u));-webkit-mask-image:radial-gradient(circle,#000 66%,transparent 76%);mask-image:radial-gradient(circle,#000 66%,transparent 76%)}
+.board .logo{height:calc(8*var(--u));width:auto;display:block;margin:calc(-1*var(--u)) 0 calc(-.5*var(--u)) calc(-1*var(--u));}
 section{padding-block:22px}
 h2{font:400 26px/1.15 var(--display);letter-spacing:.04em;margin:0 0 4px;text-wrap:balance}
 .sub{color:var(--muted);margin:0 0 16px;font-style:italic}
@@ -203,7 +203,7 @@ body.noorder{padding-bottom:32px}
 /* ===== TV menu board (descriptive) ===== */
 body.mb{display:flex;flex-direction:column}
 .mb-head{display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:calc(2.5*var(--u));padding:calc(1.2*var(--u)) calc(3*var(--u)) calc(.4*var(--u))}
-.mb-crest{width:calc(8*var(--u));aspect-ratio:1;display:block;-webkit-mask-image:radial-gradient(circle,#000 66%,transparent 76%);mask-image:radial-gradient(circle,#000 66%,transparent 76%)}
+.mb-crest{height:calc(8.5*var(--u));width:auto;display:block;}
 .mb-tag{font:italic 400 calc(2.4*var(--u))/1.1 var(--italic);color:var(--brass)}
 .mb-sub{font:500 calc(1*var(--u))/1.3 var(--label);letter-spacing:.14em;text-transform:lowercase;color:var(--muted);margin-top:calc(.6*var(--u))}
 .mb-qr{display:flex;align-items:center;gap:calc(1.2*var(--u))}
@@ -274,7 +274,7 @@ body.board .newbanner .nb-name{font-size:calc(3.2*var(--u))}
 /* ===== Table stand (iPad on the pub table) ===== */
 body.table{overflow:hidden}
 .tstand{height:100vh;height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3.2vmin;padding:4vmin;text-align:center}
-.tstand .logo{width:46vmin;aspect-ratio:1;display:block;-webkit-mask-image:radial-gradient(circle,#000 66%,transparent 76%);mask-image:radial-gradient(circle,#000 66%,transparent 76%);margin:-3vmin 0 -4vmin}
+.tstand .logo{width:46vmin;height:auto;display:block;margin:-3vmin 0 -4vmin}
 .tstand .qrbox{align-self:center;padding:2vmin}
 .tstand .qrbox svg{width:30vmin;height:30vmin}
 .tstand .scan{font-size:3.4vmin;max-width:70vmin}
@@ -402,7 +402,7 @@ function renderMenu(){
   app.replaceChildren();
   app.append(
     el("header",{class:"crest"},
-      el("img",{class:"logo",src:"logo.jpg",alt:"Foreunder Coffee House crest: crossed golf clubs, a steaming cup and a thistle"}),
+      el("img",{class:"logo",src:"crest-sm.png",alt:"Foreunder Coffee House crest: crossed golf clubs, a steaming cup and a thistle"}),
       el("h1",{class:"sr",text:"Foreunder Coffee House"}),
       el("div",{class:"est",text:"est. 2026"}),
       el("div",{class:"rule"})
@@ -761,7 +761,7 @@ function renderMenuBoard(){
   app.className = "";
   app.replaceChildren();
   const head = el("header",{class:"mb-head"},
-    el("img",{class:"mb-crest",src:"logo.jpg",alt:"Foreunder Coffee House"}),
+    el("img",{class:"mb-crest",src:"crest-sm.png",alt:"Foreunder Coffee House"}),
     el("div",{class:"mb-title"}, el("div",{class:"mb-tag",text:"A good round starts here."}), el("div",{class:"mb-sub",text:"Every espresso drink is a double shot, pulled to order."})),
     (() => { const sd = M.drinks.filter(d => d.section === "seasonal" && d.tv !== false && (d.uses === "none" || beansFor(d).length)); return sd.length ? el("div",{class:"mb-season"}, el("div",{class:"k",text:(M.season && M.season.name ? M.season.name : "Seasonal") + " seasonal"}), ...sd.map(d => el("div",{class:"sd"}, el("span",{class:"n",text:d.name}), el("span",{class:"l",text:d.line})))) : el("div"); })(),
     el("div",{class:"mb-qr"}, el("div",{class:"qrbox",id:"qr"}), el("div",{class:"mb-scan",text:"Scan to read it on your phone."}))
@@ -808,7 +808,7 @@ function renderBoard(){
   app.className = "";
   app.replaceChildren();
   const left = el("div",null,
-    el("img",{class:"logo",src:"logo.jpg",alt:"Foreunder Coffee House"}),
+    el("img",{class:"logo",src:"crest-sm.png",alt:"Foreunder Coffee House"}),
     el("h2",{text:"Drinks"})
   );
   const list = el("ul",{class:"drinks"});
@@ -951,7 +951,7 @@ function renderTable(){
   const qr = el("div",{class:"qrbox"});
   const wait = el("div",{class:"wait"});
   app.append(el("div",{class:"tstand"},
-    el("img",{class:"logo",src:"logo.jpg",alt:"Foreunder Coffee House"}),
+    el("img",{class:"logo",src:"crest-sm.png",alt:"Foreunder Coffee House"}),
     el("div",{class:"side"}, qr, el("div",{class:"scan",text:SCAN_LINE}), wait)
   ));
   makeQR(qr);

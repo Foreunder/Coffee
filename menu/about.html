@@ -8,7 +8,7 @@
 <link rel="icon" href="icon.png">
 <meta property="og:title" content="Why a Thistle? · Foreunder Coffee House">
 <meta property="og:description" content="The story behind Foreunder Coffee House.">
-<meta property="og:image" content="https://foreunder.github.io/Coffee/menu/logo.jpg">
+<meta property="og:image" content="https://foreunder.github.io/Coffee/menu/og.jpg">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
 <title>Our Story · Foreunder Coffee House</title>
@@ -20,7 +20,7 @@ html,body{margin:0;background:var(--ground);color:var(--ink);font:18px/1.6 "Aleg
 .band{height:8px;background:repeating-linear-gradient(90deg,var(--ground) 0 26px,var(--brass) 26px 28px,var(--ground) 28px 48px,var(--oxblood) 48px 54px)}
 main{max-width:620px;margin:0 auto;padding:12px 16px 56px}
 .back{display:inline-block;font:500 13px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.14em;text-transform:lowercase;color:var(--brass);text-decoration:none;padding:10px 0}
-.logo{display:block;width:min(340px,82vw);aspect-ratio:1;margin:0 auto -6px;-webkit-mask-image:radial-gradient(circle,#000 66%,transparent 76%);mask-image:radial-gradient(circle,#000 66%,transparent 76%)}
+.logo{display:block;width:min(340px,82vw);height:auto;margin:0 auto -6px;}
 h1{font:400 clamp(36px,10vw,52px)/1.05 "IM Fell English SC",Georgia,serif;letter-spacing:.04em;text-align:center;margin:8px 0 4px}
 .kicker{text-align:center;font:500 12px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.24em;text-transform:lowercase;color:var(--muted);margin:0 0 28px}
 h2{font:400 26px/1.15 "IM Fell English SC",Georgia,serif;letter-spacing:.03em;color:var(--brass);margin:40px 0 10px}
@@ -36,7 +36,7 @@ p{margin:0 0 16px}
 .sign{text-align:center;margin-top:44px}
 .sign .n{font:400 24px/1 "IM Fell English SC",Georgia,serif;letter-spacing:.08em}
 .sign .t{font:italic 17px/1.5 "IM Fell English",Georgia,serif;color:var(--brass);margin-top:8px}
-.sign img{width:64px;height:64px;border-radius:50%;margin-top:22px}
+.sign .wm{display:block;width:100%;max-width:520px;height:auto;margin:0 auto;border-radius:10px;border:1px solid var(--rule)}
 .cta{display:block;width:max-content;margin:28px auto 0;border:1px solid var(--brass);color:var(--brass);text-decoration:none;font:700 14px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.12em;text-transform:lowercase;padding:14px 22px;border-radius:999px}
 </style>
 </head>
@@ -44,7 +44,7 @@ p{margin:0 0 16px}
 <div class="band"></div>
 <main>
   <a class="back" id="back" href="./">‹ back to the menu</a>
-  <img class="logo" src="logo.jpg" alt="Foreunder Coffee House crest">
+  <img class="logo" src="crest-sm.png" alt="Foreunder Coffee House crest">
   <h1>Why a Thistle?</h1>
   <p class="kicker">our story</p>
 
@@ -82,10 +82,9 @@ p{margin:0 0 16px}
   </div>
 
   <div class="sign">
-    <div class="n">FOREUNDER COFFEE HOUSE</div>
-    <div class="t">A Good Round Starts Here.<br>Great Coffee. Better Grounds.</div>
+    <img class="wm" src="brand/wordmark-green.png" alt="ForeUnder Coffee House. Honest coffee. Questionable handicaps.">
+    <div class="t">A Good Round Starts Here.</div>
     <a class="cta" id="cta" href="./">see our coffees</a>
-    <img src="icon.png" alt="">
   </div>
 </main>
 <script>if(/[?&](order|test)\b/.test(location.search)){var c=document.getElementById("cta");c.href="./?order#order";c.textContent="order a coffee";document.getElementById("back").href="./?order";}</script>
