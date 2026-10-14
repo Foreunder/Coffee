@@ -16,7 +16,7 @@ window.FOREUNDER = {
 
   beans: [
     {
-      id: "rockbrook", score: 3, scoreNote: "The house espresso. Balanced and the one I reach for most.",
+      id: "rockbrook", bagArt: "photos/bag-rockbrook.jpg", score: 3, scoreNote: "The house espresso. Balanced and the one I reach for most.",
       status: "bar",
       name: "Rockbrook Espresso",
       roaster: "A Hill of Beans Coffee Roasters",
@@ -29,7 +29,7 @@ window.FOREUNDER = {
       roastNote: "Roasted daily; purchase date used",
       opened: "2026-09-22",
       bestFor: ["Espresso", "Milk drinks"],
-      expect: "A classic Northern Italian-style blend built for espresso and milk. Rich and rounded, low in acidity, and comfortable under a lot of milk.",
+      expect: "The roaster's flagship, years in the making. A traditional Northern Italian-style blend: balanced enough to drink straight, bold enough for a latte or cappuccino, rich and smooth with plenty of crema.",
       take: "The house espresso. Balanced straight, neither sour nor bitter, and the one I reach for most.",
       scale: { body: 4, acidity: 1, roast: 4 },
       recipe: "18 g in · 36 g out · about 28 s", dialNote: "Grind 13 on the GaggiMate (26.2 s and 29.8 s on 10/13, both balanced)."
