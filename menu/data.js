@@ -48,7 +48,8 @@ window.FOREUNDER = {
       roastNote: "Roasted daily; purchase date used",
       opened: "2026-09-22",
       bestFor: ["Espresso", "Mochas", "Milk drinks"],
-      expect: "Green coffee left open to the monsoon winds on India's Malabar coast, which swells the beans and strips out acidity. Expect a heavy, syrupy body with earthy, spiced and nutty notes. FTCO certified.",
+      elevation: "3,200–4,000 ft", cert: "Fair Trade Organic",
+      expect: "Green coffee left open to the monsoon winds and humidity on India's Malabar coast, which swells the beans and strips out acidity. Mellow and earthy, with a heavy, syrupy body, nutty notes and a subtle sweetness.",
       take: "Thick and full of flavor, with real nuttiness. Outstanding in a mocha.",
       scale: { body: 5, acidity: 1, roast: 3 },
       recipe: "18 g in · 36 g out · about 28 s", dialNote: "Grind 7 (28.5 s on 10/12). Keep the portafilter locked in the group while the machine heats; a cold portafilter added 7 s to the first shot on 10/12."

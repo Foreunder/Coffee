@@ -498,6 +498,8 @@ function beanCard(b){
   add("process", b.process);
   add("roast", b.roastLevel);
   add("type", b.type);
+  add("elevation", b.elevation);
+  add("certified", b.cert);
   const fr = b.status !== "out" ? freshness(b) : null;
 
   const card = el("article",{class:"bean" + (b.status === "out" ? " out" : "")},
