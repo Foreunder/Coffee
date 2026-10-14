@@ -11,8 +11,6 @@ window.FOREUNDER = {
   guestApi: "https://script.google.com/macros/s/AKfycbxRgVX3UtW0bbD4AMxkVZrLOSPmwccrMyPv4moCB_9_jFTAyXhk4FaO0v-BLiIfFE6q/exec",
   minutesPerDrink: 4,
   // Seasonal section heading. Swap the drinks marked section: "seasonal" when the season changes.
-  // The playlist on the speakers. Shown on the TV board and as a button on the phone menu.
-  music: { name: "Scottish Pub Coffee House Evening", url: "https://open.spotify.com/playlist/20RyJS4ygV6BrTLoDU9xD4?utm_source=anthropic&utm_medium=claude&go=1&nap_web=1&request_id=a6688d7d-8e52-44b3-b513-4a0a2f997a43" },
   season: { name: "Fall", sub: "Here for the season. Ask Jamey which one he's pouring." },
   decafNote: "No decaf right now. Ask Jamey and he'll sort you out.",
 

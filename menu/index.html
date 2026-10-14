@@ -207,8 +207,6 @@ body.mb{display:flex;flex-direction:column}
 .mb-crest{height:calc(8.5*var(--u));width:auto;display:block;}
 .mb-tag{font:italic 400 calc(2.4*var(--u))/1.1 var(--italic);color:var(--brass)}
 .mb-sub{font:500 calc(1*var(--u))/1.3 var(--label);letter-spacing:.14em;text-transform:lowercase;color:var(--muted);margin-top:calc(.6*var(--u))}
-.mb-music{font:italic 400 calc(1.2*var(--u))/1.2 var(--italic);color:var(--ink);margin-top:calc(.5*var(--u))}
-.mb-music .k{font:500 calc(.8*var(--u))/1 var(--label);font-style:normal;letter-spacing:.14em;text-transform:lowercase;color:var(--brass);margin-right:calc(.4*var(--u))}
 .mb-qr{display:flex;align-items:center;gap:calc(1.2*var(--u))}
 .mb-qr .qrbox{padding:calc(.6*var(--u))}
 .mb-qr .qrbox svg{width:calc(7*var(--u));height:calc(7*var(--u))}
@@ -417,8 +415,7 @@ function renderMenu(){
     ORDERING ? el("button",{class:"qa main",type:"button",onclick:()=>openOrder()}, el("b",{text:"Order a drink"}), el("span",{text:"Straight to Jamey"})) : null,
     el("button",{class:"qa",type:"button",onclick:()=>{ const s=document.querySelector(".pickstart"); const box=document.querySelector(".pickbox"); if(s) s.click(); if(box) box.scrollIntoView({behavior:"smooth",block:"start"}); }}, el("b",{text:"Help me pick"}), el("span",{text:"3 quick taps"})),
     live ? el("a",{class:"qa",href:"scorecard.html" + MODE_QS}, el("b",{text:"Score your drink"}), el("span",{text:"Birdie or bogey?"})) : null,
-    live ? el("a",{class:"qa",href:"share.html" + MODE_QS}, el("b",{text:"Share your pour"}), el("span",{text:"Send Jamey a photo"})) : null,
-    M.music && M.music.url ? el("a",{class:"qa",href:M.music.url,target:"_blank",rel:"noopener"}, el("b",{text:"What's playing"}), el("span",{text:"Open it in Spotify"})) : null
+    live ? el("a",{class:"qa",href:"share.html" + MODE_QS}, el("b",{text:"Share your pour"}), el("span",{text:"Send Jamey a photo"})) : null
   ));
 
   // Drinks
@@ -769,7 +766,7 @@ function renderMenuBoard(){
   app.replaceChildren();
   const head = el("header",{class:"mb-head"},
     el("img",{class:"mb-crest",src:"crest-sm.png",alt:"Foreunder Coffee House"}),
-    el("div",{class:"mb-title"}, el("div",{class:"mb-tag",text:"A good round starts here."}), el("div",{class:"mb-sub",text:"Every espresso drink is a double shot, pulled to order."}), M.music && M.music.name ? el("div",{class:"mb-music"}, el("span",{class:"k",text:"on the speakers "}), M.music.name) : null),
+    el("div",{class:"mb-title"}, el("div",{class:"mb-tag",text:"A good round starts here."}), el("div",{class:"mb-sub",text:"Every espresso drink is a double shot, pulled to order."})),
     (() => { const sd = M.drinks.filter(d => d.section === "seasonal" && d.tv !== false && (d.uses === "none" || beansFor(d).length)); return sd.length ? el("div",{class:"mb-season"}, el("div",{class:"k",text:(M.season && M.season.name ? M.season.name : "Seasonal") + " seasonal"}), ...sd.map(d => el("div",{class:"sd"}, el("span",{class:"n",text:d.name}), el("span",{class:"l",text:d.line})))) : el("div"); })(),
     el("div",{class:"mb-qr"}, el("div",{class:"qrbox",id:"qr"}), el("div",{class:"mb-scan",text:"Scan to read it on your phone."}))
   );
