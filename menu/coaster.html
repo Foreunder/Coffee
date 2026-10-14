@@ -6,6 +6,7 @@
 <title>Foreunder Coaster Inserts</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=IM+Fell+English:ital@1&family=Alegreya+Sans+SC:wght@500&display=swap">
 <style>
+@font-face{font-family:"Fell SC";src:url(brand/fonts/im-fell-english-sc-latin-400-normal.woff) format("woff")}
 /* Insert for a clear 4 x 4 in acrylic coaster (Nap Tags, 1/8 in). The print is 3 x 3 in, leaving a 1/2 in clear border
    on every side for packing tape on the back and keeping the corner bumper feet clear. Print at 100%. */
 @page{size:letter;margin:.25in .3in}
@@ -15,12 +16,15 @@ html,body{margin:0;background:#fff;color:#14231b}
 .c{position:relative;width:3.25in;height:3.25in;box-sizing:border-box;border-radius:0;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;padding:.33in .3in;gap:.04in}
 .c > svg.frame{position:absolute;inset:0;width:3.25in;height:3.25in;pointer-events:none}
 .crest{position:relative;height:1.98in;width:auto;display:block}
-.row{position:relative;display:flex;justify-content:center}
+.row{position:relative;display:flex;justify-content:center;align-items:center;gap:.13in}
+.qrw{display:block;flex:none}
+.tag{font:400 10.5pt/1.25 "Fell SC","IM Fell English SC",Georgia,serif;color:#14231b;letter-spacing:.02em;white-space:nowrap}
+.green .tag{color:#efe3c6}
 .row svg{width:.56in;height:.56in;display:block;flex:none}
 /* parchment: warm aged-paper tone that matches the room and prints with light ink coverage */
 .parch .c{background:radial-gradient(ellipse at 50% 45%,#f1e6c9 0,#e8d8b2 62%,#d9c495 100%)}
 .green .c{background:#10211a}
-.green .row{background:#efe3c6;padding:.05in;border-radius:3px}
+.green .qrw{background:#efe3c6;padding:.05in;border-radius:3px}
 .plain .c{padding:.325in}
 .plain .crest{height:1.8in}
 .plain .row svg{width:.68in;height:.68in}
@@ -30,12 +34,12 @@ html,body{margin:0;background:#fff;color:#14231b}
 <body class="parch celtic">
 <p class="tip">Print at 100% (actual size, not "fit to page") with background graphics on. Each print is 3¼ × 3¼ in. The background runs ⅛ in past the design on every side, so you can cut anywhere in that band and it still looks right: aim for the outer edge and you have about ⅛ in of room for a wobbly cut. Six per sheet. Peel the coaster's protective film, lay the print face-down on the center of the coaster's back (so it reads through the top), and tape over all four edges with clear packing tape, pressing from the center out so no bubbles sit over the QR code. Keep the tape off the corners where the bumper feet go.</p>
 <div class="sheet">
-  <div class="c"><img class="crest" src="crest.png" alt="Foreunder Coffee House crest"><div class="row"><span class="qr"></span></div></div>
-  <div class="c"><img class="crest" src="crest.png" alt="Foreunder Coffee House crest"><div class="row"><span class="qr"></span></div></div>
-  <div class="c"><img class="crest" src="crest.png" alt="Foreunder Coffee House crest"><div class="row"><span class="qr"></span></div></div>
-  <div class="c"><img class="crest" src="crest.png" alt="Foreunder Coffee House crest"><div class="row"><span class="qr"></span></div></div>
-  <div class="c"><img class="crest" src="crest.png" alt="Foreunder Coffee House crest"><div class="row"><span class="qr"></span></div></div>
-  <div class="c"><img class="crest" src="crest.png" alt="Foreunder Coffee House crest"><div class="row"><span class="qr"></span></div></div>
+  <div class="c"><img class="crest" src="crest-coaster.png" alt="Foreunder Coffee House crest"><div class="row"><span class="qrw"><span class="qr"></span></span><div class="tag">Honest coffee.<br>Questionable handicaps.</div></div></div>
+  <div class="c"><img class="crest" src="crest-coaster.png" alt="Foreunder Coffee House crest"><div class="row"><span class="qrw"><span class="qr"></span></span><div class="tag">Honest coffee.<br>Questionable handicaps.</div></div></div>
+  <div class="c"><img class="crest" src="crest-coaster.png" alt="Foreunder Coffee House crest"><div class="row"><span class="qrw"><span class="qr"></span></span><div class="tag">Honest coffee.<br>Questionable handicaps.</div></div></div>
+  <div class="c"><img class="crest" src="crest-coaster.png" alt="Foreunder Coffee House crest"><div class="row"><span class="qrw"><span class="qr"></span></span><div class="tag">Honest coffee.<br>Questionable handicaps.</div></div></div>
+  <div class="c"><img class="crest" src="crest-coaster.png" alt="Foreunder Coffee House crest"><div class="row"><span class="qrw"><span class="qr"></span></span><div class="tag">Honest coffee.<br>Questionable handicaps.</div></div></div>
+  <div class="c"><img class="crest" src="crest-coaster.png" alt="Foreunder Coffee House crest"><div class="row"><span class="qrw"><span class="qr"></span></span><div class="tag">Honest coffee.<br>Questionable handicaps.</div></div></div>
 </div>
 <script src="qrcode.js"></script>
 <script src="data.js"></script>
