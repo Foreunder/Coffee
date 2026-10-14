@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0f1c16">
+<title>Pub Quiz · Foreunder Coffee House</title>
+<link rel="icon" href="../icon.png">
+<link rel="apple-touch-icon" href="../icon.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=IM+Fell+English:ital@0;1&family=Alegreya:ital,wght@0,400;0,500;1,400&family=Alegreya+Sans+SC:wght@500;700&display=swap">
+<style>
+:root{--ground:#0f1c16;--panel:#16271f;--ink:#f0e7d3;--muted:#b9ad90;--brass:#c9a24f;--oxblood:#8a2a35;--rule:rgba(201,162,79,.28);--A:#c9a24f;--B:#a8424f;--C:#4f8a6a;--D:#5a7499}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--ground);color:var(--ink);font:17px/1.45 "Alegreya",Georgia,serif;-webkit-font-smoothing:antialiased}
+.band{height:8px;background:repeating-linear-gradient(90deg,var(--ground) 0 26px,var(--brass) 26px 28px,var(--ground) 28px 48px,var(--oxblood) 48px 54px)}
+main{max-width:520px;margin:0 auto;padding:14px 16px calc(40px + env(safe-area-inset-bottom))}
+.top{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.top img{height:54px;width:auto}
+.top h1{font:400 28px/1 "IM Fell English SC",Georgia,serif;letter-spacing:.03em;margin:0}
+.top .sub{font:500 12px/1.2 "Alegreya Sans SC",sans-serif;letter-spacing:.14em;color:var(--brass);margin-top:4px}
+.k{display:block;font:500 13px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.14em;text-transform:lowercase;color:var(--brass);margin:18px 0 8px}
+input[type=text]{width:100%;background:var(--panel);color:var(--ink);border:1px solid var(--rule);border-radius:10px;padding:13px 14px;font:18px/1.2 "Alegreya",Georgia,serif;min-height:50px}
+input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell English SC",Georgia,serif;text-align:center}
+.btn{display:block;width:100%;margin-top:18px;border:0;background:var(--brass);color:#1a1408;font:700 15px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.14em;text-transform:lowercase;padding:16px;border-radius:999px;min-height:54px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--brass);border:1.5px solid var(--brass)}
+.btn[disabled]{opacity:.45}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1.5px solid var(--rule);background:transparent;color:var(--ink);font:500 15px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.06em;text-transform:lowercase;border-radius:999px;padding:12px 15px;min-height:46px;cursor:pointer}
+.chip.on{background:var(--brass);border-color:var(--brass);color:#1a1408}
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:14px 16px;margin-top:12px}
+.big{font:400 30px/1.1 "IM Fell English SC",Georgia,serif;color:var(--brass);margin:6px 0}
+.muted{color:var(--muted)}
+.qmeta{display:flex;justify-content:space-between;align-items:center;font:500 13px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.12em;text-transform:lowercase;color:var(--brass)}
+.clock{font:400 26px/1 "IM Fell English SC",Georgia,serif;color:var(--ink)}
+.timer{height:6px;background:rgba(201,162,79,.15);border-radius:99px;overflow:hidden;margin:10px 0 12px}
+.timer i{display:block;height:100%;background:var(--brass);transform-origin:left}
+.qtext{font:400 22px/1.25 "IM Fell English",Georgia,serif;margin:0 0 14px}
+.ans{display:grid;gap:10px}
+.a{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--panel);border:2.5px solid var(--c);border-radius:14px;padding:12px 14px;min-height:64px;color:var(--ink);font:500 18px/1.2 "Alegreya",Georgia,serif;cursor:pointer}
+.a .L{flex:none;display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--c);color:#14110a;font:700 19px/1 "Alegreya Sans SC",sans-serif}
+.a.on{background:var(--c);color:#14110a}
+.a.on .L{background:var(--ink)}
+.a.win{background:var(--c);color:#14110a;opacity:1}
+.a.dim{opacity:.3}
+.a.win .L{background:var(--ink)}
+.a.was{opacity:.75;border-style:dashed}
+.a .yp{margin-left:auto;font:500 11px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.12em;text-transform:lowercase}
+.a[disabled]{cursor:default}
+.pick{margin-top:12px;color:var(--muted);text-align:center}
+.result{text-align:center;padding:18px 8px}
+.result .big{font-size:40px}
+.result.bad .big{color:var(--muted)}
+.rows{display:grid;gap:8px;margin-top:10px}
+.row{display:grid;grid-template-columns:30px 1fr auto;gap:10px;align-items:center;background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:10px 12px}
+.row.me{border-color:var(--brass);background:rgba(201,162,79,.14)}
+.row b{font:400 20px/1 "IM Fell English SC",Georgia,serif;color:var(--brass)}
+.row .n{font:400 19px/1.1 "IM Fell English SC",Georgia,serif}
+.row .m{font-size:13px;color:var(--muted)}
+.qm{margin-top:28px;border:1px dashed var(--rule);border-radius:12px;padding:12px 14px}
+.qm .k{margin-top:4px}
+.qm .btn{margin-top:10px}
+.err{color:#e7a3a3}
+.fact{font:italic 17px/1.35 "IM Fell English",Georgia,serif;color:var(--brass);margin-top:10px}
+</style>
+</head>
+<body>
+<div class="band"></div>
+<main id="app"></main>
+<script src="peerjs.min.js"></script>
+<script src="quiz.js"></script>
+<script>
+(function(){
+  var el = PQ.el, app = document.getElementById("app");
+  var PID = PQ.pid();
+  if (PQ.qs.get("qm") === "1") PQ.store("foreunder.quiz.qm", "1");
+  if (PQ.qs.get("qm") === "0") PQ.store("foreunder.quiz.qm", "");
+  var QM = PQ.store("foreunder.quiz.qm") === "1";
+  var room = (PQ.qs.get("room") || "").toUpperCase().replace(/[^A-Z]/g, "").slice(0, 4);
+  var V = null, endsAt = 0, status = "", peer = null, conn = null, retry = null;
+  var pending = { name: PQ.store("foreunder.name") || "", team: PQ.store("foreunder.quiz.team") || "", newTeam: false };
+
+  function header(){ return el("div",{class:"top"}, el("img",{src:"../crest-sm.png",alt:""}), el("div",null, el("h1",{text:"Pub Quiz"}), el("div",{class:"sub",text: room ? "Room " + room + (V && V.me && V.me.team ? " · " + V.me.team : "") : "foreunder coffee house"}))); }
+  function send(o){ o.pid = PID; if (QM) o.qm = true; try { if (conn && conn.open) conn.send(o); } catch(e) {} }
+
+  // ---- connecting ----
+  function connect(){
+    clearTimeout(retry);
+    if (!room) return render();
+    status = "Connecting to the TV…"; render();
+    if (!peer || peer.destroyed){
+      peer = new Peer(PQ.peerOpts());
+      peer.on("open", openConn);
+      peer.on("error", function(e){
+        if (e.type === "peer-unavailable") status = "No game found for room " + room + ". Check the code on the TV.";
+        else if (e.type === "browser-incompatible") status = "This browser can't join. Try Safari or Chrome.";
+        else status = "Lost the connection. Retrying…";
+        render(); retry = setTimeout(connect, 3000);
+      });
+      peer.on("disconnected", function(){ try { peer.reconnect(); } catch(e) {} });
+    } else if (peer.open) openConn();
+  }
+  function openConn(){
+    if (conn && conn.open) return;
+    conn = peer.connect(PQ.PREFIX + room.toLowerCase(), { reliable: true });
+    conn.on("open", function(){ status = ""; send({ t: "hello" }); if (pending.name && PQ.store("foreunder.quiz.room") === room && PQ.store("foreunder.quiz.joined") === "1") join(true); });
+    conn.on("data", function(d){ if (d && d.t === "state"){ V = d; endsAt = Date.now() + (d.left || 0); render(); } });
+    conn.on("close", function(){ status = "Lost the TV. Reconnecting…"; render(); retry = setTimeout(connect, 2000); });
+  }
+  // Phones sleep; reconnect when the screen comes back.
+  document.addEventListener("visibilitychange", function(){ if (!document.hidden && room && !(conn && conn.open)) connect(); });
+
+  function join(silent){
+    var name = pending.name.trim(); if (!name) return;
+    PQ.store("foreunder.name", name);
+    PQ.store("foreunder.quiz.team", pending.team);
+    PQ.store("foreunder.quiz.room", room); PQ.store("foreunder.quiz.joined", "1");
+    send({ t: "join", name: name, team: pending.team });
+  }
+
+  // ---- screens ----
+  function codeScreen(){
+    var inp = el("input",{type:"text",class:"code",maxlength:"4",autocapitalize:"characters",autocomplete:"off",placeholder:"ABCD",value:room});
+    return [header(), el("p",{text:"Type the 4-letter room code on the TV."}), inp,
+      el("button",{class:"btn",type:"button",onclick:function(){ room = inp.value.toUpperCase().replace(/[^A-Z]/g,"").slice(0,4); if (room.length === 4){ history.replaceState(null, "", "?room=" + room + (PQ.qs.get("peer") ? "&peer=" + PQ.qs.get("peer") : "")); connect(); } }}, "join the game")];
+  }
+  function joinScreen(){
+    var teams = V.mode === "teams" ? V.teams : [];
+    var nameIn = el("input",{type:"text",maxlength:"20",autocomplete:"given-name",placeholder:"Your name",value:pending.name,oninput:function(e){ pending.name = e.target.value; btn.disabled = !ok(); }});
+    var teamIn = el("input",{type:"text",maxlength:"24",placeholder:"Team name",value: pending.newTeam ? pending.team : "",oninput:function(e){ pending.team = e.target.value; btn.disabled = !ok(); }});
+    function ok(){ return pending.name.trim() && (V.mode === "solo" || pending.team.trim()); }
+    var btn = el("button",{class:"btn",type:"button",onclick:function(){ join(); }}, V.mode === "teams" ? "join team" : "i'm in");
+    btn.disabled = !ok();
+    var known = teams.some(function(t){ return t.name === pending.team; });
+    if (!known && pending.team && !pending.newTeam) pending.newTeam = true;
+    return [header(),
+      el("label",{class:"k",text:"your name"}), nameIn,
+      V.mode === "teams" ? [
+        el("label",{class:"k",text: teams.length ? "pick your team" : "name your team"}),
+        teams.length ? el("div",{class:"chips"}, teams.map(function(t){ return el("button",{type:"button",class:"chip" + (!pending.newTeam && pending.team === t.name ? " on" : ""),onclick:function(){ pending.team = t.name; pending.newTeam = false; render(); }}, t.name); }),
+          el("button",{type:"button",class:"chip" + (pending.newTeam ? " on" : ""),onclick:function(){ pending.newTeam = true; pending.team = ""; render(); }}, "+ new team")) : null,
+        (!teams.length || pending.newTeam) ? el("div",{style:"margin-top:10px"}, teamIn) : null
+      ] : el("p",{class:"muted",text:"Everyone for themselves this game."}),
+      btn,
+      V.phase !== "lobby" ? el("p",{class:"muted",text:"A game is already going. You'll jump in on the next question."}) : null];
+  }
+  function lobbyScreen(){
+    return [header(), el("div",{class:"card"},
+      el("div",{class:"big",text:"You're in, " + V.me.name + "."}),
+      V.mode === "teams" ? el("p",null, "Team ", el("b",{text:V.me.team}), V.me.mates.length > 1 ? " with " + V.me.mates.filter(function(n){ return n !== V.me.name; }).join(", ") : ". Get others to pick it on their phones.") : null,
+      el("p",{class:"muted",text:"Watch the TV. The questions show up there, and you answer here."})),
+      el("button",{class:"btn ghost",type:"button",onclick:function(){ PQ.store("foreunder.quiz.joined",""); V.me.team = null; pending.newTeam = false; render(); }}, V.mode === "teams" ? "switch team" : "change name")];
+  }
+  function questionScreen(){
+    var q = V.q, rev = V.phase === "reveal", mine = V.mine;
+    var colors = ["var(--A)","var(--B)","var(--C)","var(--D)"];
+    var out = [el("div",{class:"qmeta"}, el("span",{text:"question " + (V.i + 1) + " of " + V.total + " · " + q.cat + (q.dbl ? " · double points" : "")}), el("span",{class:"clock",id:"clock"})),
+      el("div",{class:"timer"}, el("i",{id:"bar"})),
+      el("p",{class:"qtext",text:q.text}),
+      el("div",{class:"ans"}, q.opts.map(function(o, k){
+        var cls = "a" + (rev ? (k === V.correct ? " win" : (mine && mine.choice === k ? " was" : " dim")) : (mine && mine.choice === k ? " on" : ""));
+        return el("button",{type:"button",class:cls,style:"--c:" + colors[k],disabled: rev ? "" : null,onclick: rev ? null : function(){ send({ t: "answer", choice: k }); if (!V.mine) V.mine = {}; V.mine.choice = k; V.mine.by = V.me.name; render(); }},
+          el("span",{class:"L",text:PQ.LETTERS[k]}), el("span",{text:o}), rev && mine && mine.choice === k ? el("span",{class:"yp",text: V.mode === "teams" ? "your team" : "you"}) : null);
+      }))];
+    if (!rev){
+      out.push(el("p",{class:"pick",text: mine ? (V.mode === "teams" && mine.by && mine.by !== V.me.name ? mine.by + " locked in " + PQ.LETTERS[mine.choice] + ". Anyone on the team can change it until time's up." : "Locked in " + PQ.LETTERS[mine.choice] + ". You can change it until time's up.") : (V.mode === "teams" ? "One answer per team. Anyone can tap it." : "Tap your answer.")}));
+    } else {
+      var right = mine && mine.ok;
+      out.push(el("div",{class:"result" + (right ? "" : " bad")}, el("div",{class:"big",text: right ? "Correct! +" + V.gained : mine ? "Not this time" : "No answer"}), el("div",{class:"muted",text:"The answer: " + PQ.LETTERS[V.correct] + ", " + q.opts[V.correct] + " · " + V.score + " pts, " + ordinal(V.rank) + " place"})));
+      if (q.fact) out.push(el("p",{class:"fact",text:q.fact}));
+    }
+    return [header()].concat(out);
+  }
+  function ordinal(n){ var s = ["th","st","nd","rd"], v = n % 100; return n + (s[(v - 20) % 10] || s[v] || s[0]); }
+  function boardScreen(final){
+    var top = V.teams[0];
+    return [header(),
+      final ? el("div",{class:"big",text: top ? (top.id === V.me.teamId ? "You win!" : top.name + " wins") : "Game over"}) : el("div",{class:"big",text:"The Leaderboard"}),
+      el("p",{class:"muted",text: V.rank ? "You're in " + ordinal(V.rank) + " with " + V.score + " pts." : ""}),
+      el("div",{class:"rows"}, V.teams.map(function(t, i){
+        return el("div",{class:"row" + (t.id === V.me.teamId ? " me" : "")}, el("b",{text:String(i + 1)}), el("div",null, el("div",{class:"n",text:t.name}), V.mode === "teams" ? el("div",{class:"m",text:t.members.join(", ")}) : null), el("span",{text:t.score + " pts"}));
+      }))];
+  }
+  function qmPanel(){
+    if (!V || !V.me.qm) return null;
+    var p = V.phase, body = [el("span",{class:"k",text:"quizmaster"})];
+    if (p === "lobby"){
+      body.push(el("div",{class:"chips"},
+        el("button",{type:"button",class:"chip" + (V.mode === "teams" ? " on" : ""),onclick:function(){ send({ t:"qm", cmd:"mode", mode:"teams" }); }}, "teams"),
+        el("button",{type:"button",class:"chip" + (V.mode === "solo" ? " on" : ""),onclick:function(){ send({ t:"qm", cmd:"mode", mode:"solo" }); }}, "solo")));
+      body.push(el("div",{class:"chips",style:"margin-top:8px"}, [6, 12, 18].map(function(n){ return el("button",{type:"button",class:"chip" + (V.holes === n ? " on" : ""),onclick:function(){ send({ t:"qm", cmd:"holes", holes:n }); }}, n + " questions"); })));
+      body.push(el("button",{class:"btn",type:"button",disabled: V.playing ? null : "",onclick:function(){ send({ t:"qm", cmd:"start" }); }}, V.playing ? "start the game" : "waiting for players"));
+    } else if (p === "final"){
+      body.push(el("button",{class:"btn",type:"button",onclick:function(){ send({ t:"qm", cmd:"again" }); }}, "play again"));
+    } else {
+      body.push(el("button",{class:"btn",type:"button",onclick:function(){ send({ t:"qm", cmd:"next" }); }}, p === "question" ? "reveal the answer" : "next question"));
+      body.push(el("button",{class:"btn ghost",type:"button",onclick:function(){ send({ t:"qm", cmd:"end" }); }}, "end the game"));
+    }
+    return el("div",{class:"qm"}, body);
+  }
+
+  function render(){
+    var parts;
+    if (!room) parts = codeScreen();
+    else if (!V) parts = [header(), el("p",{class: /No game|can't/.test(status) ? "err" : "muted",text: status || "Connecting to the TV…"}), /No game/.test(status) ? el("button",{class:"btn ghost",type:"button",onclick:function(){ room = ""; V = null; clearTimeout(retry); history.replaceState(null,"",location.pathname); render(); }}, "enter a different code") : null];
+    else if (!V.me.team || PQ.store("foreunder.quiz.joined") !== "1") parts = joinScreen();
+    else if (V.phase === "lobby") parts = lobbyScreen();
+    else if (V.phase === "question" || V.phase === "reveal") parts = questionScreen();
+    else parts = boardScreen(V.phase === "final");
+    if (V && status) parts.push(el("p",{class:"err",text:status}));
+    // Keep what someone is typing when a state update arrives.
+    var active = document.activeElement, keepTyping = active && active.tagName === "INPUT" && V && !V.me.team;
+    if (keepTyping) return;
+    app.replaceChildren.apply(app, flat([parts, qmPanel()]));
+    tick();
+  }
+  function flat(a){ var out = []; (function walk(x){ if (Array.isArray(x)) x.forEach(walk); else if (x != null && x !== false) out.push(x); })(a); return out; }
+  function tick(){
+    var c = document.getElementById("clock"), b = document.getElementById("bar");
+    if (!c || !V) return;
+    var left = Math.max(0, endsAt - Date.now()), total = (V.phase === "question" ? (Number(PQ.qs.get("secs")) || 25) : 9) * 1000;
+    c.textContent = V.phase === "question" ? Math.ceil(left / 1000) : "";
+    b.style.transform = "scaleX(" + (V.phase === "question" ? Math.min(1, left / total) : 0) + ")";
+  }
+  setInterval(tick, 250);
+  connect();
+})();
+</script>
+</body>
+</html>

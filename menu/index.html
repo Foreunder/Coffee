@@ -415,7 +415,8 @@ function renderMenu(){
     ORDERING ? el("button",{class:"qa main",type:"button",onclick:()=>openOrder()}, el("b",{text:"Order a drink"}), el("span",{text:"Straight to Jamey"})) : null,
     el("button",{class:"qa",type:"button",onclick:()=>{ const s=document.querySelector(".pickstart"); const box=document.querySelector(".pickbox"); if(s) s.click(); if(box) box.scrollIntoView({behavior:"smooth",block:"start"}); }}, el("b",{text:"Help me pick"}), el("span",{text:"3 quick taps"})),
     live ? el("a",{class:"qa",href:"scorecard.html" + MODE_QS}, el("b",{text:"Score your drink"}), el("span",{text:"Birdie or bogey?"})) : null,
-    live ? el("a",{class:"qa",href:"share.html" + MODE_QS}, el("b",{text:"Share your pour"}), el("span",{text:"Send Jamey a photo"})) : null
+    live ? el("a",{class:"qa",href:"share.html" + MODE_QS}, el("b",{text:"Share your pour"}), el("span",{text:"Send Jamey a photo"})) : null,
+    el("a",{class:"qa",href:"trivia/play.html"}, el("b",{text:"Pub quiz"}), el("span",{text:"Join the game on the TV"}))
   ));
 
   // Drinks

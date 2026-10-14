@@ -20,6 +20,7 @@ The live log is the master copy; this repo is updated by Claude after each logge
   - `?order#bar` – order screen; `?order#table` – table iPad with live queue
   - `about.html` – Why a Thistle? brand story
   - `recipes.html` – bar recipes, current dial-ins, the Dial-In Coach (next grind move from each coffee's own shot history) and beans left per bag (bag weight minus logged doses; set `weighed: {g, afterShot}` on a bean in `data.js` to correct it). Reads `data.js` and the Shot Log mirror.
+  - `trivia/` – the Pub Quiz. `index.html` runs on the TV (short address `/Coffee/quiz`) and hosts the game; phones join through `play.html` by QR or room code (`?qm=1` once makes a phone the quizmaster). Phones talk straight to the TV over WebRTC via PeerJS (vendored `peerjs.min.js`); the free PeerJS server only introduces them. Questions live in `questions.js` (first answer is the correct one; shuffled each game). Test locally with a PeerServer and `?peer=127.0.0.1:9000`.
   - `links.html` – every Foreunder link in one page
   - `table.html` – static table card for older iPads
   - `card.html` – printable 4×6 QR table card; `coaster.html` – 3×3 QR insert for the 4×4 acrylic coaster

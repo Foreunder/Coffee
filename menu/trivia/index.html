@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Foreunder Pub Quiz</title>
+<link rel="icon" href="../icon.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=IM+Fell+English:ital@0;1&family=Alegreya:ital,wght@0,400;0,500;1,400&family=Alegreya+Sans+SC:wght@500;700&display=swap">
+<style>
+:root{--ground:#0f1c16;--panel:#16271f;--ink:#f0e7d3;--muted:#b9ad90;--brass:#c9a24f;--oxblood:#8a2a35;--rule:rgba(201,162,79,.28);
+  --u:min(1vw,1.78vh);--A:#c9a24f;--B:#a8424f;--C:#4f8a6a;--D:#5a7499}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--ground);color:var(--ink);font:calc(1.6*var(--u))/1.35 "Alegreya",Georgia,serif;-webkit-font-smoothing:antialiased}
+.band{height:calc(.6*var(--u));background:repeating-linear-gradient(90deg,var(--ground) 0 26px,var(--brass) 26px 28px,var(--ground) 28px 48px,var(--oxblood) 48px 54px)}
+#app{position:absolute;inset:calc(.6*var(--u)) 0 0 0;display:flex;flex-direction:column;padding:calc(2*var(--u)) calc(3.5*var(--u)) calc(2*var(--u))}
+.k{font:500 calc(1.1*var(--u))/1 "Alegreya Sans SC",sans-serif;letter-spacing:.16em;text-transform:lowercase;color:var(--brass)}
+h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spacing:.03em;margin:0}
+.it{font:italic 400 calc(2*var(--u))/1.25 "IM Fell English",Georgia,serif;color:var(--brass)}
+/* lobby */
+.lobby{display:grid;grid-template-columns:1.25fr 1fr;gap:calc(4*var(--u));flex:1;min-height:0}
+.brand{display:flex;align-items:center;gap:calc(2*var(--u));margin-bottom:calc(1.6*var(--u))}
+.brand img{height:calc(9*var(--u));width:auto}
+.join{display:flex;gap:calc(2.5*var(--u));align-items:center;background:var(--panel);border:1px solid var(--rule);border-radius:calc(1.2*var(--u));padding:calc(2*var(--u))}
+.qr{background:var(--ink);padding:calc(1*var(--u));border-radius:calc(.6*var(--u))}
+.qr svg{display:block;width:calc(16*var(--u));height:calc(16*var(--u))}
+.code{font:400 calc(6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spacing:.18em;color:var(--brass)}
+.steps{margin:calc(1*var(--u)) 0 0;padding-left:calc(2.2*var(--u));font-size:calc(1.5*var(--u))}
+.steps li{margin:calc(.4*var(--u)) 0}
+.settings{display:flex;gap:calc(1*var(--u));flex-wrap:wrap;margin-top:calc(2*var(--u))}
+.pill{font:500 calc(1.2*var(--u))/1 "Alegreya Sans SC",sans-serif;letter-spacing:.12em;text-transform:lowercase;border:1px solid var(--brass);color:var(--brass);border-radius:999px;padding:calc(.6*var(--u)) calc(1.1*var(--u))}
+.wait{margin-top:calc(1.6*var(--u));font:italic calc(1.7*var(--u))/1.3 "IM Fell English",Georgia,serif;color:var(--muted)}
+.teams h2{font:400 calc(3*var(--u))/1 "IM Fell English SC",Georgia,serif;color:var(--brass);margin:0 0 calc(1.2*var(--u))}
+.tlist{display:grid;gap:calc(.8*var(--u))}
+.team{background:var(--panel);border:1px solid var(--rule);border-radius:calc(.8*var(--u));padding:calc(1*var(--u)) calc(1.4*var(--u))}
+.team b{font:400 calc(2.2*var(--u))/1.1 "IM Fell English SC",Georgia,serif;letter-spacing:.02em}
+.team span{display:block;color:var(--muted);font-size:calc(1.4*var(--u))}
+.empty{color:var(--muted);font-style:italic}
+.btn{font:700 calc(1.5*var(--u))/1 "Alegreya Sans SC",sans-serif;letter-spacing:.14em;text-transform:lowercase;background:var(--brass);color:#1a1408;border:0;border-radius:999px;padding:calc(1.2*var(--u)) calc(2.4*var(--u));cursor:pointer;margin-top:calc(1.6*var(--u))}
+.btn:focus{outline:calc(.3*var(--u)) solid var(--ink);outline-offset:calc(.3*var(--u))}
+/* question */
+.qhead{display:flex;justify-content:space-between;align-items:center}
+.hole{font:400 calc(2.4*var(--u))/1 "IM Fell English SC",Georgia,serif;color:var(--brass)}
+.dbl{background:var(--oxblood);color:var(--ink);border-radius:999px;padding:calc(.4*var(--u)) calc(1*var(--u));margin-left:calc(1*var(--u));font:500 calc(1.1*var(--u))/1 "Alegreya Sans SC",sans-serif;letter-spacing:.12em;text-transform:lowercase;vertical-align:middle}
+.clock{font:400 calc(4.4*var(--u))/1 "IM Fell English SC",Georgia,serif;min-width:calc(7*var(--u));text-align:right}
+.timer{height:calc(.7*var(--u));background:rgba(201,162,79,.15);border-radius:99px;overflow:hidden;margin:calc(1.2*var(--u)) 0 calc(2.4*var(--u))}
+.timer i{display:block;height:100%;background:var(--brass);transform-origin:left;transition:transform .25s linear}
+.qtext{font:400 calc(4.6*var(--u))/1.15 "IM Fell English",Georgia,serif;margin:calc(1*var(--u)) 0 auto;padding-bottom:calc(3*var(--u))}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:calc(1.6*var(--u))}
+.opt{display:flex;align-items:center;gap:calc(1.6*var(--u));background:var(--panel);border:calc(.25*var(--u)) solid var(--c);border-radius:calc(1.2*var(--u));padding:calc(1.6*var(--u)) calc(2*var(--u));min-height:calc(10*var(--u));position:relative}
+.opt .L{flex:none;display:grid;place-items:center;width:calc(5.4*var(--u));height:calc(5.4*var(--u));border-radius:50%;background:var(--c);color:#14110a;font:700 calc(2.6*var(--u))/1 "Alegreya Sans SC",sans-serif}
+.opt .t{font:400 calc(2.9*var(--u))/1.15 "Alegreya",Georgia,serif}
+.opt .who{position:absolute;right:calc(1.4*var(--u));bottom:calc(.8*var(--u));font:500 calc(1.15*var(--u))/1.2 "Alegreya Sans SC",sans-serif;letter-spacing:.08em;text-transform:lowercase;color:var(--muted);max-width:60%;text-align:right}
+.opt.dim{opacity:.28}
+.opt.win{background:var(--c);box-shadow:0 0 calc(3*var(--u)) rgba(201,162,79,.35)}
+.opt.win .t,.opt.win .who{color:#14110a}
+.opt.win .L{background:var(--ink)}
+.status{display:flex;gap:calc(1*var(--u));flex-wrap:wrap;margin-top:calc(1*var(--u));padding-top:calc(2*var(--u));align-items:center}
+.chip{font:500 calc(1.25*var(--u))/1 "Alegreya Sans SC",sans-serif;letter-spacing:.1em;text-transform:lowercase;border:1px solid var(--rule);color:var(--muted);border-radius:999px;padding:calc(.6*var(--u)) calc(1.1*var(--u))}
+.chip.on{border-color:var(--brass);color:var(--ink);background:rgba(201,162,79,.18)}
+.fact{font:italic calc(2*var(--u))/1.3 "IM Fell English",Georgia,serif;color:var(--brass);margin-top:calc(2*var(--u))}
+/* board */
+.board h1{margin-bottom:calc(.6*var(--u))}
+.rows{display:grid;gap:calc(.9*var(--u));margin-top:calc(2*var(--u))}
+.row{display:grid;grid-template-columns:calc(5*var(--u)) 1fr auto;align-items:center;gap:calc(1.6*var(--u));background:var(--panel);border:1px solid var(--rule);border-radius:calc(.8*var(--u));padding:calc(1*var(--u)) calc(1.8*var(--u))}
+.row .p{font:400 calc(3*var(--u))/1 "IM Fell English SC",Georgia,serif;color:var(--brass)}
+.row .n{font:400 calc(2.6*var(--u))/1.1 "IM Fell English SC",Georgia,serif}
+.row .m{font-size:calc(1.3*var(--u));color:var(--muted)}
+.row .s{font:400 calc(3.2*var(--u))/1 "IM Fell English SC",Georgia,serif}
+.row.first{border-color:var(--brass);background:rgba(201,162,79,.14)}
+.winner{font:400 calc(8*var(--u))/1 "IM Fell English SC",Georgia,serif;color:var(--brass);margin:calc(1*var(--u)) 0}
+.note{position:absolute;right:calc(2*var(--u));bottom:calc(1.2*var(--u));font-size:calc(1.15*var(--u));color:var(--muted)}
+.err{color:#e7a3a3}
+</style>
+</head>
+<body>
+<div class="band"></div>
+<div id="app"></div>
+<script src="../data.js"></script>
+<script src="../qrcode.js"></script>
+<script src="peerjs.min.js"></script>
+<script src="quiz.js"></script>
+<script src="questions.js"></script>
+<script>
+(function(){
+  var el = PQ.el, M = window.FOREUNDER || {}, app = document.getElementById("app");
+  var Q_SECONDS = Number(PQ.qs.get("secs")) || 25, REVEAL_SECONDS = 9, BOARD_SECONDS = 20, PER_ROUND = 6;
+
+  // ---- game state (lives only on the TV) ----
+  var S = { phase: "boot", mode: PQ.store("foreunder.quiz.mode") === "solo" ? "solo" : "teams", holes: Number(PQ.store("foreunder.quiz.holes")) || 12, qs: [], i: -1, teams: {}, players: {}, answers: {}, endsAt: 0, qStart: 0, room: "", err: "" };
+  var conns = {};   // pid -> DataConnection
+  var timer = null;
+
+  function code(){ var a = "ABCDEFGHJKLMNPQRSTUVWXYZ"; var s = ""; for (var i = 0; i < 4; i++) s += a[Math.floor(Math.random() * a.length)]; return s; }
+  function slug(s){ return String(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 24) || "team"; }
+  function shuffle(a){ a = a.slice(); for (var i = a.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function joinUrl(){ var base = (M.siteUrl || location.href.replace(/trivia\/.*$/, "")) + "trivia/play.html?room=" + S.room; var p = PQ.qs.get("peer"); return p ? location.origin + location.pathname.replace(/index\.html$/, "") + "play.html?room=" + S.room + "&peer=" + p : base; }
+
+  // Pick questions: mix categories, avoid ones used in recent games on this TV.
+  function pickQuestions(n){
+    var bank = window.QUIZ.map(function(q){ return Object.assign({ id: slug(q.q).slice(0, 40) }, q); });
+    var used = []; try { used = JSON.parse(PQ.store("foreunder.quiz.used") || "[]"); } catch(e) {}
+    var fresh = bank.filter(function(q){ return used.indexOf(q.id) === -1; });
+    if (fresh.length < n){ used = []; fresh = bank; }
+    var byCat = {}; shuffle(fresh).forEach(function(q){ (byCat[q.c] = byCat[q.c] || []).push(q); });
+    var cats = shuffle(Object.keys(byCat)), out = [];
+    // Deal one question per category in turn, so every game mixes topics.
+    while (out.length < n){
+      var added = false;
+      cats.forEach(function(c){ if (out.length < n && byCat[c].length){ out.push(byCat[c].shift()); added = true; } });
+      if (!added) break;
+    }
+    out = shuffle(out);
+    PQ.store("foreunder.quiz.used", JSON.stringify(used.concat(out.map(function(q){ return q.id; })).slice(-150)));
+    return out.map(function(q){
+      var order = shuffle([0, 1, 2, 3]);
+      return { id: q.id, c: q.c, q: q.q, f: q.f || "", opts: order.map(function(k){ return q.a[k]; }), correct: order.indexOf(0) };
+    });
+  }
+
+  // ---- networking ----
+  var peer, idTries = 0;
+  function startPeer(){
+    S.room = PQ.qs.get("room") || PQ.store("foreunder.quiz.tvroom") || code();
+    PQ.store("foreunder.quiz.tvroom", S.room);
+    peer = new Peer(PQ.PREFIX + S.room.toLowerCase(), PQ.peerOpts());
+    peer.on("open", function(){ S.phase = "lobby"; S.err = ""; render(); });
+    peer.on("connection", function(conn){
+      conn.on("data", function(d){ onMsg(conn, d); });
+      conn.on("close", function(){ for (var pid in conns) if (conns[pid] === conn){ delete conns[pid]; if (S.players[pid]) S.players[pid].online = false; } render(); });
+    });
+    peer.on("disconnected", function(){ setTimeout(function(){ try { peer.reconnect(); } catch(e) {} }, 2000); });
+    peer.on("error", function(e){
+      // Same room code after a refresh, so phones reconnect on their own. The server can hold the old code for a few seconds.
+      if (e.type === "unavailable-id"){ try { peer.destroy(); } catch(x) {} idTries++; if (idTries > 4){ PQ.qs.delete("room"); PQ.store("foreunder.quiz.tvroom", code()); idTries = 0; } setTimeout(startPeer, 2500); return; }
+      if (e.type === "network" || e.type === "server-error" || e.type === "socket-error"){ S.err = "Can't reach the game server. Check the Wi-Fi; retrying…"; render(); setTimeout(function(){ try { peer.reconnect(); } catch(x) { location.reload(); } }, 4000); return; }
+      if (e.type === "browser-incompatible"){ S.err = "This browser can't host the quiz. Try Chrome or Silk on the Fire TV."; render(); }
+    });
+  }
+
+  function teamOf(pid){ var p = S.players[pid]; return p && p.team ? S.teams[p.team] : null; }
+  function onMsg(conn, d){
+    if (!d || !d.t || !d.pid) return;
+    var pid = String(d.pid).slice(0, 20);
+    conns[pid] = conn;
+    var p = S.players[pid] || (S.players[pid] = { name: "", team: null, qm: false, online: true });
+    p.online = true;
+    if (d.qm) p.qm = true;
+    if (d.t === "join"){
+      var name = String(d.name || "").trim().slice(0, 20) || "Player";
+      p.name = name;
+      var tid, tname;
+      if (S.mode === "solo"){ tid = "p-" + pid; tname = name; }
+      else { tname = String(d.team || "").trim().slice(0, 24) || name + "'s team"; tid = slug(tname); }
+      if (p.team && p.team !== tid) leaveTeam(pid);
+      if (!S.teams[tid]) S.teams[tid] = { id: tid, name: tname, score: 0, correct: 0, ms: 0 };
+      p.team = tid;
+    }
+    else if (d.t === "answer"){
+      var t = teamOf(pid), c = Number(d.choice);
+      if (S.phase === "question" && t && c >= 0 && c <= 3 && Date.now() < S.endsAt){
+        S.answers[t.id] = { choice: c, by: p.name, ms: Date.now() - S.qStart };
+        if (everyoneIn()){ S.endsAt = Math.min(S.endsAt, Date.now() + 1200); schedule(); }
+      }
+    }
+    else if (d.t === "qm" && p.qm) command(d.cmd, d);
+    render();
+  }
+  function leaveTeam(pid){
+    var tid = S.players[pid].team; S.players[pid].team = null;
+    var still = Object.keys(S.players).some(function(k){ return S.players[k].team === tid; });
+    if (!still && S.phase === "lobby") delete S.teams[tid];
+  }
+  function activeTeams(){
+    var ids = {}; Object.keys(S.players).forEach(function(k){ var p = S.players[k]; if (p.team && p.online) ids[p.team] = 1; });
+    return Object.keys(ids);
+  }
+  function everyoneIn(){ var a = activeTeams(); return a.length > 0 && a.every(function(t){ return S.answers[t]; }); }
+
+  // ---- game flow ----
+  function command(cmd, d){
+    if (cmd === "mode" && S.phase === "lobby" && (d.mode === "teams" || d.mode === "solo")){
+      if (S.mode !== d.mode){ S.mode = d.mode; PQ.store("foreunder.quiz.mode", d.mode); S.teams = {}; Object.keys(S.players).forEach(function(k){ S.players[k].team = null; }); }
+    }
+    else if (cmd === "holes" && S.phase === "lobby" && [6, 12, 18].indexOf(Number(d.holes)) !== -1) { S.holes = Number(d.holes); PQ.store("foreunder.quiz.holes", String(S.holes)); }
+    else if (cmd === "start" && S.phase === "lobby") start();
+    else if (cmd === "next") next();
+    else if (cmd === "end" && S.phase !== "lobby") finish();
+    else if (cmd === "again") toLobby();
+  }
+  function start(){
+    if (!activeTeams().length) return;
+    S.qs = pickQuestions(S.holes); S.i = -1;
+    Object.keys(S.teams).forEach(function(k){ var t = S.teams[k]; t.score = 0; t.correct = 0; t.ms = 0; });
+    ask();
+  }
+  function ask(){
+    S.i++; S.answers = {}; S.phase = "question"; S.qStart = Date.now(); S.endsAt = Date.now() + Q_SECONDS * 1000;
+    schedule(); render();
+  }
+  function isDouble(i){ return i === S.qs.length - 1; }
+  function reveal(){
+    var q = S.qs[S.i], pts = isDouble(S.i) ? 20 : 10;
+    Object.keys(S.answers).forEach(function(tid){
+      var a = S.answers[tid], t = S.teams[tid]; if (!t) return;
+      a.ok = a.choice === q.correct;
+      if (a.ok){ t.score += pts; t.correct++; t.ms += a.ms; }
+    });
+    S.phase = "reveal"; S.endsAt = Date.now() + REVEAL_SECONDS * 1000; schedule(); render();
+  }
+  function next(){
+    if (S.phase === "question") return reveal();
+    if (S.phase === "reveal"){
+      if (S.i >= S.qs.length - 1) return finish();
+      if ((S.i + 1) % PER_ROUND === 0){ S.phase = "board"; S.endsAt = Date.now() + BOARD_SECONDS * 1000; schedule(); return render(); }
+      return ask();
+    }
+    if (S.phase === "board") return ask();
+    if (S.phase === "lobby") return start();
+  }
+  function finish(){ clearTimeout(timer); S.phase = "final"; S.endsAt = 0; render(); }
+  function toLobby(){
+    clearTimeout(timer); S.phase = "lobby"; S.i = -1; S.qs = []; S.answers = {};
+    Object.keys(S.teams).forEach(function(k){ var t = S.teams[k]; t.score = 0; t.correct = 0; t.ms = 0; });
+    render();
+  }
+  function schedule(){
+    clearTimeout(timer);
+    var ms = Math.max(0, S.endsAt - Date.now());
+    timer = setTimeout(function(){ if (S.phase === "question") reveal(); else if (S.phase === "reveal" || S.phase === "board") next(); }, ms);
+  }
+  function standings(){
+    return Object.keys(S.teams).map(function(k){ return S.teams[k]; })
+      .filter(function(t){ return Object.keys(S.players).some(function(p){ return S.players[p].team === t.id; }); })
+      .sort(function(a, b){ return b.score - a.score || a.ms - b.ms; });
+  }
+  function membersOf(tid){ return Object.keys(S.players).filter(function(k){ return S.players[k].team === tid; }).map(function(k){ return S.players[k].name; }); }
+
+  // ---- what each phone sees ----
+  function view(pid){
+    var p = S.players[pid] || {}, t = p.team ? S.teams[p.team] : null, q = S.qs[S.i], a = t ? S.answers[t.id] : null;
+    var st = standings(), rank = t ? st.findIndex(function(x){ return x.id === t.id; }) + 1 : 0;
+    return {
+      t: "state", phase: S.phase, mode: S.mode, holes: S.holes, room: S.room, i: S.i, total: S.qs.length,
+      left: S.endsAt ? Math.max(0, S.endsAt - Date.now()) : 0,
+      q: q && (S.phase === "question" || S.phase === "reveal") ? { text: q.q, opts: q.opts, cat: q.c, dbl: isDouble(S.i), fact: S.phase === "reveal" ? q.f : "" } : null,
+      correct: S.phase === "reveal" ? q.correct : null,
+      me: { name: p.name || "", team: t ? t.name : null, teamId: t ? t.id : null, qm: !!p.qm, mates: t ? membersOf(t.id) : [] },
+      mine: a ? { choice: a.choice, by: a.by, ok: S.phase === "reveal" ? !!a.ok : null } : null,
+      gained: S.phase === "reveal" && a && a.ok ? (isDouble(S.i) ? 20 : 10) : 0,
+      rank: rank, score: t ? t.score : 0,
+      teams: st.map(function(x){ return { id: x.id, name: x.name, score: x.score, members: membersOf(x.id) }; }),
+      answered: Object.keys(S.answers).length, playing: activeTeams().length
+    };
+  }
+  function broadcast(){ for (var pid in conns){ try { if (conns[pid].open) conns[pid].send(view(pid)); } catch(e) {} } }
+
+  // ---- TV rendering ----
+  var lastPhase = "", lastI = -2;
+  function render(){
+    broadcast();
+    if (S.phase === "question" || S.phase === "reveal"){
+      if (S.phase !== lastPhase || S.i !== lastI) app.replaceChildren(questionView());
+      else updateQuestion();
+    } else {
+      app.replaceChildren(S.phase === "boot" ? bootView() : S.phase === "lobby" ? lobbyView() : S.phase === "board" ? boardView(false) : boardView(true));
+      if (S.phase === "lobby"){ var b = document.getElementById("startBtn"); if (b) b.focus(); }
+    }
+    lastPhase = S.phase; lastI = S.i;
+  }
+  function bootView(){ return el("div",null, el("h1",{text:"Foreunder Pub Quiz"}), el("p",{class:"it" + (S.err ? " err" : ""), text: S.err || "Setting up the game…"})); }
+  function qrSvg(url){
+    if (typeof qrcode !== "function") return el("div",{style:"color:#111"}, url);
+    var q = qrcode(0, "M"); q.addData(url); q.make();
+    var d = el("div",{class:"qr"}); d.innerHTML = q.createSvgTag({ cellSize: 6, margin: 0, scalable: true }).replace(/fill="white"/g, 'fill="#f0e7d3"').replace(/fill="black"/g, 'fill="#0f1c16"');
+    return d;
+  }
+  function lobbyView(){
+    var st = standings();
+    return el("div",{class:"lobby"},
+      el("div",null,
+        el("div",{class:"brand"}, el("img",{src:"../crest-sm.png",alt:""}), el("div",null, el("h1",{text:"Pub Quiz"}), el("div",{class:"it",text:"Questions on the TV. Answers on your phone."}))),
+        el("div",{class:"join"}, qrSvg(joinUrl()),
+          el("div",null, el("div",{class:"k",text:"room code"}), el("div",{class:"code",text:S.room}),
+            el("ol",{class:"steps"}, el("li",{text:"Scan the code with your phone camera."}), el("li",{text: S.mode === "teams" ? "Enter your name and pick or start a team." : "Enter your name."}), el("li",{text:"Answer on your phone before the clock runs out."})))),
+        el("div",{class:"settings"}, el("span",{class:"pill",text: S.mode === "teams" ? "team mode" : "everyone for themselves"}), el("span",{class:"pill",text: S.holes + " questions"}), el("span",{class:"pill",text:"10 points each · last one doubles"})),
+        el("div",{class:"wait" + (S.err ? " err" : ""), text: S.err || (st.length ? "The quizmaster starts the game from their phone, or press OK on the remote." : "Waiting for players…")}),
+        st.length ? el("button",{class:"btn",id:"startBtn",type:"button",onclick:function(){ start(); }}, "start the game") : null
+      ),
+      el("div",{class:"teams"}, el("h2",{text: S.mode === "teams" ? "Teams" : "Players"}),
+        st.length ? el("div",{class:"tlist"}, st.map(function(t){ var m = membersOf(t.id); return el("div",{class:"team"}, el("b",{text:t.name}), S.mode === "teams" ? el("span",{text:m.join(", ")}) : null); }))
+          : el("p",{class:"empty",text:"Nobody yet. Be the first."}))
+    );
+  }
+  var colors = ["var(--A)", "var(--B)", "var(--C)", "var(--D)"];
+  function questionView(){
+    var q = S.qs[S.i];
+    var wrap = el("div",{style:"display:flex;flex-direction:column;flex:1;min-height:0"},
+      el("div",{class:"qhead"},
+        el("div",null, el("span",{class:"hole",text:"Question " + (S.i + 1) + " of " + S.qs.length}), el("span",{class:"k",style:"margin-left:calc(1.4*var(--u))",text:q.c}), isDouble(S.i) ? el("span",{class:"dbl",text:"double points"}) : null),
+        el("div",{class:"clock",id:"clock"})),
+      el("div",{class:"timer"}, el("i",{id:"bar"})),
+      el("p",{class:"qtext",text:q.q}),
+      el("div",{class:"opts"}, q.opts.map(function(o, k){
+        return el("div",{class:"opt",id:"opt" + k,style:"--c:" + colors[k]}, el("span",{class:"L",text:PQ.LETTERS[k]}), el("span",{class:"t",text:o}), el("span",{class:"who",id:"who" + k}));
+      })),
+      el("div",{class:"fact",id:"fact"}),
+      el("div",{class:"status",id:"status"})
+    );
+    setTimeout(updateQuestion, 0);
+    return wrap;
+  }
+  function updateQuestion(){
+    var q = S.qs[S.i]; if (!q) return;
+    var rev = S.phase === "reveal";
+    for (var k = 0; k < 4; k++){
+      var o = document.getElementById("opt" + k); if (!o) return;
+      o.className = "opt" + (rev ? (k === q.correct ? " win" : " dim") : "");
+      var who = rev ? Object.keys(S.answers).filter(function(t){ return S.answers[t].choice === k && S.teams[t]; }).map(function(t){ return S.teams[t].name; }) : [];
+      document.getElementById("who" + k).textContent = who.join(" · ");
+    }
+    document.getElementById("fact").textContent = rev && q.f ? q.f : "";
+    var st = document.getElementById("status"); st.replaceChildren();
+    if (rev){
+      var right = Object.keys(S.answers).filter(function(t){ return S.answers[t].ok && S.teams[t]; }).map(function(t){ return S.teams[t].name; });
+      st.append.apply(st, [el("span",{class:"k",text: right.length ? "got it" : "nobody got this one"})].concat(right.map(function(n){ return el("span",{class:"chip on",text:n}); })));
+    } else {
+      st.append.apply(st, [el("span",{class:"k",text:"answered"})].concat(activeTeams().map(function(t){ return el("span",{class:"chip" + (S.answers[t] ? " on" : ""),text:S.teams[t].name}); })));
+    }
+  }
+  function tick(){
+    if (S.phase === "question" || S.phase === "reveal"){
+      var c = document.getElementById("clock"), b = document.getElementById("bar");
+      if (c && b){
+        var left = Math.max(0, S.endsAt - Date.now());
+        c.textContent = S.phase === "question" ? Math.ceil(left / 1000) : "";
+        b.style.transform = "scaleX(" + (S.phase === "question" ? left / (Q_SECONDS * 1000) : 0) + ")";
+      }
+    }
+  }
+  setInterval(tick, 250);
+  function boardView(final){
+    var st = standings(), top = st[0];
+    var tie = final && st[1] && st[1].score === top.score;
+    return el("div",{class:"board"},
+      el("div",{class:"k",text: final ? "final scores" : "after question " + (S.i + 1) + " of " + S.qs.length}),
+      final && top ? el("div",{class:"winner",text: top.name + (tie ? " wins the tiebreak" : " wins!")}) : el("h1",{text:"The Leaderboard"}),
+      final && tie ? el("div",{class:"it",text:"Tied on points. Faster correct answers broke the tie."}) : null,
+      el("div",{class:"rows"}, st.slice(0, final ? 6 : 8).map(function(t, i){
+        var m = membersOf(t.id);
+        return el("div",{class:"row" + (i === 0 ? " first" : "")}, el("span",{class:"p",text:String(i + 1)}),
+          el("div",null, el("div",{class:"n",text:t.name}), S.mode === "teams" ? el("div",{class:"m",text:m.join(", ") + " · " + t.correct + " right"}) : el("div",{class:"m",text:t.correct + " right"})),
+          el("span",{class:"s",text:t.score + " pts"}));
+      })),
+      el("div",{class:"note",text: final ? "Quizmaster: tap Play again on your phone, or press OK." : "Next question in a moment…"})
+    );
+  }
+
+  // Fire TV remote: OK / Enter starts, skips ahead, or replays.
+  document.addEventListener("keydown", function(e){
+    if (e.key !== "Enter" && e.key !== " " && e.keyCode !== 13 && e.keyCode !== 23) return;
+    if (S.phase === "lobby") { e.preventDefault(); start(); }
+    else if (S.phase === "board") { e.preventDefault(); next(); }
+    else if (S.phase === "final") { e.preventDefault(); toLobby(); }
+  });
+  // Keep the TV awake.
+  try { if (navigator.wakeLock) { var lock = function(){ navigator.wakeLock.request("screen").catch(function(){}); }; lock(); document.addEventListener("visibilitychange", function(){ if (!document.hidden) lock(); }); } } catch(e) {}
+
+  render();
+  if (typeof Peer !== "function"){ S.err = "The game engine didn't load. Refresh the page."; render(); }
+  else startPeer();
+  window.__quiz = S; // for testing
+})();
+</script>
+</body>
+</html>
