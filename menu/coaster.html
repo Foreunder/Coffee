@@ -12,17 +12,23 @@
 html,body{margin:0;background:#fff;color:#14231b}
 .tip{font:13px/1.45 Georgia,serif;color:#444;margin:16px;max-width:7.5in}
 .sheet{display:grid;grid-template-columns:repeat(2,3in);gap:.4in .9in;justify-content:center;padding:.1in 0}
-.c{width:3in;height:3in;box-sizing:border-box;border-radius:.12in;background:#fff;border:1px solid #d9d2c0;display:flex;flex-direction:column;align-items:center;justify-content:space-evenly;overflow:hidden;padding:0 .14in}
-.crest{height:1.85in;width:auto;display:block}
-.row{display:flex;align-items:center;gap:.12in;width:100%;justify-content:center}
-.row svg{width:.7in;height:.7in;display:block;flex:none}
-.s{font:400 13pt/1.05 "IM Fell English SC",Georgia,serif;color:#14231b;text-align:left;letter-spacing:.02em}
-.s small{display:block;font:500 7.5pt/1.2 "Alegreya Sans SC",sans-serif;letter-spacing:.14em;color:#7a5a17;text-transform:lowercase;margin-top:.04in}
+.c{position:relative;width:3in;height:3in;box-sizing:border-box;border-radius:.1in;display:flex;flex-direction:column;align-items:center;justify-content:space-evenly;overflow:hidden;padding:.26in .2in}
+.c > svg.frame{position:absolute;inset:0;width:3in;height:3in;pointer-events:none}
+.crest{position:relative;height:1.62in;width:auto;display:block}
+.row{position:relative;display:flex;justify-content:center}
+.row svg{width:.64in;height:.64in;display:block;flex:none}
+/* parchment: warm aged-paper tone that matches the room and prints with light ink coverage */
+.parch .c{background:radial-gradient(ellipse at 50% 45%,#f1e6c9 0,#e8d8b2 62%,#d9c495 100%)}
+.green .c{background:#10211a}
+.green .row{background:#efe3c6;padding:.05in;border-radius:3px}
+.plain .c{padding:.2in}
+.plain .crest{height:1.8in}
+.plain .row svg{width:.68in;height:.68in}
 @media print{.tip{display:none}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 </style>
 </head>
-<body>
-<p class="tip">Print at 100% (actual size, not "fit to page") with background graphics on. Each print is 3 × 3 in for the 4 × 4 in coaster, leaving a 1/2 in clear border on every side. Cut along the thin gray edge line. Peel the coaster's protective film, lay the print face-down on the center of the coaster's back (so it reads through the top), and tape over all four edges with clear packing tape, pressing from the center out so no bubbles sit over the QR code. Keep the tape off the corners where the bumper feet go. Six per sheet.</p>
+<body class="parch celtic">
+<p class="tip">Print at 100% (actual size, not "fit to page") with background graphics on. Each print is 3 × 3 in for the 4 × 4 in coaster, leaving a 1/2 in clear border on every side. Cut along the edge of the print. Peel the coaster's protective film, lay the print face-down on the center of the coaster's back (so it reads through the top), and tape over all four edges with clear packing tape, pressing from the center out so no bubbles sit over the QR code. Keep the tape off the corners where the bumper feet go. Six per sheet.</p>
 <div class="sheet">
   <div class="c"><img class="crest" src="crest.png" alt="Foreunder Coffee House crest"><div class="row"><span class="qr"></span></div></div>
   <div class="c"><img class="crest" src="crest.png" alt="Foreunder Coffee House crest"><div class="row"><span class="qr"></span></div></div>
@@ -35,10 +41,42 @@ html,body{margin:0;background:#fff;color:#14231b}
 <script src="data.js"></script>
 <script>
 var ORDER=/[?&]order\b/.test(location.search), URL=window.FOREUNDER.siteUrl+(ORDER?"?order":"");
+// ?style=celtic (parchment + knotwork border, the default), plain (parchment + thin rule), green (dark green + border)
+var STYLE=(location.search.match(/[?&]style=(\w+)/)||[])[1]||"celtic";
+document.body.className=STYLE==="green"?"green celtic":STYLE==="plain"?"parch plain":"parch celtic";
+var DARK=STYLE==="green", INK=DARK?"#c9a24f":"#7d5f1f", GROUND=DARK?"#10211a":"#e0cca0";
 var q=qrcode(0,"M"); q.addData(URL); q.make();
-var svg=q.createSvgTag({cellSize:8,margin:0,scalable:true}).replace(/fill="white"/g,'fill="#ffffff"').replace(/fill="black"/g,'fill="#14231b"');
+var svg=q.createSvgTag({cellSize:8,margin:0,scalable:true}).replace(/fill="white"/g,'fill="'+(DARK?"#efe3c6":"none")+'"').replace(/fill="black"/g,'fill="#14231b"');
 document.querySelectorAll(".qr").forEach(function(n){n.outerHTML=svg;});
-if(ORDER){document.title="Foreunder Coaster Inserts (ordering)"; 
+
+// Two-strand interlace (a Celtic cable), drawn along a straight run, over/under alternating at each crossing.
+function braid(x0, y0, len, h, horiz){
+  var n=Math.max(2,Math.round(len/0.2)), w=len/n, a=h*0.3, out="", sw=0.017, gap=0.04;
+  function pt(t,sign){ var x=x0+t, y=y0+h/2+sign*a*Math.sin(2*Math.PI*t/w); return horiz?[x,y]:[y0+h/2+sign*a*Math.sin(2*Math.PI*t/w)-y0+x0- x0 + y0 - y0 + 0, 0]; }
+  function path(t0,t1,sign){
+    var d="", steps=Math.max(4,Math.round((t1-t0)/0.01));
+    for(var i=0;i<=steps;i++){ var t=t0+(t1-t0)*i/steps, u=y0+h/2+sign*a*Math.sin(2*Math.PI*t/w), v=x0+t;
+      var X=horiz?v:u, Y=horiz?u:v; d+=(i?"L":"M")+X.toFixed(4)+" "+Y.toFixed(4); }
+    return d;
+  }
+  function stroke(d){ return '<path d="'+d+'" fill="none" stroke="'+GROUND+'" stroke-width="'+gap+'" stroke-linecap="butt"/><path d="'+d+'" fill="none" stroke="'+INK+'" stroke-width="'+sw+'" stroke-linecap="round"/>'; }
+  out+=stroke(path(0,len,-1))+stroke(path(0,len,1));
+  for(var k=1;k<2*n;k+=2){ var c=k*w/2; out+=stroke(path(Math.max(0,c-w/5),Math.min(len,c+w/5),-1)); }
+  return out;
+}
+function frame(){
+  var i=0.1, h=0.13, W=3, L=W-2*i-2*h, g='';
+  g+='<rect x="'+(i-0.025)+'" y="'+(i-0.025)+'" width="'+(W-2*i+0.05)+'" height="'+(W-2*i+0.05)+'" rx="0.05" fill="none" stroke="'+INK+'" stroke-width="0.008"/>';
+  g+='<rect x="'+(i+h+0.025)+'" y="'+(i+h+0.025)+'" width="'+(W-2*(i+h)-0.05)+'" height="'+(W-2*(i+h)-0.05)+'" fill="none" stroke="'+INK+'" stroke-width="0.008"/>';
+  g+=braid(i+h,i,L,h,true)+braid(i+h,W-i-h,L,h,true)+braid(i+h,i,L,h,false)+braid(i+h,W-i-h,L,h,false);
+  [[i,i],[W-i-h,i],[i,W-i-h],[W-i-h,W-i-h]].forEach(function(p){ var cx=p[0]+h/2, cy=p[1]+h/2;
+    g+='<circle cx="'+cx+'" cy="'+cy+'" r="'+(h*0.42)+'" fill="'+GROUND+'" stroke="'+INK+'" stroke-width="0.014"/><circle cx="'+cx+'" cy="'+cy+'" r="'+(h*0.16)+'" fill="'+INK+'"/>'; });
+  return g;
+}
+function rule(){ var i=0.11; return '<rect x="'+i+'" y="'+i+'" width="'+(3-2*i)+'" height="'+(3-2*i)+'" rx="0.06" fill="none" stroke="'+INK+'" stroke-width="0.012"/><rect x="'+(i+0.045)+'" y="'+(i+0.045)+'" width="'+(3-2*i-0.09)+'" height="'+(3-2*i-0.09)+'" rx="0.04" fill="none" stroke="'+INK+'" stroke-width="0.006"/>'; }
+var art=STYLE==="plain"?rule():frame();
+document.querySelectorAll(".c").forEach(function(c){ c.insertAdjacentHTML("afterbegin",'<svg class="frame" viewBox="0 0 3 3" xmlns="http://www.w3.org/2000/svg">'+art+'</svg>'); });
+if(ORDER){document.title="Foreunder Coaster Inserts (ordering)";
   var tip=document.querySelector(".tip"); if(tip) tip.insertAdjacentHTML("afterbegin","<b>Ordering version.</b> ");}
 else { var tip=document.querySelector(".tip"); if(tip) tip.insertAdjacentHTML("afterbegin","<b>Menu version.</b> "); }
 </script>
