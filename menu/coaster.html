@@ -12,10 +12,10 @@
 html,body{margin:0;background:#fff;color:#14231b}
 .tip{font:13px/1.45 Georgia,serif;color:#444;margin:16px;max-width:7.5in}
 .sheet{display:grid;grid-template-columns:repeat(2,3in);gap:.4in .9in;justify-content:center;padding:.1in 0}
-.c{width:3in;height:3in;box-sizing:border-box;border-radius:.12in;background:#fff;border:1px solid #d9d2c0;display:flex;flex-direction:column;align-items:center;justify-content:space-between;overflow:hidden;padding:.12in .14in .14in}
-.crest{height:2.02in;width:auto;display:block}
+.c{width:3in;height:3in;box-sizing:border-box;border-radius:.12in;background:#fff;border:1px solid #d9d2c0;display:flex;flex-direction:column;align-items:center;justify-content:space-evenly;overflow:hidden;padding:0 .14in}
+.crest{height:1.85in;width:auto;display:block}
 .row{display:flex;align-items:center;gap:.12in;width:100%;justify-content:center}
-.row svg{width:.74in;height:.74in;display:block;flex:none}
+.row svg{width:.7in;height:.7in;display:block;flex:none}
 .s{font:400 13pt/1.05 "IM Fell English SC",Georgia,serif;color:#14231b;text-align:left;letter-spacing:.02em}
 .s small{display:block;font:500 7.5pt/1.2 "Alegreya Sans SC",sans-serif;letter-spacing:.14em;color:#7a5a17;text-transform:lowercase;margin-top:.04in}
 @media print{.tip{display:none}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
@@ -24,12 +24,12 @@ html,body{margin:0;background:#fff;color:#14231b}
 <body>
 <p class="tip">Print at 100% (actual size, not "fit to page") with background graphics on. Each print is 3 × 3 in for the 4 × 4 in coaster, leaving a 1/2 in clear border on every side. Cut along the thin gray edge line. Peel the coaster's protective film, lay the print face-down on the center of the coaster's back (so it reads through the top), and tape over all four edges with clear packing tape, pressing from the center out so no bubbles sit over the QR code. Keep the tape off the corners where the bumper feet go. Six per sheet.</p>
 <div class="sheet">
-  <div class="c"><img class="crest" src="crest.png" alt="Foreunder Coffee House crest"><div class="row"><span class="qr"></span><div class="s">Scan for<br>the menu<small>drinks · coffees</small></div></div></div>
-  <div class="c"><img class="crest" src="crest.png" alt="Foreunder Coffee House crest"><div class="row"><span class="qr"></span><div class="s">Scan for<br>the menu<small>drinks · coffees</small></div></div></div>
-  <div class="c"><img class="crest" src="crest.png" alt="Foreunder Coffee House crest"><div class="row"><span class="qr"></span><div class="s">Scan for<br>the menu<small>drinks · coffees</small></div></div></div>
-  <div class="c"><img class="crest" src="crest.png" alt="Foreunder Coffee House crest"><div class="row"><span class="qr"></span><div class="s">Scan for<br>the menu<small>drinks · coffees</small></div></div></div>
-  <div class="c"><img class="crest" src="crest.png" alt="Foreunder Coffee House crest"><div class="row"><span class="qr"></span><div class="s">Scan for<br>the menu<small>drinks · coffees</small></div></div></div>
-  <div class="c"><img class="crest" src="crest.png" alt="Foreunder Coffee House crest"><div class="row"><span class="qr"></span><div class="s">Scan for<br>the menu<small>drinks · coffees</small></div></div></div>
+  <div class="c"><img class="crest" src="crest.png" alt="Foreunder Coffee House crest"><div class="row"><span class="qr"></span></div></div>
+  <div class="c"><img class="crest" src="crest.png" alt="Foreunder Coffee House crest"><div class="row"><span class="qr"></span></div></div>
+  <div class="c"><img class="crest" src="crest.png" alt="Foreunder Coffee House crest"><div class="row"><span class="qr"></span></div></div>
+  <div class="c"><img class="crest" src="crest.png" alt="Foreunder Coffee House crest"><div class="row"><span class="qr"></span></div></div>
+  <div class="c"><img class="crest" src="crest.png" alt="Foreunder Coffee House crest"><div class="row"><span class="qr"></span></div></div>
+  <div class="c"><img class="crest" src="crest.png" alt="Foreunder Coffee House crest"><div class="row"><span class="qr"></span></div></div>
 </div>
 <script src="qrcode.js"></script>
 <script src="data.js"></script>
@@ -38,7 +38,7 @@ var ORDER=/[?&]order\b/.test(location.search), URL=window.FOREUNDER.siteUrl+(ORD
 var q=qrcode(0,"M"); q.addData(URL); q.make();
 var svg=q.createSvgTag({cellSize:8,margin:0,scalable:true}).replace(/fill="white"/g,'fill="#ffffff"').replace(/fill="black"/g,'fill="#14231b"');
 document.querySelectorAll(".qr").forEach(function(n){n.outerHTML=svg;});
-if(ORDER){document.querySelectorAll(".s").forEach(function(n){n.innerHTML="Scan to<br>order<small>drinks · coffees</small>";}); document.title="Foreunder Coaster Inserts (ordering)"; 
+if(ORDER){document.title="Foreunder Coaster Inserts (ordering)"; 
   var tip=document.querySelector(".tip"); if(tip) tip.insertAdjacentHTML("afterbegin","<b>Ordering version.</b> ");}
 else { var tip=document.querySelector(".tip"); if(tip) tip.insertAdjacentHTML("afterbegin","<b>Menu version.</b> "); }
 </script>
