@@ -131,6 +131,7 @@ dl.kv dd{margin:0}
     var status = b.status === "press" ? "french press" : b.status === "out" ? "finished" : "espresso";
     cl.append(el("div",{class:"card"},
       el("div",{class:"top"}, el("h3",{text:b.name}), el("span",{class:"pill",text:status})),
+      b.bagArt ? el("img",{src:b.bagArt,alt:"",style:"display:block;width:120px;height:auto;border-radius:4px;margin:8px 0 4px"}) : null,
       el("div",{class:"meta",text:[b.roaster, b.roastLevel ? b.roastLevel + " roast" : null].filter(Boolean).join(" · ")}),
       b.recipe ? el("div",{class:"recipe",text:b.recipe}) : null,
       b.dialNote ? el("div",null,b.dialNote) : null,

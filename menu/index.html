@@ -108,6 +108,7 @@ body:not(.board) .drink button{align-self:center}
 .beans{display:flex;flex-direction:column;gap:14px}
 .bean{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:18px;display:flex;flex-direction:column;gap:10px;min-width:0}
 .bean.out{opacity:.62}
+.bean .bagart{display:block;width:100%;max-width:300px;height:auto;margin:2px auto 4px;border-radius:4px;box-shadow:0 6px 18px rgba(0,0,0,.35)}
 .bean .top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
 .bean h3{font:400 23px/1.15 var(--display);letter-spacing:.03em;margin:0}
 .bean .by{font-style:italic;color:var(--muted);font-size:15px}
@@ -507,6 +508,7 @@ function beanCard(b){
       el("div",null, el("h3",{text:b.name}), el("div",{class:"by",text:b.roaster + (b.roasterCity ? " · " + b.roasterCity : "")})),
       el("span",{class:"pill " + b.status,text:pillText})
     ),
+    b.bagArt ? el("img",{class:"bagart",src:b.bagArt,alt:b.name + " bag art from " + b.roaster,loading:"lazy"}) : null,
     fr ? el("div",{class:"label fresh",text:fr}) : null,
     b.roasterNotes ? el("p",{class:"expect"}, el("span",{class:"label",text:"roaster's notes  "}), b.roasterNotes) : null,
     b.status !== "out" && b.expect ? el("p",{class:"expect",text:b.expect}) : null,

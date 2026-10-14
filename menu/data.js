@@ -48,7 +48,7 @@ window.FOREUNDER = {
       roastNote: "Roasted daily; purchase date used",
       opened: "2026-09-22",
       bestFor: ["Espresso", "Mochas", "Milk drinks"],
-      elevation: "3,200–4,000 ft", cert: "Fair Trade Organic",
+      bagArt: "photos/bag-malabar.jpg", elevation: "3,200–4,000 ft", cert: "Fair Trade Organic",
       expect: "Green coffee left open to the monsoon winds and humidity on India's Malabar coast, which swells the beans and strips out acidity. Mellow and earthy, with a heavy, syrupy body, nutty notes and a subtle sweetness.",
       take: "Thick and full of flavor, with real nuttiness. Outstanding in a mocha.",
       scale: { body: 5, acidity: 1, roast: 3 },
