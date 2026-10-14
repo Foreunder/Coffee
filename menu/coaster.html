@@ -8,12 +8,12 @@
 <style>
 /* Insert for a clear 4 x 4 in acrylic coaster (Nap Tags, 1/8 in). The print is 3 x 3 in, leaving a 1/2 in clear border
    on every side for packing tape on the back and keeping the corner bumper feet clear. Print at 100%. */
-@page{size:letter;margin:.3in}
+@page{size:letter;margin:.25in .3in}
 html,body{margin:0;background:#fff;color:#14231b}
 .tip{font:13px/1.45 Georgia,serif;color:#444;margin:16px;max-width:7.5in}
-.sheet{display:grid;grid-template-columns:repeat(2,3in);gap:.4in .9in;justify-content:center;padding:.1in 0}
-.c{position:relative;width:3in;height:3in;box-sizing:border-box;border-radius:.1in;display:flex;flex-direction:column;align-items:center;justify-content:space-evenly;overflow:hidden;padding:.26in .2in}
-.c > svg.frame{position:absolute;inset:0;width:3in;height:3in;pointer-events:none}
+.sheet{display:grid;grid-template-columns:repeat(2,3.25in);gap:.22in .6in;justify-content:center;padding:0}
+.c{position:relative;width:3.25in;height:3.25in;box-sizing:border-box;border-radius:0;display:flex;flex-direction:column;align-items:center;justify-content:space-evenly;overflow:hidden;padding:.385in .325in}
+.c > svg.frame{position:absolute;inset:0;width:3.25in;height:3.25in;pointer-events:none}
 .crest{position:relative;height:1.62in;width:auto;display:block}
 .row{position:relative;display:flex;justify-content:center}
 .row svg{width:.64in;height:.64in;display:block;flex:none}
@@ -21,14 +21,14 @@ html,body{margin:0;background:#fff;color:#14231b}
 .parch .c{background:radial-gradient(ellipse at 50% 45%,#f1e6c9 0,#e8d8b2 62%,#d9c495 100%)}
 .green .c{background:#10211a}
 .green .row{background:#efe3c6;padding:.05in;border-radius:3px}
-.plain .c{padding:.2in}
+.plain .c{padding:.325in}
 .plain .crest{height:1.8in}
 .plain .row svg{width:.68in;height:.68in}
 @media print{.tip{display:none}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 </style>
 </head>
 <body class="parch celtic">
-<p class="tip">Print at 100% (actual size, not "fit to page") with background graphics on. Each print is 3 × 3 in for the 4 × 4 in coaster, leaving a 1/2 in clear border on every side. Cut along the edge of the print. Peel the coaster's protective film, lay the print face-down on the center of the coaster's back (so it reads through the top), and tape over all four edges with clear packing tape, pressing from the center out so no bubbles sit over the QR code. Keep the tape off the corners where the bumper feet go. Six per sheet.</p>
+<p class="tip">Print at 100% (actual size, not "fit to page") with background graphics on. Each print is 3¼ × 3¼ in. The background runs ⅛ in past the design on every side, so you can cut anywhere in that band and it still looks right: aim for the outer edge and you have about ⅛ in of room for a wobbly cut. Six per sheet. Peel the coaster's protective film, lay the print face-down on the center of the coaster's back (so it reads through the top), and tape over all four edges with clear packing tape, pressing from the center out so no bubbles sit over the QR code. Keep the tape off the corners where the bumper feet go.</p>
 <div class="sheet">
   <div class="c"><img class="crest" src="crest.png" alt="Foreunder Coffee House crest"><div class="row"><span class="qr"></span></div></div>
   <div class="c"><img class="crest" src="crest.png" alt="Foreunder Coffee House crest"><div class="row"><span class="qr"></span></div></div>
@@ -75,7 +75,7 @@ function frame(){
 }
 function rule(){ var i=0.11; return '<rect x="'+i+'" y="'+i+'" width="'+(3-2*i)+'" height="'+(3-2*i)+'" rx="0.06" fill="none" stroke="'+INK+'" stroke-width="0.012"/><rect x="'+(i+0.045)+'" y="'+(i+0.045)+'" width="'+(3-2*i-0.09)+'" height="'+(3-2*i-0.09)+'" rx="0.04" fill="none" stroke="'+INK+'" stroke-width="0.006"/>'; }
 var art=STYLE==="plain"?rule():frame();
-document.querySelectorAll(".c").forEach(function(c){ c.insertAdjacentHTML("afterbegin",'<svg class="frame" viewBox="0 0 3 3" xmlns="http://www.w3.org/2000/svg">'+art+'</svg>'); });
+document.querySelectorAll(".c").forEach(function(c){ c.insertAdjacentHTML("afterbegin",'<svg class="frame" viewBox="-0.125 -0.125 3.25 3.25" xmlns="http://www.w3.org/2000/svg">'+art+'</svg>'); });
 if(ORDER){document.title="Foreunder Coaster Inserts (ordering)";
   var tip=document.querySelector(".tip"); if(tip) tip.insertAdjacentHTML("afterbegin","<b>Ordering version.</b> ");}
 else { var tip=document.querySelector(".tip"); if(tip) tip.insertAdjacentHTML("afterbegin","<b>Menu version.</b> "); }
