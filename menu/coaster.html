@@ -12,11 +12,11 @@
 html,body{margin:0;background:#fff;color:#14231b}
 .tip{font:13px/1.45 Georgia,serif;color:#444;margin:16px;max-width:7.5in}
 .sheet{display:grid;grid-template-columns:repeat(2,3.25in);gap:.22in .6in;justify-content:center;padding:0}
-.c{position:relative;width:3.25in;height:3.25in;box-sizing:border-box;border-radius:0;display:flex;flex-direction:column;align-items:center;justify-content:space-evenly;overflow:hidden;padding:.385in .325in}
+.c{position:relative;width:3.25in;height:3.25in;box-sizing:border-box;border-radius:0;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;padding:.33in .3in;gap:.04in}
 .c > svg.frame{position:absolute;inset:0;width:3.25in;height:3.25in;pointer-events:none}
-.crest{position:relative;height:1.62in;width:auto;display:block}
+.crest{position:relative;height:1.98in;width:auto;display:block}
 .row{position:relative;display:flex;justify-content:center}
-.row svg{width:.64in;height:.64in;display:block;flex:none}
+.row svg{width:.56in;height:.56in;display:block;flex:none}
 /* parchment: warm aged-paper tone that matches the room and prints with light ink coverage */
 .parch .c{background:radial-gradient(ellipse at 50% 45%,#f1e6c9 0,#e8d8b2 62%,#d9c495 100%)}
 .green .c{background:#10211a}
@@ -51,7 +51,7 @@ document.querySelectorAll(".qr").forEach(function(n){n.outerHTML=svg;});
 
 // Two-strand interlace (a Celtic cable), drawn along a straight run, over/under alternating at each crossing.
 function braid(x0, y0, len, h, horiz){
-  var n=Math.max(2,Math.round(len/0.2)), w=len/n, a=h*0.3, out="", sw=0.017, gap=0.04;
+  var n=Math.max(2,Math.round(len/0.16)), w=len/n, a=h*0.3, out="", sw=0.014, gap=0.034;
   function pt(t,sign){ var x=x0+t, y=y0+h/2+sign*a*Math.sin(2*Math.PI*t/w); return horiz?[x,y]:[y0+h/2+sign*a*Math.sin(2*Math.PI*t/w)-y0+x0- x0 + y0 - y0 + 0, 0]; }
   function path(t0,t1,sign){
     var d="", steps=Math.max(4,Math.round((t1-t0)/0.01));
@@ -65,7 +65,7 @@ function braid(x0, y0, len, h, horiz){
   return out;
 }
 function frame(){
-  var i=0.1, h=0.13, W=3, L=W-2*i-2*h, g='';
+  var i=0.07, h=0.1, W=3, L=W-2*i-2*h, g='';
   g+='<rect x="'+(i-0.025)+'" y="'+(i-0.025)+'" width="'+(W-2*i+0.05)+'" height="'+(W-2*i+0.05)+'" rx="0.05" fill="none" stroke="'+INK+'" stroke-width="0.008"/>';
   g+='<rect x="'+(i+h+0.025)+'" y="'+(i+h+0.025)+'" width="'+(W-2*(i+h)-0.05)+'" height="'+(W-2*(i+h)-0.05)+'" fill="none" stroke="'+INK+'" stroke-width="0.008"/>';
   g+=braid(i+h,i,L,h,true)+braid(i+h,W-i-h,L,h,true)+braid(i+h,i,L,h,false)+braid(i+h,W-i-h,L,h,false);
