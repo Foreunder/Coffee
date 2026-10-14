@@ -19,7 +19,7 @@ The live log is the master copy; this repo is updated by Claude after each logge
   - `#board` – TV menu board (drinks, dessert, coffees, QR). `tv/` and `ordertv/` are short redirects for the Fire TVs
   - `?order#bar` – order screen; `?order#table` – table iPad with live queue
   - `about.html` – Why a Thistle? brand story
-  - `recipes.html` – bar recipes and current dial-ins (reads `data.js` and the Shot Log mirror)
+  - `recipes.html` – bar recipes, current dial-ins, the Dial-In Coach (next grind move from each coffee's own shot history) and beans left per bag (bag weight minus logged doses; set `weighed: {g, afterShot}` on a bean in `data.js` to correct it). Reads `data.js` and the Shot Log mirror.
   - `links.html` – every Foreunder link in one page
   - `table.html` – static table card for older iPads
   - `card.html` – printable 4×6 QR table card; `coaster.html` – 3×3 QR insert for the 4×4 acrylic coaster

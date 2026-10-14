@@ -44,6 +44,22 @@ dl.kv dt{font:500 13px/1.5 "Alegreya Sans SC",sans-serif;letter-spacing:.1em;tex
 dl.kv dd{margin:0}
 .grid{display:grid;grid-template-columns:1fr;gap:10px}
 @media (min-width:700px){.grid{grid-template-columns:1fr 1fr}.grid .card{margin:0}}
+.coach .row{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 12px}
+.coach label.k{display:block;font:500 12px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.12em;text-transform:lowercase;color:var(--brass);margin:10px 0 6px}
+.chip{border:1.5px solid var(--rule);background:transparent;color:var(--ink);font:500 14px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.08em;text-transform:lowercase;border-radius:999px;padding:11px 14px;min-height:44px;cursor:pointer}
+.chip.on{background:var(--brass);border-color:var(--brass);color:#1a140a}
+.nums{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.nums input{width:100%;background:var(--ground);color:var(--ink);border:1px solid var(--rule);border-radius:8px;padding:11px 10px;font:500 20px/1 "Alegreya",Georgia,serif;min-height:48px}
+.verdict{margin-top:14px;border-left:3px solid var(--brass);padding:6px 0 6px 14px}
+.verdict b.big{display:block;font:400 26px/1.15 "IM Fell English SC",Georgia,serif;color:var(--brass);margin-bottom:4px}
+.verdict.warn{border-color:var(--oxblood)}
+.verdict p{margin:4px 0}
+.hist{font-size:14px;color:var(--muted);margin-top:10px}
+.left{display:flex;align-items:center;gap:10px;margin:8px 0 2px;font-size:15px}
+.bar{flex:1;height:8px;border-radius:99px;background:rgba(201,162,79,.15);overflow:hidden;max-width:220px}
+.bar i{display:block;height:100%;background:var(--brass)}
+.bar.low i{background:var(--oxblood)}
+.tag.reorder{background:var(--oxblood);color:var(--ink)}
 .foot{color:var(--muted);font-size:14px;border-top:1px solid var(--rule);margin-top:32px;padding-top:12px}
 @media print{
   :root{--ground:#fff;--panel:#fff;--ink:#111;--muted:#444;--brass:#6b4e12;--rule:#bbb}
@@ -60,7 +76,7 @@ dl.kv dd{margin:0}
     <img src="crest-sm.png" alt="">
     <div><h1>Bar Recipes</h1><p class="kicker">How we make every drink, and where each coffee is dialed.</p></div>
   </header>
-  <nav class="jump"><a href="#machine">machine</a><a href="#coffees">coffees</a><a href="#drinks">drinks</a><a href="#seasonal">seasonal</a><a href="#dessert">dessert</a><a href="#milk">milk</a></nav>
+  <nav class="jump"><a href="#machine">machine</a><a href="#coach">dial-in coach</a><a href="#coffees">coffees</a><a href="#drinks">drinks</a><a href="#seasonal">seasonal</a><a href="#dessert">dessert</a><a href="#milk">milk</a></nav>
 
   <h2 id="machine">The Machine</h2>
   <p class="lead">Baseline for every shot unless a coffee says otherwise.</p>
@@ -72,8 +88,22 @@ dl.kv dd{margin:0}
     <dt>Brew temp</dt><dd>93 °C (offset 8 is calibration, leave it)</dd>
     <dt>Warm-up</dt><dd>At least 20 minutes with the portafilter locked in the group. A cold portafilter or machine runs slow: +7 s on 10/12.</dd>
     <dt>Prep</dt><dd>WDT, distribute, tamp level, puck screen</dd>
-    <dt>Grinder</dt><dd>DF64. Lower number is finer and slower; one step is about 5 s.</dd>
+    <dt>Grinder</dt><dd>DF64. Lower number is finer and slower. One step moves the shot about 2–4 s; the coach below uses each coffee's own history.</dd>
   </dl></div>
+
+  <h2 id="coach">Dial-In Coach</h2>
+  <p class="lead">Pulled a shot? Enter what happened and get the next move, based on your own log for that coffee.</p>
+  <div class="card coach" id="coach-card">
+    <label class="k">Coffee</label><div class="row" id="c-bean"></div>
+    <div class="nums">
+      <div><label class="k" for="c-grind">Grind</label><input id="c-grind" type="number" step="0.5" inputmode="decimal"></div>
+      <div><label class="k" for="c-time">Time (s)</label><input id="c-time" type="number" step="0.1" inputmode="decimal" placeholder="28"></div>
+      <div><label class="k" for="c-yield">Out (g)</label><input id="c-yield" type="number" step="0.1" inputmode="decimal" value="36"></div>
+    </div>
+    <label class="k">How did it taste?</label><div class="row" id="c-taste"></div>
+    <label class="k">Session</label><div class="row" id="c-first"></div>
+    <div id="c-out"></div>
+  </div>
 
   <h2 id="coffees">Our Coffees</h2>
   <p class="lead">Current dial-in for each bag. The Shot Log line updates every time a pull is logged.</p>
@@ -104,8 +134,7 @@ dl.kv dd{margin:0}
     <dt>Half &amp; half</dt><dd>Richer and denser. Stretch only 1–2 s for a flat white, 3–4 s for a cappuccino, then roll. Stop at 135–140 °F; it tastes cooked sooner. Swirl hard and pour right away.</dd>
     <dt>Oat (barista)</dt><dd>Steams and pours well. Short stretch, stop under 140 °F or it turns gummy.</dd>
     <dt>Heavy cream</dt><dd>Very little foam, very rich. Best as a cap (Grounds Crew) or whipped cold (con panna).</dd>
-  </dl>
-  </ol></div>
+  </dl></div>
 
   <p class="foot">Recipes live in the menu data, and dial-ins come from the Shot Log, so this page stays current on its own.</p>
 </main>
@@ -124,6 +153,109 @@ dl.kv dd{margin:0}
     hits.sort(function(a,c){ return a.n - c.n; });
     return hits[hits.length-1] || null;
   }
+  var BAGS = window.BEANS || [];
+  var GM_START = "2026-10-07"; // GaggiMate install: shots before this ran on the stock machine
+  function shotsFor(b){ return SHOTS.filter(function(s){ return s.bean && s.bean.indexOf(b.name) !== -1; }); }
+  function bagFor(b){ return BAGS.find(function(x){ return x.key && x.key.indexOf(b.name) !== -1; }); }
+
+  // Beans left: bag weight minus every logged dose since the bag was opened (or since Jamey last weighed it).
+  function beansLeft(b){
+    var bag = bagFor(b); if (!bag || !bag.bagOz) return null;
+    var start = b.weighed ? b.weighed.g : Math.round(bag.bagOz * 28.35), after = b.weighed ? b.weighed.afterShot : 0;
+    var used = shotsFor(b).filter(function(s){ return s.n > after && (!b.opened || s.date >= b.opened); })
+      .reduce(function(t, s){ return t + (Number(s.dose) || 18); }, 0);
+    var g = Math.max(0, start - used);
+    return { g: g, full: Math.round(bag.bagOz * 28.35), shots: Math.floor(g / 18) };
+  }
+  function leftLine(b){
+    if (b.status !== "bar") return null;
+    var L = beansLeft(b); if (!L) return null;
+    var low = L.shots <= 5;
+    return el("div",{class:"left"},
+      el("span",{class:"bar" + (low ? " low" : "")}, el("i",{style:"width:" + Math.round(100 * L.g / L.full) + "%"})),
+      el("span",{text:"about " + L.g + " g left · " + L.shots + " shot" + (L.shots === 1 ? "" : "s")}),
+      low ? el("span",{class:"tag reorder",text:"reorder"}) : null);
+  }
+
+  // Dial-in coach -----------------------------------------------------------
+  // Seconds per grind step for this coffee, from the median time at each grind on the GaggiMate.
+  function slopeFor(b){
+    var by = {};
+    shotsFor(b).forEach(function(s){
+      var t = Number(s.time), g = Number(s.grind);
+      if (s.date < GM_START || s.practice || s.estimated || !t || !g || t < 18 || t > 38) return;
+      (by[g] = by[g] || []).push(t);
+    });
+    var pts = Object.keys(by).map(Number).sort(function(a,c){ return a - c; }).map(function(g){
+      var v = by[g].slice().sort(function(a,c){ return a - c; }); var m = v.length % 2 ? v[(v.length - 1) / 2] : (v[v.length / 2 - 1] + v[v.length / 2]) / 2; return { g: g, t: m, n: v.length };
+    });
+    var sl = [];
+    for (var i = 1; i < pts.length; i++) sl.push((pts[i-1].t - pts[i].t) / (pts[i].g - pts[i-1].g));
+    var s = sl.length ? sl.reduce(function(a,c){ return a + c; }, 0) / sl.length : 3;
+    return { perStep: Math.min(6, Math.max(1.5, s || 3)), pts: pts, fromLog: sl.length > 0 };
+  }
+  function lastGrind(b){ var h = shotsFor(b).filter(function(s){ return s.date >= GM_START && s.grind; }); return h.length ? Number(h[h.length-1].grind) : ""; }
+  var C = { bean: null, taste: "unsure", first: false };
+  function chips(id, opts, key, after){
+    var box = document.getElementById(id); box.replaceChildren();
+    opts.forEach(function(o){
+      var btn = el("button",{type:"button",class:"chip" + (C[key] === o.v ? " on" : "")}, o.t);
+      btn.onclick = function(){ C[key] = o.v; chips(id, opts, key, after); if (after) after(); coach(); };
+      box.append(btn);
+    });
+  }
+  var half = function(x){ return Math.round(x * 2) / 2; };
+  function coach(){
+    var out = document.getElementById("c-out"), b = C.bean;
+    var g = parseFloat(document.getElementById("c-grind").value), t = parseFloat(document.getElementById("c-time").value), y = parseFloat(document.getElementById("c-yield").value);
+    if (!b || !g || !t) { out.replaceChildren(el("p",{class:"hist",text:"Enter grind and time to get the next move."})); return; }
+    var S = slopeFor(b), tips = [], head, warn = false, next = g;
+    var low = 26, high = 30, target = 28;
+    if (y && Math.abs(y - 36) > 3) tips.push("Yield was " + y + " g. Stop at 36 g with brew-by-weight first; the time only means something once the ratio is right.");
+    if (t < 15) {
+      var good = S.pts.filter(function(p){ return p.t >= low && p.t <= high && p.g < g; }).sort(function(a,c){ return Math.abs(a.t - target) - Math.abs(c.t - target); })[0];
+      next = good ? good.g : g - 2;
+      head = "Gusher. Go to " + next + "."; warn = true;
+      if (good) tips.push("Your log has grind " + good.g + " running " + good.t.toFixed(1) + " s on this coffee, so jump straight there.");
+      tips.push("Under 15 s usually means the grind is far too coarse for this coffee. Make the big move, then fine-tune.");
+      tips.push("Check the dose is 18 g and the puck was WDT'd and tamped level.");
+    } else if (t > high && C.first) {
+      head = "Pull one more before changing anything."; warn = true;
+      tips.push("First shot of the session running long is usually a cold portafilter, not the grind (+7 s on 10/12). Give it 20 minutes locked in the group.");
+    } else if (t < low || t > high) {
+      var steps = Math.min(1, Math.max(0.5, Math.floor(Math.abs(t - target) / S.perStep * 2) / 2)); // small moves: never more than one step at a time
+      next = t < low ? g - steps : g + steps;
+      head = (t < low ? "Go finer: " : "Go coarser: ") + next + ".";
+      tips.push((t < low ? "Ran fast" : "Ran slow") + " by " + Math.abs(t - target).toFixed(1) + " s. On this coffee one step moves about " + S.perStep.toFixed(1) + " s" + (S.fromLog ? " (from your log)." : " (typical; not enough history yet).") + " Move at most one step, then re-pull.");
+      if (t < low && C.taste === "bitter") tips.push("Fast and bitter is usually channeling, not grind. Check WDT and a level tamp before you change the grind.");
+      if (t > high && C.taste === "sour") tips.push("Slow and sour is unusual. Make sure the machine and portafilter were fully warm.");
+    } else if (C.taste === "sour") {
+      next = g - 0.5; head = "Time is good. Go a touch finer: " + next + ".";
+      tips.push("Or keep the grind and pull longer, to 38–40 g. Sour means under-extracted.");
+    } else if (C.taste === "bitter") {
+      next = g + 0.5; head = "Time is good. Go a touch coarser: " + next + ".";
+      tips.push("Or keep the grind and stop shorter, at 32–34 g. Bitter means over-extracted.");
+    } else if (C.taste === "good") {
+      head = "Dialed. Keep grind " + g + ".";
+      tips.push("Log it as the reference shot for this bag.");
+    } else {
+      head = "In range. Keep grind " + g + " and taste the next one.";
+      tips.push("Taste it straight before the milk goes in: sour, bitter or good decides the next move.");
+    }
+    var hist = S.pts.length ? "Your " + b.name + " on the GaggiMate: " + S.pts.map(function(p){ return "grind " + p.g + " → " + p.t.toFixed(1) + " s" + (p.n > 1 ? " (" + p.n + ")" : ""); }).join(" · ") : "";
+    out.replaceChildren(el("div",{class:"verdict" + (warn ? " warn" : "")}, el("b",{class:"big",text:head}), ...tips.map(function(x){ return el("p",{text:x}); })),
+      hist ? el("p",{class:"hist",text:hist}) : null);
+  }
+  var barBeans = M.beans.filter(function(b){ return b.status === "bar"; });
+  C.bean = barBeans[0] || null;
+  function setGrind(){ document.getElementById("c-grind").value = C.bean ? lastGrind(C.bean) : ""; }
+  chips("c-bean", barBeans.map(function(b){ return { v: b, t: b.name }; }), "bean", setGrind);
+  chips("c-taste", [{v:"sour",t:"sour / thin"},{v:"good",t:"good"},{v:"bitter",t:"bitter / harsh"},{v:"unsure",t:"not sure"}], "taste");
+  chips("c-first", [{v:false,t:"machine warm"},{v:true,t:"first shot"}], "first");
+  setGrind();
+  ["c-grind","c-time","c-yield"].forEach(function(id){ document.getElementById(id).addEventListener("input", coach); });
+  coach();
+
   var order = {bar:0, press:1, out:2};
   var cl = document.getElementById("coffeeList");
   M.beans.slice().sort(function(a,b){ return order[a.status]-order[b.status]; }).forEach(function(b){
@@ -135,6 +267,7 @@ dl.kv dd{margin:0}
       el("div",{class:"meta",text:[b.roaster, b.roastLevel ? b.roastLevel + " roast" : null].filter(Boolean).join(" · ")}),
       b.recipe ? el("div",{class:"recipe",text:b.recipe}) : null,
       b.dialNote ? el("div",null,b.dialNote) : null,
+      leftLine(b),
       dial ? el("div",{class:"log"}, el("b",{text:"shot log · " + fmt(dial.date) + " · "}), dial.dialed.replace(/^[^:]+:\s*/,"")) : null
     ));
   });
