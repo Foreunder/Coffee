@@ -32,7 +32,7 @@ window.FOREUNDER = {
       expect: "A classic Northern Italian-style blend built for espresso and milk. Rich and rounded, low in acidity, and comfortable under a lot of milk.",
       take: "The house espresso. Balanced straight, neither sour nor bitter, and the one I reach for most.",
       scale: { body: 4, acidity: 1, roast: 4 },
-      recipe: "18 g in · 36 g out · about 28 s", dialNote: "Grind 13 to confirm on the GaggiMate (grind 14 ran 24 s on 10/10)."
+      recipe: "18 g in · 36 g out · about 28 s", dialNote: "Grind 13 on the GaggiMate (26.2 s and 29.8 s on 10/13, both balanced)."
     },
     {
       id: "malabar", score: 3, scoreNote: "Heavy, nutty and outstanding in a mocha.",

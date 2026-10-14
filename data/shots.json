@@ -739,5 +739,35 @@
     "taste": "5 stars · Balanced",
     "time": 28.5,
     "yield": 36.3
+  },
+  {
+    "bean": "Hill of Beans Rockbrook Espresso",
+    "date": "2026-10-13",
+    "dose": 18,
+    "drink": "Flat white · latte art pour",
+    "estimated": false,
+    "grind": 13,
+    "n": 52,
+    "notes": "26.2s, 1:1.99, peak 9.9 bar, avg pump flow 2.9 ml/s, 77.3 ml pumped, avg temp 95.4°C. 5 stars. First Rockbrook at grind 13 on the GaggiMate (grind 14 ran 24s on 10/10): one step finer added about 2s.",
+    "session": "Evening (GaggiMate shot #27, 7:49 PM, Foreunder profile)",
+    "taste": "5 stars",
+    "time": 26.2,
+    "yield": 35.9
+  },
+  {
+    "bean": "Hill of Beans Rockbrook Espresso",
+    "date": "2026-10-13",
+    "dialed": "Rockbrook: 18g → 36g · grind 13 · 26–30s · 93°C · Foreunder profile",
+    "dose": 18,
+    "drink": "Flat white · latte art pour",
+    "estimated": false,
+    "grind": 13,
+    "n": 53,
+    "notes": "29.8s, 1:2.02, peak 9.9 bar, avg pump flow 2.9 ml/s, 86.1 ml pumped, avg temp 95.3°C. 5 stars, GaggiMate: Balanced. Back-to-back with #52 at grind 13: 26.2s then 29.8s, both balanced. Rockbrook dialed in on the GaggiMate at grind 13.",
+    "ref": true,
+    "session": "Evening (GaggiMate shot #28, 7:53 PM, Foreunder profile)",
+    "taste": "5 stars · Balanced",
+    "time": 29.8,
+    "yield": 36.3
   }
 ]
