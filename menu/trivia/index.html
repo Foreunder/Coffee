@@ -77,7 +77,6 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
 <div id="app"></div>
 <script src="../data.js"></script>
 <script src="../qrcode.js"></script>
-<script src="peerjs.min.js"></script>
 <script src="quiz.js"></script>
 <script src="questions.js"></script>
 <script>
@@ -87,13 +86,12 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
 
   // ---- game state (lives only on the TV) ----
   var S = { phase: "boot", mode: PQ.store("foreunder.quiz.mode") === "solo" ? "solo" : "teams", holes: Number(PQ.store("foreunder.quiz.holes")) || 12, qs: [], i: -1, teams: {}, players: {}, answers: {}, endsAt: 0, qStart: 0, room: "", err: "" };
-  var conns = {};   // pid -> DataConnection
   var timer = null;
 
   function code(){ var a = "ABCDEFGHJKLMNPQRSTUVWXYZ"; var s = ""; for (var i = 0; i < 4; i++) s += a[Math.floor(Math.random() * a.length)]; return s; }
   function slug(s){ return String(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 24) || "team"; }
   function shuffle(a){ a = a.slice(); for (var i = a.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
-  function joinUrl(){ var base = (M.siteUrl || location.href.replace(/trivia\/.*$/, "")) + "trivia/play.html?room=" + S.room; var p = PQ.qs.get("peer"); return p ? location.origin + location.pathname.replace(/index\.html$/, "") + "play.html?room=" + S.room + "&peer=" + p : base; }
+  function joinUrl(){ var r = PQ.qs.get("relay"); if (r) return location.origin + location.pathname.replace(/index\.html$/, "") + "play.html?room=" + S.room + "&relay=" + encodeURIComponent(r); return (M.siteUrl || location.href.replace(/trivia\/.*$/, "")) + "trivia/play.html?room=" + S.room; }
 
   // Pick questions: mix categories, avoid ones used in recent games on this TV.
   function pickQuestions(n){
@@ -117,34 +115,62 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
     });
   }
 
-  // ---- networking ----
-  var peer, idTries = 0;
-  function startPeer(){
-    S.room = PQ.qs.get("room") || PQ.store("foreunder.quiz.tvroom") || code();
+  // ---- networking (ntfy relay) ----
+  var IN, OUT, sub = null, live = false, pubTimer = null, lastPubKey = "", beat = null;
+  function startRelay(){
+    S.room = (PQ.qs.get("room") || PQ.store("foreunder.quiz.tvroom") || code()).toUpperCase();
     PQ.store("foreunder.quiz.tvroom", S.room);
-    peer = new Peer(PQ.PREFIX + S.room.toLowerCase(), PQ.peerOpts());
-    peer.on("open", function(){ S.phase = "lobby"; S.err = ""; render(); });
-    peer.on("connection", function(conn){
-      conn.on("data", function(d){ onMsg(conn, d); });
-      conn.on("close", function(){ for (var pid in conns) if (conns[pid] === conn){ delete conns[pid]; if (S.players[pid]) S.players[pid].online = false; } render(); });
+    IN = PQ.topic(S.room, "in"); OUT = PQ.topic(S.room, "tv");
+    // Only messages sent after the TV opened. Phones re-join on their own after a TV refresh.
+    sub = PQ.subscribe([IN], String(Math.floor(Date.now() / 1000)), function(d){ onMsg(d); }, function(ok){
+      if (ok){
+        live = true; S.err = "";
+        if (S.phase === "boot") S.phase = "lobby";
+        announce(); render(); publishNow();
+      } else if (live || S.phase === "boot"){
+        live = false; S.err = "Can't reach the game server. Check the Wi-Fi; retrying…"; render();
+      }
     });
-    peer.on("disconnected", function(){ setTimeout(function(){ try { peer.reconnect(); } catch(e) {} }, 2000); });
-    peer.on("error", function(e){
-      // Same room code after a refresh, so phones reconnect on their own. The server can hold the old code for a few seconds.
-      if (e.type === "unavailable-id"){ try { peer.destroy(); } catch(x) {} idTries++; if (idTries > 4){ PQ.qs.delete("room"); PQ.store("foreunder.quiz.tvroom", code()); idTries = 0; } setTimeout(startPeer, 2500); return; }
-      if (e.type === "network" || e.type === "server-error" || e.type === "socket-error"){ S.err = "Can't reach the game server. Check the Wi-Fi; retrying…"; render(); setTimeout(function(){ try { peer.reconnect(); } catch(x) { location.reload(); } }, 4000); return; }
-      if (e.type === "browser-incompatible"){ S.err = "This browser can't host the quiz. Try Chrome or Silk on the Fire TV."; render(); }
-    });
+    // Heartbeat: keeps the menu button pointed at this TV and lets phones tell a live game from an old one.
+    beat = setInterval(function(){ if (live){ announce(); publishNow(); } }, 120000);
   }
-
+  function announce(){ PQ.publish(PQ.LIVE, { room: S.room }).catch(function(){}); }
+  // Everything a phone needs, in one small message. Phones work out their own view from it.
+  function pubState(){
+    var q = S.qs[S.i], players = {}, ans = {};
+    Object.keys(S.players).forEach(function(k){ var p = S.players[k]; if (p.name || p.qm) players[k] = [p.name, p.team || "", p.qm ? 1 : 0]; });
+    Object.keys(S.answers).forEach(function(t){ var a = S.answers[t]; ans[t] = [a.choice, a.by, S.phase === "reveal" ? (a.ok ? 1 : 0) : null]; });
+    return {
+      t: "state", phase: S.phase, mode: S.mode, holes: S.holes, room: S.room, i: S.i, total: S.qs.length,
+      left: S.endsAt ? Math.max(0, S.endsAt - Date.now()) : 0,
+      q: q && (S.phase === "question" || S.phase === "reveal") ? { text: q.q, opts: q.opts, cat: q.c, dbl: isDouble(S.i), fact: S.phase === "reveal" ? q.f : "" } : null,
+      correct: S.phase === "reveal" ? q.correct : null,
+      pts: q && isDouble(S.i) ? 20 : 10,
+      teams: standings().map(function(x){ return [x.id, x.name, x.score]; }),
+      players: players, ans: ans, playing: activeTeams().length
+    };
+  }
+  function publishNow(){
+    clearTimeout(pubTimer); pubTimer = null;
+    if (!live) return;
+    lastPubKey = S.phase + "|" + S.i;
+    // A dropped or rate-limited post is retried, so phones never get stuck on an old screen.
+    PQ.publish(OUT, pubState()).catch(function(){ if (!pubTimer) pubTimer = setTimeout(publishNow, 3000); });
+  }
+  // New phase or question goes out at once; joins and answers are batched (ntfy allows a burst of about 60 posts, then one every 5 s per home connection).
+  function broadcast(){
+    if (!live) return;
+    if (S.phase + "|" + S.i !== lastPubKey) return publishNow();
+    if (!pubTimer) pubTimer = setTimeout(publishNow, 1500);
+  }
   function teamOf(pid){ var p = S.players[pid]; return p && p.team ? S.teams[p.team] : null; }
-  function onMsg(conn, d){
+  function onMsg(d){
     if (!d || !d.t || !d.pid) return;
     var pid = String(d.pid).slice(0, 20);
-    conns[pid] = conn;
     var p = S.players[pid] || (S.players[pid] = { name: "", team: null, qm: false, online: true });
     p.online = true;
     if (d.qm) p.qm = true;
+    if (d.t === "hello"){ broadcast(); return; }
     if (d.t === "join"){
       var name = String(d.name || "").trim().slice(0, 20) || "Player";
       p.name = name;
@@ -234,25 +260,6 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
       .sort(function(a, b){ return b.score - a.score || a.ms - b.ms; });
   }
   function membersOf(tid){ return Object.keys(S.players).filter(function(k){ return S.players[k].team === tid; }).map(function(k){ return S.players[k].name; }); }
-
-  // ---- what each phone sees ----
-  function view(pid){
-    var p = S.players[pid] || {}, t = p.team ? S.teams[p.team] : null, q = S.qs[S.i], a = t ? S.answers[t.id] : null;
-    var st = standings(), rank = t ? st.findIndex(function(x){ return x.id === t.id; }) + 1 : 0;
-    return {
-      t: "state", phase: S.phase, mode: S.mode, holes: S.holes, room: S.room, i: S.i, total: S.qs.length,
-      left: S.endsAt ? Math.max(0, S.endsAt - Date.now()) : 0,
-      q: q && (S.phase === "question" || S.phase === "reveal") ? { text: q.q, opts: q.opts, cat: q.c, dbl: isDouble(S.i), fact: S.phase === "reveal" ? q.f : "" } : null,
-      correct: S.phase === "reveal" ? q.correct : null,
-      me: { name: p.name || "", team: t ? t.name : null, teamId: t ? t.id : null, qm: !!p.qm, mates: t ? membersOf(t.id) : [] },
-      mine: a ? { choice: a.choice, by: a.by, ok: S.phase === "reveal" ? !!a.ok : null } : null,
-      gained: S.phase === "reveal" && a && a.ok ? (isDouble(S.i) ? 20 : 10) : 0,
-      rank: rank, score: t ? t.score : 0,
-      teams: st.map(function(x){ return { id: x.id, name: x.name, score: x.score, members: membersOf(x.id) }; }),
-      answered: Object.keys(S.answers).length, playing: activeTeams().length
-    };
-  }
-  function broadcast(){ for (var pid in conns){ try { if (conns[pid].open) conns[pid].send(view(pid)); } catch(e) {} } }
 
   // ---- TV rendering ----
   var lastPhase = "", lastI = -2;
@@ -366,8 +373,8 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
   try { if (navigator.wakeLock) { var lock = function(){ navigator.wakeLock.request("screen").catch(function(){}); }; lock(); document.addEventListener("visibilitychange", function(){ if (!document.hidden) lock(); }); } } catch(e) {}
 
   render();
-  if (typeof Peer !== "function"){ S.err = "The game engine didn't load. Refresh the page."; render(); }
-  else startPeer();
+  if (typeof EventSource !== "function"){ S.err = "This browser can't host the quiz. Try Silk or Chrome on the Fire TV."; render(); }
+  else startRelay();
   window.__quiz = S; // for testing
 })();
 </script>

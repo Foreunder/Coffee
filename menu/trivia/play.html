@@ -67,7 +67,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
 <body>
 <div class="band"></div>
 <main id="app"></main>
-<script src="peerjs.min.js"></script>
+<script src="../data.js"></script>
 <script src="quiz.js"></script>
 <script>
 (function(){
@@ -77,41 +77,70 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
   if (PQ.qs.get("qm") === "0") PQ.store("foreunder.quiz.qm", "");
   var QM = PQ.store("foreunder.quiz.qm") === "1";
   var room = (PQ.qs.get("room") || "").toUpperCase().replace(/[^A-Z]/g, "").slice(0, 4);
-  var V = null, endsAt = 0, status = "", peer = null, conn = null, retry = null;
+  var V = null, endsAt = 0, status = "", sub = null, retry = null, lastSeen = 0, rejoinAt = 0, finding = false;
   var pending = { name: PQ.store("foreunder.name") || "", team: PQ.store("foreunder.quiz.team") || "", newTeam: false };
 
   function header(){ return el("div",{class:"top"}, el("img",{src:"../crest-sm.png",alt:""}), el("div",null, el("h1",{text:"Pub Quiz"}), el("div",{class:"sub",text: room ? "Room " + room + (V && V.me && V.me.team ? " · " + V.me.team : "") : "foreunder coffee house"}))); }
-  function send(o){ o.pid = PID; if (QM) o.qm = true; try { if (conn && conn.open) conn.send(o); } catch(e) {} }
+  function send(o){ o.pid = PID; if (QM) o.qm = true; if (!room) return; PQ.publish(PQ.topic(room, "in"), o).catch(function(){ status = "Couldn't reach the TV. Check your signal and try again."; render(); }); }
 
-  // ---- connecting ----
+  // ---- connecting (ntfy relay) ----
+  // Turn the TV's shared game state into this phone's view.
+  function toView(d){
+    var me = (d.players || {})[PID] || null, teams = (d.teams || []).map(function(t){
+      return { id: t[0], name: t[1], score: t[2], members: Object.keys(d.players || {}).filter(function(k){ return d.players[k][1] === t[0]; }).map(function(k){ return d.players[k][0]; }) };
+    });
+    var tid = me && me[1] ? me[1] : null, team = tid ? teams.filter(function(t){ return t.id === tid; })[0] : null;
+    var a = tid && d.ans ? d.ans[tid] : null, rank = team ? teams.indexOf(team) + 1 : 0;
+    return {
+      t: "state", phase: d.phase, mode: d.mode, holes: d.holes, room: d.room, i: d.i, total: d.total, left: d.left, q: d.q, correct: d.correct,
+      me: { name: me ? me[0] : "", team: team ? team.name : null, teamId: tid, qm: !!(me && me[2]), mates: team ? team.members : [] },
+      mine: a ? { choice: a[0], by: a[1], ok: d.phase === "reveal" ? !!a[2] : null } : null,
+      gained: d.phase === "reveal" && a && a[2] ? d.pts : 0,
+      rank: rank, score: team ? team.score : 0, teams: teams, playing: d.playing
+    };
+  }
+  function onState(d, m){
+    if (!d || d.t !== "state") return;
+    var age = Math.max(0, Date.now() / 1000 - (m.time || 0));
+    if (age > PQ.STALE_SECS){ if (!V) { status = "The quiz isn't running on the TV right now. Open foreunder.github.io/Coffee/quiz on the TV to start one."; render(); } return; }
+    lastSeen = Date.now(); status = "";
+    // Keep my own pick on screen until the TV's batched update catches up.
+    var keep = V && V.phase === "question" && d.phase === "question" && V.i === d.i && V.mine ? V.mine : null;
+    V = toView(d);
+    if (keep && !V.mine) V.mine = keep;
+    endsAt = Date.now() + Math.max(0, (d.left || 0) - age * 1000);
+    // After a TV refresh the TV forgets players: quietly join again.
+    if (!V.me.teamId && pending.name && PQ.store("foreunder.quiz.room") === room && PQ.store("foreunder.quiz.joined") === "1" && Date.now() > rejoinAt){ rejoinAt = Date.now() + 8000; join(true); }
+    render();
+  }
   function connect(){
     clearTimeout(retry);
-    if (!room) return render();
+    if (!room) return findGame();
     status = "Connecting to the TV…"; render();
-    if (!peer || peer.destroyed){
-      peer = new Peer(PQ.peerOpts());
-      peer.on("open", openConn);
-      peer.on("error", function(e){
-        if (e.type === "peer-unavailable") status = "No game found for room " + room + ". Check the code on the TV.";
-        else if (e.type === "browser-incompatible") status = "This browser can't join. Try Safari or Chrome.";
-        else status = "Lost the connection. Retrying…";
-        render(); retry = setTimeout(connect, 3000);
-      });
-      peer.on("disconnected", function(){ try { peer.reconnect(); } catch(e) {} });
-    } else if (peer.open) openConn();
+    if (sub) sub.close();
+    sub = PQ.subscribe([PQ.topic(room, "tv")], "latest", onState, function(ok){
+      if (ok){ send({ t: "hello" }); if (!V) retry = setTimeout(function(){ if (!V){ status = "No game found for room " + room + ". Check the code on the TV."; render(); } }, 8000); }
+      else if (!V){ status = "Can't reach the game. Check your signal; retrying…"; render(); }
+    });
   }
-  function openConn(){
-    if (conn && conn.open) return;
-    conn = peer.connect(PQ.PREFIX + room.toLowerCase(), { reliable: true });
-    conn.on("open", function(){ status = ""; send({ t: "hello" }); if (pending.name && PQ.store("foreunder.quiz.room") === room && PQ.store("foreunder.quiz.joined") === "1") join(true); });
-    conn.on("data", function(d){ if (d && d.t === "state"){ V = d; endsAt = Date.now() + (d.left || 0); render(); } });
-    conn.on("close", function(){ status = "Lost the TV. Reconnecting…"; render(); retry = setTimeout(connect, 2000); });
+  // From the menu button: find the room the TV is running, so guests never type a code.
+  function findGame(){
+    if (finding) return; finding = true; status = "Looking for the game on the TV…"; render();
+    PQ.latest(PQ.LIVE).then(function(r){
+      finding = false;
+      if (r && r.data && r.data.room && (Date.now() / 1000 - r.time) < PQ.STALE_SECS){
+        room = String(r.data.room).toUpperCase().replace(/[^A-Z]/g, "").slice(0, 4);
+        history.replaceState(null, "", "?room=" + room + (PQ.qs.get("relay") ? "&relay=" + encodeURIComponent(PQ.qs.get("relay")) : ""));
+        return connect();
+      }
+      status = "nogame"; render();
+    });
   }
-  // Phones sleep; reconnect when the screen comes back.
-  document.addEventListener("visibilitychange", function(){ if (!document.hidden && room && !(conn && conn.open)) connect(); });
-
+  // Phones sleep; catch up when the screen comes back.
+  document.addEventListener("visibilitychange", function(){ if (!document.hidden && room && Date.now() - lastSeen > 20000 && sub) sub.reopen(); });
   function join(silent){
     var name = pending.name.trim(); if (!name) return;
+    rejoinAt = Date.now() + 8000;
     PQ.store("foreunder.name", name);
     PQ.store("foreunder.quiz.team", pending.team);
     PQ.store("foreunder.quiz.room", room); PQ.store("foreunder.quiz.joined", "1");
@@ -121,8 +150,9 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
   // ---- screens ----
   function codeScreen(){
     var inp = el("input",{type:"text",class:"code",maxlength:"4",autocapitalize:"characters",autocomplete:"off",placeholder:"ABCD",value:room});
-    return [header(), el("p",{text:"Type the 4-letter room code on the TV."}), inp,
-      el("button",{class:"btn",type:"button",onclick:function(){ room = inp.value.toUpperCase().replace(/[^A-Z]/g,"").slice(0,4); if (room.length === 4){ history.replaceState(null, "", "?room=" + room + (PQ.qs.get("peer") ? "&peer=" + PQ.qs.get("peer") : "")); connect(); } }}, "join the game")];
+    var off = status === "nogame";
+    return [header(), off ? el("div",{class:"card"}, el("div",{class:"big",text:"No game on the TV yet."}), el("p",{class:"muted",text:"Ask Jamey to start the pub quiz, then tap below. Or type the room code from the TV."}), el("button",{class:"btn",type:"button",onclick:function(){ status = ""; findGame(); }}, "check again")) : el("p",{text: finding ? "Looking for the game on the TV…" : "Type the 4-letter room code on the TV."}), inp,
+      el("button",{class:"btn",type:"button",onclick:function(){ room = inp.value.toUpperCase().replace(/[^A-Z]/g,"").slice(0,4); if (room.length === 4){ status = ""; history.replaceState(null, "", "?room=" + room + (PQ.qs.get("relay") ? "&relay=" + encodeURIComponent(PQ.qs.get("relay")) : "")); connect(); } }}, "join the game")];
   }
   function joinScreen(){
     var teams = V.mode === "teams" ? V.teams : [];
@@ -202,12 +232,12 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
   function render(){
     var parts;
     if (!room) parts = codeScreen();
-    else if (!V) parts = [header(), el("p",{class: /No game|can't/.test(status) ? "err" : "muted",text: status || "Connecting to the TV…"}), /No game/.test(status) ? el("button",{class:"btn ghost",type:"button",onclick:function(){ room = ""; V = null; clearTimeout(retry); history.replaceState(null,"",location.pathname); render(); }}, "enter a different code") : null];
+    else if (!V) parts = [header(), el("p",{class: /No game|n't/.test(status) ? "err" : "muted",text: status || "Connecting to the TV…"}), /No game|isn't running/.test(status) ? el("button",{class:"btn ghost",type:"button",onclick:function(){ room = ""; V = null; status = ""; clearTimeout(retry); if (sub) sub.close(); history.replaceState(null,"",location.pathname + (PQ.qs.get("relay") ? "?relay=" + encodeURIComponent(PQ.qs.get("relay")) : "")); render(); }}, "enter a different code") : null];
     else if (!V.me.team || PQ.store("foreunder.quiz.joined") !== "1") parts = joinScreen();
     else if (V.phase === "lobby") parts = lobbyScreen();
     else if (V.phase === "question" || V.phase === "reveal") parts = questionScreen();
     else parts = boardScreen(V.phase === "final");
-    if (V && status) parts.push(el("p",{class:"err",text:status}));
+    if (V && status && status !== "nogame") parts.push(el("p",{class:"err",text:status}));
     // Keep what someone is typing when a state update arrives.
     var active = document.activeElement, keepTyping = active && active.tagName === "INPUT" && V && !V.me.team;
     if (keepTyping) return;
