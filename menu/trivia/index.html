@@ -89,7 +89,7 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
   var Q_SECONDS = Number(PQ.qs.get("secs")) || 30, REVEAL_SECONDS = 9, BOARD_SECONDS = 20, PER_ROUND = 6;
 
   // ---- game state (lives only on the TV) ----
-  var S = { phase: "boot", mode: PQ.store("foreunder.quiz.mode") === "solo" ? "solo" : "teams", holes: Number(PQ.store("foreunder.quiz.holes")) || 12, qs: [], i: -1, teams: {}, players: {}, answers: {}, gone: [], endsAt: 0, qStart: 0, room: "", err: "" };
+  var S = { phase: "boot", mode: PQ.store("foreunder.quiz.mode") === "solo" ? "solo" : "teams", holes: Number(PQ.store("foreunder.quiz.holes")) || 12, preset: PQ.store("foreunder.quiz.preset") || "pub", cats: storedCats(), qs: [], i: -1, teams: {}, players: {}, answers: {}, gone: [], endsAt: 0, qStart: 0, room: "", err: "" };
   var timer = null, elimTimers = [];
   // Bar-trivia scoring: a correct answer is worth 1,000 the instant the question appears, falling
   // steadily to 100 when time runs out (last question doubles). Two wrong answers drop out at the
@@ -102,18 +102,31 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
   function shuffle(a){ a = a.slice(); for (var i = a.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
   function joinUrl(){ var r = PQ.qs.get("relay"); if (r) return location.origin + location.pathname.replace(/index\.html$/, "") + "play.html?room=" + S.room + "&relay=" + encodeURIComponent(r); return (M.siteUrl || location.href.replace(/trivia\/.*$/, "")) + "trivia/play.html?room=" + S.room; }
 
-  // Pick questions: mix categories, avoid ones used in recent games on this TV.
+  // Game modes: Pub Night uses every category, Foreunder is the house specialty, Pick lets the host choose.
+  var PRESETS = { pub: { name: "Pub Night" }, foreunder: { name: "Foreunder", cats: ["Coffee", "Golf", "Scotland"] }, pick: { name: "Pick categories" } };
+  function allCats(){ var seen = {}, out = []; window.QUIZ.forEach(function(q){ if (!seen[q.c]){ seen[q.c] = 1; out.push(q.c); } }); return out; }
+  function storedCats(){ try { var c = JSON.parse(PQ.store("foreunder.quiz.cats") || "[]"); return Array.isArray(c) ? c : []; } catch(e) { return []; } }
+  function activeCats(){
+    if (S.preset === "foreunder") return PRESETS.foreunder.cats;
+    if (S.preset === "pick"){ var all = allCats(); return S.cats.filter(function(c){ return all.indexOf(c) !== -1; }); }
+    return allCats();
+  }
+  function modeLabel(){ return S.preset === "pick" ? (S.cats.length === 1 ? S.cats[0] : S.cats.length + " categories") : PRESETS[S.preset].name; }
+
+  // Pick questions from the active categories, dealt one category at a time, avoiding ones used recently on this TV.
   function pickQuestions(n){
-    var bank = window.QUIZ.map(function(q){ return Object.assign({ id: slug(q.q).slice(0, 40) }, q); });
+    var cats = activeCats();
+    var bank = window.QUIZ.filter(function(q){ return cats.indexOf(q.c) !== -1; }).map(function(q){ return Object.assign({ id: slug(q.q).slice(0, 40) }, q); });
+    n = Math.min(n, bank.length);
     var used = []; try { used = JSON.parse(PQ.store("foreunder.quiz.used") || "[]"); } catch(e) {}
     var fresh = bank.filter(function(q){ return used.indexOf(q.id) === -1; });
     if (fresh.length < n){ used = []; fresh = bank; }
     var byCat = {}; shuffle(fresh).forEach(function(q){ (byCat[q.c] = byCat[q.c] || []).push(q); });
-    var cats = shuffle(Object.keys(byCat)), out = [];
+    var order = shuffle(Object.keys(byCat)), out = [];
     // Deal one question per category in turn, so every game mixes topics.
     while (out.length < n){
       var added = false;
-      cats.forEach(function(c){ if (out.length < n && byCat[c].length){ out.push(byCat[c].shift()); added = true; } });
+      order.forEach(function(c){ if (out.length < n && byCat[c].length){ out.push(byCat[c].shift()); added = true; } });
       if (!added) break;
     }
     out = shuffle(out);
@@ -156,7 +169,8 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
       correct: S.phase === "reveal" ? q.correct : null,
       secs: Q_SECONDS, max: MAX_PTS, min: MIN_PTS,
       teams: standings().map(function(x){ return [x.id, x.name, x.score]; }),
-      players: players, ans: ans, playing: activeTeams().length
+      players: players, ans: ans, playing: activeTeams().length,
+      preset: S.preset, cats: S.phase === "lobby" ? activeCats() : undefined, all: S.phase === "lobby" ? allCats() : undefined
     };
   }
   function publishNow(){
@@ -218,13 +232,18 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
       if (S.mode !== d.mode){ S.mode = d.mode; PQ.store("foreunder.quiz.mode", d.mode); S.teams = {}; Object.keys(S.players).forEach(function(k){ S.players[k].team = null; }); }
     }
     else if (cmd === "holes" && S.phase === "lobby" && [6, 12, 18].indexOf(Number(d.holes)) !== -1) { S.holes = Number(d.holes); PQ.store("foreunder.quiz.holes", String(S.holes)); }
+    else if (cmd === "preset" && S.phase === "lobby" && PRESETS[d.preset]){ S.preset = d.preset; PQ.store("foreunder.quiz.preset", d.preset); }
+    else if (cmd === "cat" && S.phase === "lobby" && allCats().indexOf(d.cat) !== -1){
+      var at = S.cats.indexOf(d.cat); if (at === -1) S.cats.push(d.cat); else S.cats.splice(at, 1);
+      S.preset = "pick"; PQ.store("foreunder.quiz.preset", "pick"); PQ.store("foreunder.quiz.cats", JSON.stringify(S.cats));
+    }
     else if (cmd === "start" && S.phase === "lobby") start();
     else if (cmd === "next") next();
     else if (cmd === "end" && S.phase !== "lobby") finish();
     else if (cmd === "again") toLobby();
   }
   function start(){
-    if (!activeTeams().length) return;
+    if (!activeTeams().length || !activeCats().length) return;
     S.qs = pickQuestions(S.holes); S.i = -1;
     Object.keys(S.teams).forEach(function(k){ var t = S.teams[k]; t.score = 0; t.correct = 0; t.ms = 0; });
     ask();
@@ -311,7 +330,7 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
         el("div",{class:"join"}, qrSvg(joinUrl()),
           el("div",null, el("div",{class:"k",text:"room code"}), el("div",{class:"code",text:S.room}),
             el("ol",{class:"steps"}, el("li",{text:"Scan the code with your phone camera."}), el("li",{text: S.mode === "teams" ? "Enter your name and pick or start a team." : "Enter your name."}), el("li",{text:"Answer on your phone before the clock runs out."})))),
-        el("div",{class:"settings"}, el("span",{class:"pill",text: S.mode === "teams" ? "team mode" : "everyone for themselves"}), el("span",{class:"pill",text: S.holes + " questions"}), el("span",{class:"pill",text:"up to 1,000 a question · faster pays more"}), el("span",{class:"pill",text:"2 wrong answers drop out as the clock runs"}), el("span",{class:"pill",text:"last one doubles"})),
+        el("div",{class:"settings"}, el("span",{class:"pill",text: S.mode === "teams" ? "team mode" : "everyone for themselves"}), el("span",{class:"pill",text: modeLabel()}), el("span",{class:"pill",text: S.holes + " questions"}), el("span",{class:"pill",text:"up to 1,000 a question · faster pays more"}), el("span",{class:"pill",text:"2 wrong answers drop out as the clock runs"}), el("span",{class:"pill",text:"last one doubles"})),
         el("div",{class:"wait" + (S.err ? " err" : ""), text: S.err || (st.length ? "The quizmaster starts the game from their phone, or press OK on the remote." : "Waiting for players…")}),
         st.length ? el("button",{class:"btn",id:"startBtn",type:"button",onclick:function(){ start(); }}, "start the game") : null
       ),

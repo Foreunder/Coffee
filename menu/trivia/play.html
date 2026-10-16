@@ -106,6 +106,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
       mine: a ? { choice: a[0], by: a[1], ok: d.phase === "reveal" ? !!a[2] : null } : null,
       gained: d.phase === "reveal" && a && a[2] ? (a[3] || 0) : 0, secs: d.secs || 30, max: d.max || 1000, min: d.min || 100,
       rank: rank, score: team ? team.score : 0, teams: teams, playing: d.playing,
+      preset: d.preset || "pub", cats: d.cats || [], all: d.all || [],
       answered: Object.keys(d.ans || {}).length, players: Object.keys(d.players || {}).length
     };
   }
@@ -233,11 +234,17 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
     var p = V.phase, active = V.teams.filter(function(t){ return t.members.length; }).length;
     var body = [el("span",{class:"k",style:"margin-top:0",text: "host · " + V.players + (V.players === 1 ? " player" : " players") + (p === "question" ? " · " + V.answered + " of " + active + " answered" : "")})];
     if (p === "lobby"){
+      body.push(el("span",{class:"k",text:"game"}), el("div",{class:"chips"}, [["pub","pub night"],["foreunder","foreunder"],["pick","pick categories"]].map(function(m){
+        return el("button",{type:"button",class:"chip" + (V.preset === m[0] ? " on" : ""),onclick:function(){ send({ t:"qm", cmd:"preset", preset:m[0] }); V.preset = m[0]; if (m[0] === "foreunder") V.cats = ["Coffee", "Golf", "Scotland"]; else if (m[0] === "pub") V.cats = V.all.slice(); render(); }}, m[1]); })));
+      if (V.preset === "pick") body.push(el("div",{class:"chips",style:"margin-top:8px"}, V.all.map(function(c){
+        return el("button",{type:"button",class:"chip" + (V.cats.indexOf(c) !== -1 ? " on" : ""),onclick:function(){ send({ t:"qm", cmd:"cat", cat:c }); var at = V.cats.indexOf(c); if (at === -1) V.cats.push(c); else V.cats.splice(at, 1); render(); }}, c); })));
+      else body.push(el("p",{class:"muted",style:"margin:8px 0 0;font-size:14px",text: V.cats.join(" · ")}));
+      body.push(el("span",{class:"k",text:"teams & length"}));
       body.push(el("div",{class:"chips"},
         el("button",{type:"button",class:"chip" + (V.mode === "teams" ? " on" : ""),onclick:function(){ send({ t:"qm", cmd:"mode", mode:"teams" }); }}, "teams"),
         el("button",{type:"button",class:"chip" + (V.mode === "solo" ? " on" : ""),onclick:function(){ send({ t:"qm", cmd:"mode", mode:"solo" }); }}, "solo")));
       body.push(el("div",{class:"chips",style:"margin-top:8px"}, [6, 12, 18].map(function(n){ return el("button",{type:"button",class:"chip" + (V.holes === n ? " on" : ""),onclick:function(){ send({ t:"qm", cmd:"holes", holes:n }); }}, n + " questions"); })));
-      body.push(el("button",{class:"btn",type:"button",disabled: V.playing ? null : "",onclick:function(){ send({ t:"qm", cmd:"start" }); }}, V.playing ? "start the game" : "waiting for players"));
+      body.push(el("button",{class:"btn",type:"button",disabled: V.playing && V.cats.length ? null : "",onclick:function(){ send({ t:"qm", cmd:"start" }); }}, !V.cats.length ? "pick at least one category" : V.playing ? "start the game" : "waiting for players"));
     } else if (p === "final"){
       body.push(el("button",{class:"btn",type:"button",onclick:function(){ send({ t:"qm", cmd:"again" }); }}, "play again"));
     } else {
