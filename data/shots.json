@@ -769,5 +769,33 @@
     "taste": "5 stars · Balanced",
     "time": 29.8,
     "yield": 36.3
+  },
+  {
+    "bean": "Hill of Beans Rockbrook Espresso",
+    "date": "2026-10-15",
+    "dose": 18,
+    "drink": "Not noted",
+    "estimated": false,
+    "grind": 13,
+    "n": 54,
+    "notes": "24.2s, 1:1.98, peak 9.8 bar, avg pump flow 2.9 ml/s, 70.3 ml pumped, avg temp 95.4°C. 5 stars. First shot of the pair ran fast at grind 13 (~4s under the 28s target); second shot at the same grind ran 28.7s.",
+    "session": "Evening (GaggiMate shot #29, 8:33 PM, Foreunder profile)",
+    "taste": "5 stars",
+    "time": 24.2,
+    "yield": 35.6
+  },
+  {
+    "bean": "Hill of Beans Rockbrook Espresso",
+    "date": "2026-10-15",
+    "dose": 18,
+    "drink": "Not noted",
+    "estimated": false,
+    "grind": 13,
+    "n": 55,
+    "notes": "28.7s, 1:2.0, peak 9.9 bar, avg pump flow 2.8 ml/s, 81.1 ml pumped, avg temp 95.9°C. 5 stars, GaggiMate: Balanced. Back-to-back with #54: 24.2s then 28.7s at the same grind, same pattern as 10/13 (26.2s then 29.8s). Grind 13 holds.",
+    "session": "Evening (GaggiMate shot #30, 8:36 PM, Foreunder profile)",
+    "taste": "5 stars · Balanced",
+    "time": 28.7,
+    "yield": 36
   }
 ]
