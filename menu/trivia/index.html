@@ -194,7 +194,9 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
       var t = teamOf(pid), c = Number(d.choice);
       if (S.phase === "question" && t && c >= 0 && c <= 3 && S.gone.indexOf(c) === -1 && Date.now() < S.endsAt){
         S.answers[t.id] = { choice: c, by: p.name, ms: Date.now() - S.qStart };
-        if (everyoneIn()){ S.endsAt = Math.min(S.endsAt, Date.now() + 1200); schedule(); }
+        // The clock always runs out: eliminations are the game. Changing an answer re-stamps the
+        // time, so switching late still costs points. The quizmaster's "reveal" skips ahead if needed.
+        render();
       }
     }
     else if (d.t === "qm" && p.qm) command(d.cmd, d);
@@ -209,7 +211,6 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
     var ids = {}; Object.keys(S.players).forEach(function(k){ var p = S.players[k]; if (p.team && p.online) ids[p.team] = 1; });
     return Object.keys(ids);
   }
-  function everyoneIn(){ var a = activeTeams(); return a.length > 0 && a.every(function(t){ return S.answers[t]; }); }
 
   // ---- game flow ----
   function command(cmd, d){
