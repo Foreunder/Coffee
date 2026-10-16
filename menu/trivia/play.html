@@ -45,6 +45,9 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
 .a.dim{opacity:.3}
 .a.win .L{background:var(--ink)}
 .a.was{opacity:.75;border-style:dashed}
+.a.gone{opacity:.15;filter:grayscale(1)}
+.a.gone span:nth-child(2){text-decoration:line-through}
+.worth{color:var(--brass);font-weight:700}
 .a .yp{margin-left:auto;font:500 11px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.12em;text-transform:lowercase}
 .a[disabled]{cursor:default}
 .pick{margin-top:12px;color:var(--muted);text-align:center}
@@ -95,7 +98,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
       t: "state", phase: d.phase, mode: d.mode, holes: d.holes, room: d.room, i: d.i, total: d.total, left: d.left, q: d.q, correct: d.correct,
       me: { name: me ? me[0] : "", team: team ? team.name : null, teamId: tid, qm: !!(me && me[2]), mates: team ? team.members : [] },
       mine: a ? { choice: a[0], by: a[1], ok: d.phase === "reveal" ? !!a[2] : null } : null,
-      gained: d.phase === "reveal" && a && a[2] ? d.pts : 0,
+      gained: d.phase === "reveal" && a && a[2] ? (a[3] || 0) : 0, secs: d.secs || 30, max: d.max || 1000, min: d.min || 100,
       rank: rank, score: team ? team.score : 0, teams: teams, playing: d.playing
     };
   }
@@ -107,7 +110,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
     // Keep my own pick on screen until the TV's batched update catches up.
     var keep = V && V.phase === "question" && d.phase === "question" && V.i === d.i && V.mine ? V.mine : null;
     V = toView(d);
-    if (keep && !V.mine) V.mine = keep;
+    if (keep && !V.mine && (V.q.gone || []).indexOf(keep.choice) === -1) V.mine = keep;
     endsAt = Date.now() + Math.max(0, (d.left || 0) - age * 1000);
     // After a TV refresh the TV forgets players: quietly join again.
     if (!V.me.teamId && pending.name && PQ.store("foreunder.quiz.room") === room && PQ.store("foreunder.quiz.joined") === "1" && Date.now() > rejoinAt){ rejoinAt = Date.now() + 8000; join(true); }
@@ -184,16 +187,17 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
   function questionScreen(){
     var q = V.q, rev = V.phase === "reveal", mine = V.mine;
     var colors = ["var(--A)","var(--B)","var(--C)","var(--D)"];
-    var out = [el("div",{class:"qmeta"}, el("span",{text:"question " + (V.i + 1) + " of " + V.total + " · " + q.cat + (q.dbl ? " · double points" : "")}), el("span",{class:"clock",id:"clock"})),
+    var out = [el("div",{class:"qmeta"}, el("span",{text:"question " + (V.i + 1) + " of " + V.total + " · " + q.cat + (q.dbl ? " · double points" : "")}), el("span",null, rev ? null : el("span",{class:"worth",id:"worth"}), " ", el("span",{class:"clock",id:"clock"}))),
       el("div",{class:"timer"}, el("i",{id:"bar"})),
       el("p",{class:"qtext",text:q.text}),
       el("div",{class:"ans"}, q.opts.map(function(o, k){
-        var cls = "a" + (rev ? (k === V.correct ? " win" : (mine && mine.choice === k ? " was" : " dim")) : (mine && mine.choice === k ? " on" : ""));
-        return el("button",{type:"button",class:cls,style:"--c:" + colors[k],disabled: rev ? "" : null,onclick: rev ? null : function(){ send({ t: "answer", choice: k }); if (!V.mine) V.mine = {}; V.mine.choice = k; V.mine.by = V.me.name; render(); }},
+        var gone = !rev && (q.gone || []).indexOf(k) !== -1;
+        var cls = "a" + (rev ? (k === V.correct ? " win" : (mine && mine.choice === k ? " was" : " dim")) : gone ? " gone" : (mine && mine.choice === k ? " on" : ""));
+        return el("button",{type:"button",class:cls,style:"--c:" + colors[k],disabled: rev || gone ? "" : null,onclick: rev || gone ? null : function(){ send({ t: "answer", choice: k }); if (!V.mine) V.mine = {}; V.mine.choice = k; V.mine.by = V.me.name; render(); }},
           el("span",{class:"L",text:PQ.LETTERS[k]}), el("span",{text:o}), rev && mine && mine.choice === k ? el("span",{class:"yp",text: V.mode === "teams" ? "your team" : "you"}) : null);
       }))];
     if (!rev){
-      out.push(el("p",{class:"pick",text: mine ? (V.mode === "teams" && mine.by && mine.by !== V.me.name ? mine.by + " locked in " + PQ.LETTERS[mine.choice] + ". Anyone on the team can change it until time's up." : "Locked in " + PQ.LETTERS[mine.choice] + ". You can change it until time's up.") : (V.mode === "teams" ? "One answer per team. Anyone can tap it." : "Tap your answer.")}));
+      out.push(el("p",{class:"pick",text: mine ? (V.mode === "teams" && mine.by && mine.by !== V.me.name ? mine.by + " locked in " + PQ.LETTERS[mine.choice] + ". Anyone on the team can change it until time's up." : "Locked in " + PQ.LETTERS[mine.choice] + ". You can change it until time's up.") : (V.mode === "teams" ? "One answer per team. Faster pays more; two wrong answers drop out as the clock runs." : "Faster pays more. Two wrong answers drop out as the clock runs.")}));
     } else {
       var right = mine && mine.ok;
       out.push(el("div",{class:"result" + (right ? "" : " bad")}, el("div",{class:"big",text: right ? "Correct! +" + V.gained : mine ? "Not this time" : "No answer"}), el("div",{class:"muted",text:"The answer: " + PQ.LETTERS[V.correct] + ", " + q.opts[V.correct] + " · " + V.score + " pts, " + ordinal(V.rank) + " place"})));
@@ -248,8 +252,10 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
   function tick(){
     var c = document.getElementById("clock"), b = document.getElementById("bar");
     if (!c || !V) return;
-    var left = Math.max(0, endsAt - Date.now()), total = (V.phase === "question" ? (Number(PQ.qs.get("secs")) || 25) : 9) * 1000;
+    var left = Math.max(0, endsAt - Date.now()), total = (V.phase === "question" ? V.secs : 9) * 1000;
     c.textContent = V.phase === "question" ? Math.ceil(left / 1000) : "";
+    var w = document.getElementById("worth");
+    if (w && V.phase === "question"){ var f = 1 - Math.min(1, left / total); w.textContent = (Math.round((V.max - (V.max - V.min) * f) / 10) * 10 * (V.q.dbl ? 2 : 1)).toLocaleString() + " pts"; }
     b.style.transform = "scaleX(" + (V.phase === "question" ? Math.min(1, left / total) : 0) + ")";
   }
   setInterval(tick, 250);
