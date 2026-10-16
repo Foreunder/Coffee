@@ -60,6 +60,10 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
 .row b{font:400 20px/1 "IM Fell English SC",Georgia,serif;color:var(--brass)}
 .row .n{font:400 19px/1.1 "IM Fell English SC",Georgia,serif}
 .row .m{font-size:13px;color:var(--muted)}
+.seg{display:flex;margin:14px 0 4px;border:1.5px solid var(--rule);border-radius:999px;padding:3px}
+.seg button{flex:1;border:0;background:transparent;color:var(--muted);font:600 14px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.12em;text-transform:lowercase;border-radius:999px;padding:11px;min-height:42px;cursor:pointer}
+.seg button.on{background:var(--brass);color:#1a1408}
+.qm.host{margin:12px 0 18px;border-style:solid}
 .qm{margin-top:28px;border:1px dashed var(--rule);border-radius:12px;padding:12px 14px}
 .qm .k{margin-top:4px}
 .qm .btn{margin-top:10px}
@@ -79,6 +83,8 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
   if (PQ.qs.get("qm") === "1") PQ.store("foreunder.quiz.qm", "1");
   if (PQ.qs.get("qm") === "0") PQ.store("foreunder.quiz.qm", "");
   var QM = PQ.store("foreunder.quiz.qm") === "1";
+  // The quizmaster phone has two views: "play" looks exactly like everyone else's; "host" adds the controls on top.
+  var HOST = PQ.store("foreunder.quiz.view") === "host";
   var room = (PQ.qs.get("room") || "").toUpperCase().replace(/[^A-Z]/g, "").slice(0, 4);
   var V = null, endsAt = 0, status = "", sub = null, retry = null, lastSeen = 0, rejoinAt = 0, finding = false;
   var pending = { name: PQ.store("foreunder.name") || "", team: PQ.store("foreunder.quiz.team") || "", newTeam: false };
@@ -99,7 +105,8 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
       me: { name: me ? me[0] : "", team: team ? team.name : null, teamId: tid, qm: !!(me && me[2]), mates: team ? team.members : [] },
       mine: a ? { choice: a[0], by: a[1], ok: d.phase === "reveal" ? !!a[2] : null } : null,
       gained: d.phase === "reveal" && a && a[2] ? (a[3] || 0) : 0, secs: d.secs || 30, max: d.max || 1000, min: d.min || 100,
-      rank: rank, score: team ? team.score : 0, teams: teams, playing: d.playing
+      rank: rank, score: team ? team.score : 0, teams: teams, playing: d.playing,
+      answered: Object.keys(d.ans || {}).length, players: Object.keys(d.players || {}).length
     };
   }
   function onState(d, m){
@@ -215,9 +222,16 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
         return el("div",{class:"row" + (t.id === V.me.teamId ? " me" : "")}, el("b",{text:String(i + 1)}), el("div",null, el("div",{class:"n",text:t.name}), V.mode === "teams" ? el("div",{class:"m",text:t.members.join(", ")}) : null), el("span",{text:t.score + " pts"}));
       }))];
   }
+  function viewToggle(){
+    if (!V || !V.me.qm) return null;
+    function pick(h){ return function(){ HOST = h; PQ.store("foreunder.quiz.view", h ? "host" : "play"); render(); }; }
+    return el("div",{class:"seg"}, el("button",{type:"button",class: HOST ? "" : "on",onclick:pick(false)}, "play"), el("button",{type:"button",class: HOST ? "on" : "",onclick:pick(true)}, "host"));
+  }
   function qmPanel(){
     if (!V || !V.me.qm) return null;
-    var p = V.phase, body = [el("span",{class:"k",text:"quizmaster"})];
+    if (!HOST) return V.phase === "lobby" ? el("p",{class:"pick",text:"Switch to host to set up and start the game."}) : null;
+    var p = V.phase, active = V.teams.filter(function(t){ return t.members.length; }).length;
+    var body = [el("span",{class:"k",style:"margin-top:0",text: "host · " + V.players + (V.players === 1 ? " player" : " players") + (p === "question" ? " · " + V.answered + " of " + active + " answered" : "")})];
     if (p === "lobby"){
       body.push(el("div",{class:"chips"},
         el("button",{type:"button",class:"chip" + (V.mode === "teams" ? " on" : ""),onclick:function(){ send({ t:"qm", cmd:"mode", mode:"teams" }); }}, "teams"),
@@ -230,7 +244,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
       body.push(el("button",{class:"btn",type:"button",onclick:function(){ send({ t:"qm", cmd:"next" }); }}, p === "question" ? "reveal the answer" : "next question"));
       body.push(el("button",{class:"btn ghost",type:"button",onclick:function(){ send({ t:"qm", cmd:"end" }); }}, "end the game"));
     }
-    return el("div",{class:"qm"}, body);
+    return el("div",{class:"qm host"}, body);
   }
 
   function render(){
@@ -245,7 +259,9 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
     // Keep what someone is typing when a state update arrives.
     var active = document.activeElement, keepTyping = active && active.tagName === "INPUT" && V && !V.me.team;
     if (keepTyping) return;
-    app.replaceChildren.apply(app, flat([parts, qmPanel()]));
+    // Host controls sit right under the header so they're reachable without scrolling.
+    var top = parts.length && parts[0] && parts[0].className === "top" ? [parts[0], viewToggle(), qmPanel()].concat(parts.slice(1)) : [viewToggle(), qmPanel()].concat(parts);
+    app.replaceChildren.apply(app, flat(top));
     tick();
   }
   function flat(a){ var out = []; (function walk(x){ if (Array.isArray(x)) x.forEach(walk); else if (x != null && x !== false) out.push(x); })(a); return out; }
