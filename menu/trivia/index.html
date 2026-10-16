@@ -86,6 +86,7 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
 <script src="quiz.js"></script>
 <script src="questions.js"></script>
 <script src="otdb.js"></script>
+<script src="family.js"></script>
 <script>
 (function(){
   var el = PQ.el, M = window.FOREUNDER || {}, app = document.getElementById("app");
@@ -108,7 +109,7 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
   // Game modes: Pub Night uses every category, Foreunder is the house specialty, Pick lets the host choose.
   var PRESETS = { pub: { name: "Pub Night" }, foreunder: { name: "Foreunder", cats: ["Coffee", "Golf", "Scotland"] }, pick: { name: "Pick categories" } };
   // Our own questions plus the Open Trivia DB download (house categories first in the list).
-  function bank(){ return window.QUIZ.concat(window.OTDB ? OTDB.questions() : []); }
+  function bank(){ return window.QUIZ.concat(window.FAMILY ? FAMILY.questions() : [], window.OTDB ? OTDB.questions() : []); }
   function allCats(){ var seen = {}, out = []; bank().forEach(function(q){ if (!seen[q.c]){ seen[q.c] = 1; out.push(q.c); } }); return out; }
   function storedCats(){ try { var c = JSON.parse(PQ.store("foreunder.quiz.cats") || "[]"); return Array.isArray(c) ? c : []; } catch(e) { return []; } }
   function activeCats(){
@@ -442,6 +443,7 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
   if (typeof EventSource !== "function"){ S.err = "This browser can't host the quiz. Try Silk or Chrome on the Fire TV."; render(); }
   else startRelay();
   // Grow the question bank in the background; refresh the lobby count as it comes in (TV only, no extra relay traffic).
+  if (window.FAMILY){ FAMILY.onChange(function(){ if (S.phase === "lobby") render(); }); FAMILY.load(); }
   if (window.OTDB){ var lastDraw = 0; OTDB.onChange(function(){ if (S.phase === "lobby" && Date.now() - lastDraw > 4000){ lastDraw = Date.now(); render(); } }); OTDB.fill(); }
   window.__quiz = S; // for testing
 })();
