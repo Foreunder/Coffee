@@ -134,7 +134,15 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
     var level = fresh.filter(function(q){ return fitsDiff(q); });
     if (level.length >= n) fresh = level;
     else { var lk = {}; level.forEach(function(q){ lk[q.id] = 1; }); fresh = level.concat(shuffle(fresh.filter(function(q){ return !lk[q.id]; })).slice(0, n - level.length)); }
-    var byCat = {}; shuffle(fresh).forEach(function(q){ (byCat[q.c] = byCat[q.c] || []).push(q); });
+    // Within a category, house questions get about 1 pick in 3 even when Open Trivia DB has far more,
+    // so ours don't get buried (Video Games: 20 of ours vs ~1,100 downloaded).
+    var house = {}, ext = {}, byCat = {};
+    shuffle(fresh).forEach(function(q){ var m = q.s === "otdb" ? ext : house; (m[q.c] = m[q.c] || []).push(q); });
+    Object.keys(house).concat(Object.keys(ext)).forEach(function(c){
+      if (byCat[c]) return; var h = house[c] || [], x = ext[c] || [], list = [];
+      while (h.length || x.length) list.push((h.length && (!x.length || Math.random() < 0.35)) ? h.shift() : x.shift());
+      byCat[c] = list;
+    });
     var order = shuffle(Object.keys(byCat)), out = [];
     // Deal one question per category in turn, so every game mixes topics.
     while (out.length < n){
