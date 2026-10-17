@@ -788,7 +788,7 @@
     "bean": "Hill of Beans Rockbrook Espresso",
     "date": "2026-10-15",
     "dose": 18,
-    "drink": "Not noted",
+    "drink": "Flat white · half & half · latte art pour (glossy microfoam, white landed off-center)",
     "estimated": false,
     "grind": 13,
     "n": 55,
@@ -797,5 +797,19 @@
     "taste": "5 stars · Balanced",
     "time": 28.7,
     "yield": 36
+  },
+  {
+    "bean": "Hill of Beans Rockbrook Espresso",
+    "date": "2026-10-16",
+    "dose": 18,
+    "drink": "Not noted (test shot)",
+    "estimated": false,
+    "grind": 13,
+    "n": 56,
+    "notes": "First shot on the warranty replacement display after flashing display + controller (v1.9.0) and importing settings. 29.4s, 1:2.0, peak 9.9 bar, avg pump flow 2.8 ml/s, 83.1 ml pumped, avg temp 95.4°C. Matches #55 (28.7s / 36g) almost exactly: calibration and profile carried over. Grind 13 holds.",
+    "session": "Late night (GaggiMate shot #0 on new display, 11:42 PM, Foreunder profile)",
+    "taste": "Balanced",
+    "time": 29.4,
+    "yield": 35.9
   }
 ]
