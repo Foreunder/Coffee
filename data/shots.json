@@ -820,9 +820,9 @@
     "estimated": false,
     "grind": 11,
     "n": 57,
-    "notes": "First Colombia shot on the dialed-in setup. 21.5s, 1:2.0, peak 9.8 bar, avg pump flow 3.3 ml/s, 70.9 ml pumped, avg temp 93.9°C. Ran fast (target 27-30s): beans roasted 8/12, now 66 days old. Thin, darker crema that's mostly gone, typical of stale beans. Next: grind 10.5.",
+    "notes": "First Colombia shot on the dialed-in setup. 21.5s, 1:2.0, peak 9.8 bar, avg pump flow 3.3 ml/s, 70.9 ml pumped, avg temp 93.9°C. Ran fast (target 27-30s): beans roasted 8/12, now 66 days old. Thin, darker crema mostly gone, typical of stale beans. Grind math: 15 gave 8-12s on 10/10, 11 gives 21.5s, so ~2.5-3s per grind step. Next: grind 10 (aim ~25s), then 9.5 if needed.",
     "session": "Morning (GaggiMate shot #1, 8:10 AM, Foreunder profile)",
-    "taste": "Not noted yet",
+    "taste": "Flat, clearly under-extracted, harsh hit at the back of the throat",
     "time": 21.5,
     "yield": 35.8
   }
