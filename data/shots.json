@@ -909,5 +909,19 @@
     "drink": "Espresso (photo)",
     "session": "Morning (GaggiMate shot #7, 9:52 AM, 'Foreunder HOB Brazil' profile, 93°C, BBW 36 g)",
     "notes": "First Brazil shot. Stock Gaggia dual-spout portafilter (instead of the usual bottomless) with the standard 18 g basket, plastic pressurized pin removed. 54.0s, 1:2.03, peak 10.0 bar, avg pump flow 2.5 ml/s, 132.9 ml pumped, avg temp 96.3°C. Choked: far too slow; dark, thin crema. Go coarser."
+  },
+  {
+    "n": 64,
+    "date": "2026-10-18",
+    "bean": "Hill of Beans Brazil Natural Legender Especial (Cerrado)",
+    "dose": 18,
+    "yield": 35.7,
+    "time": 31.0,
+    "grind": 13,
+    "estimated": false,
+    "taste": "",
+    "drink": "Espresso (photo)",
+    "session": "Morning (GaggiMate shot #8, 10:10 AM, 'Foreunder HOB Brazil' profile, 93°C, BBW 36 g)",
+    "notes": "Grind 11 -> 13 after #63 choked (purged 2-3 g). Stock Gaggia dual-spout portafilter, standard 18 g basket. 31.0s, 1:1.98, peak 10.0 bar, avg pump flow 2.9 ml/s, 88.8 ml pumped, avg temp 96.1°C. In range; even crema."
   }
 ]
