@@ -86,11 +86,14 @@ body:not(.board) .drink .ph{grid-column:2;grid-row:1/span 3;width:76px;height:76
 .cardlink{display:inline-block;margin-top:14px;color:var(--brass);font:500 15px/1.3 var(--label);letter-spacing:.08em;text-decoration:none}
 .drink .ph{display:none}
 body:not(.board) .drink .ph{display:block}
-.quick{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:8px;margin:4px 0 26px}
+.quick{display:flex;flex-wrap:wrap;gap:10px;margin:4px 0 26px}
+.quick .qa{flex:1 1 0;min-width:0}
+.quick .qa.main{flex-basis:100%}
+@media (max-width:699px){.quick{gap:8px}.quick .qa:not(.main){min-height:54px;padding:8px 4px;border-radius:12px}.quick .qa:not(.main) b{font-size:0;letter-spacing:.06em}.quick .qa:not(.main) b::after{content:attr(data-short);font-size:13.5px;letter-spacing:.08em}.quick .qa:not(.main) span{display:none}}
 .quick .qa{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center;text-decoration:none;border:1.5px solid var(--brass);background:rgba(201,162,79,.08);color:var(--ink);border-radius:14px;min-height:76px;padding:10px 8px;cursor:pointer;font:inherit}
 .quick .qa b{font:700 14px/1.15 var(--label);letter-spacing:.08em;text-transform:lowercase;color:var(--brass)}
 .quick .qa span{font:400 13px/1.2 var(--body,inherit);color:var(--muted)}
-.quick .qa.main{background:var(--brass);grid-column:1/-1}
+.quick .qa.main{background:var(--brass)}
 .quick .qa.main b,.quick .qa.main span{color:#1a1408}
 .drink button{grid-row:1/span 3;grid-column:2}
 body:not(.board) .drink .l{grid-column:1}
@@ -413,10 +416,10 @@ function renderMenu(){
   const live = window.GUEST && window.GUEST.on;
   app.append(el("nav",{class:"quick","aria-label":"Quick actions"},
     ORDERING ? el("button",{class:"qa main",type:"button",onclick:()=>openOrder()}, el("b",{text:"Order a drink"}), el("span",{text:"Straight to Jamey"})) : null,
-    el("button",{class:"qa",type:"button",onclick:()=>{ const s=document.querySelector(".pickstart"); const box=document.querySelector(".pickbox"); if(s) s.click(); if(box) box.scrollIntoView({behavior:"smooth",block:"start"}); }}, el("b",{text:"Help me pick"}), el("span",{text:"3 quick taps"})),
-    live ? el("a",{class:"qa",href:"scorecard.html" + MODE_QS}, el("b",{text:"Score your drink"}), el("span",{text:"Birdie or bogey?"})) : null,
-    live ? el("a",{class:"qa",href:"share.html" + MODE_QS}, el("b",{text:"Share your pour"}), el("span",{text:"Send Jamey a photo"})) : null,
-    el("a",{class:"qa",href:"trivia/play.html"}, el("b",{text:"Pub quiz"}), el("span",{text:"Join the game on the TV"}))
+    el("button",{class:"qa",type:"button",onclick:()=>{ const s=document.querySelector(".pickstart"); const box=document.querySelector(".pickbox"); if(s) s.click(); if(box) box.scrollIntoView({behavior:"smooth",block:"start"}); }}, el("b",{text:"Help me pick","data-short":"Pick"}), el("span",{text:"3 quick taps"})),
+    live ? el("a",{class:"qa",href:"scorecard.html" + MODE_QS}, el("b",{text:"Score your drink","data-short":"Score"}), el("span",{text:"Birdie or bogey?"})) : null,
+    live ? el("a",{class:"qa",href:"share.html" + MODE_QS}, el("b",{text:"Share your pour","data-short":"Share"}), el("span",{text:"Send Jamey a photo"})) : null,
+    el("a",{class:"qa",href:"trivia/play.html"}, el("b",{text:"Pub quiz","data-short":"Quiz"}), el("span",{text:"Join the game on the TV"}))
   ));
 
   // Drinks
