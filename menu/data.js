@@ -71,7 +71,7 @@ window.FOREUNDER = {
       elevation: "3,600–4,100 ft", cert: "Rainforest Alliance",
       expect: "A Cerrado micro-lot, naturally processed and taken to a medium roast. Sweet and balanced, with subtle nutty undertones, a silky body and low acidity. A real crowd-pleaser.",
       scale: { body: 4, acidity: 1, roast: 3 },
-      recipe: "18 g in · 36 g out · about 28 s", dialNote: "New bag. Start around grind 12–13 and adjust."
+      recipe: "18 g in · 36 g out · grind 13 · about 30 s", dialNote: "Grind 13 ran 31 s on 10/18: creamy and nutty. Grind 11 choked at 54 s. Testing 12 and 14 next."
     },
     {
       id: "ethiopia-kochere", bagArt: "photos/bag-ethiopia.jpg",
