@@ -59,6 +59,17 @@ header.crest{text-align:center;padding-block:28px 20px;display:flex;flex-directi
 section{padding-block:22px}
 h2{font:400 26px/1.15 var(--display);letter-spacing:.04em;margin:0 0 4px;text-wrap:balance}
 .sub{color:var(--muted);margin:0 0 16px;font-style:italic}
+.ontap{margin:0 0 22px}
+.ontap .label{text-align:center;margin-bottom:10px}
+.taps{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.tap{display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left;background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--brass);border-radius:6px;padding:10px 12px;color:var(--ink);font:inherit;cursor:pointer;min-width:0}
+.tap .tn{font:400 20px/1.1 var(--display);letter-spacing:.03em}
+.tap .tm{font:500 12px/1.2 var(--label);letter-spacing:.08em;color:var(--brass)}
+.tap .tc{font-style:italic;color:var(--muted);font-size:14px;line-height:1.25}
+.tpress,.thint{margin:10px 0 0;color:var(--muted);font-size:14px;text-align:center}
+.tpress a{color:var(--brass)}
+.thint{font-style:italic;font-size:13px;margin-top:6px}
+.bean{scroll-margin-top:12px}
 /* Menu section headers: centered brass banner between rules, so they read as chapters, not items */
 body:not(.board) section > h2{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:14px;font-size:30px;letter-spacing:.14em;color:var(--brass);text-align:center;margin:8px 0 6px}
 body:not(.board) section > h2::before,body:not(.board) section > h2::after{content:"";height:3px;border-top:1px solid var(--brass);border-bottom:1px solid var(--brass);opacity:.6}
@@ -348,7 +359,7 @@ const pressBeans = M.beans.filter(b => b.status === "press");
 function beansFor(drink){ return drink.uses === "espresso" ? onBar : drink.uses === "press" ? pressBeans : []; }
 
 function freshness(b){
-  if (b.roastDate){ const d = daysSince(b.roastDate); return "Roasted " + fmtDate(b.roastDate) + " · " + d + " days off roast"; }
+  if (b.roastDate){ const d = daysSince(b.roastDate); return "Roasted " + fmtDate(b.roastDate) + " · " + d + (d === 1 ? " day" : " days") + " off roast"; }
   if (b.opened) return "Bag opened " + fmtDate(b.opened) + " · roast date not on the bag";
   return null;
 }
@@ -447,6 +458,7 @@ function renderMenu(){
   app.append(el("section",{id:"drinks"},
     el("h2",{text:"Drinks"}),
     el("p",{class:"sub",text:"Every espresso drink is a double shot, pulled to order."}),
+    onTap(),
     picker(),
     list,
     el("p",{class:"decaf",text:M.decafNote}),
@@ -500,6 +512,21 @@ function renderMenu(){
   }
 }
 
+// "On the bar today": what you can pick from, right where you choose a drink.
+function onTap(){
+  if (!onBar.length && !pressBeans.length) return null;
+  const go = id => { const c = document.getElementById("b-" + id); if (!c) return; c.scrollIntoView({behavior:"smooth",block:"start"}); setTimeout(() => c.scrollIntoView({block:"start"}), 900); }; // second pass lands it after lazy bag photos load
+  const chip = b => el("button",{class:"tap",type:"button",onclick:()=>go(b.id),"aria-label":b.name + ", see details"},
+    el("span",{class:"tn",text:b.short || b.name}),
+    el("span",{class:"tm",text:[b.roastLevel || null, b.process && b.process !== "Blended" ? b.process.replace(/^Fully /,"") : (b.origin === "Blend" ? "blend" : null)].filter(Boolean).join(" · ").toLowerCase()}),
+    b.cue ? el("span",{class:"tc",text:b.cue}) : null);
+  return el("div",{class:"ontap"},
+    el("div",{class:"label",text:"Coffee on the bar today"}),
+    el("div",{class:"taps"}, ...onBar.map(chip)),
+    pressBeans.length ? el("p",{class:"tpress"}, "French press: ", ...pressBeans.map((b,i) => [i ? ", " : "", el("a",{href:"#b-" + b.id,onclick:e=>{e.preventDefault();go(b.id);},text:b.short || b.name})])) : null,
+    el("p",{class:"thint",text:"Any espresso drink works with any of these. Tap one for the full story."}));
+}
+
 function beanCard(b){
   const pillText = { bar:"available", press:"french press only", out:"not on hand" }[b.status];
   const facts = el("dl",{class:"facts"});
@@ -512,7 +539,7 @@ function beanCard(b){
   add("certified", b.cert);
   const fr = b.status !== "out" ? freshness(b) : null;
 
-  const card = el("article",{class:"bean" + (b.status === "out" ? " out" : "")},
+  const card = el("article",{class:"bean" + (b.status === "out" ? " out" : ""), id:"b-" + b.id},
     el("div",{class:"top"},
       el("div",null, el("h3",{text:b.name}), el("div",{class:"by",text:b.roaster + (b.roasterCity ? " · " + b.roasterCity : "")})),
       el("span",{class:"pill " + b.status,text:pillText})
@@ -794,11 +821,11 @@ function renderMenuBoard(){
   }
   const coffees = el("section",{class:"mb-coffees"}, el("h2",{text:"Our coffees"}));
   M.beans.filter(b => b.status !== "out").sort((a,b) => ({bar:0,press:1}[a.status] - {bar:0,press:1}[b.status])).forEach(b => {
-    const meta = [b.roaster, b.origin !== "Blend" ? b.origin : b.type, b.process !== "Blended" ? b.process : null, b.roastLevel ? b.roastLevel + " roast" : null].filter(Boolean).join(" · ");
+    const meta = [b.roaster, b.origin !== "Blend" ? b.origin : b.type, b.process !== "Blended" ? b.process : null, b.roastLevel || null].filter(Boolean).join(" · ");
     coffees.append(el("article",{class:"mb-bean"},
       el("div",{class:"mb-row"}, el("h3",{text:b.name}), b.status === "press" ? el("span",{class:"mb-pill",text:"french press"}) : null),
       el("div",{class:"meta",text:meta}),
-      b.roastDate ? el("div",{class:"meta2",text:"Roasted " + fmtDate(b.roastDate) + " · " + daysSince(b.roastDate) + " days off roast"}) : null,
+      b.roastDate ? el("div",{class:"meta2",text:"Roasted " + fmtDate(b.roastDate) + " · " + daysSince(b.roastDate) + (daysSince(b.roastDate) === 1 ? " day" : " days") + " off roast"}) : null,
       b.roasterNotes ? el("div",{class:"notes"}, el("span",{class:"k",text:"tasting notes "}), b.roasterNotes) : null,
       b.expect ? el("p",{class:"expect",text:b.expect}) : null,
       b.take ? el("p",{class:"take"}, el("span",{class:"k",text:"Jamey's take "}), b.take) : null

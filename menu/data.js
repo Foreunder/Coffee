@@ -18,7 +18,7 @@ window.FOREUNDER = {
     {
       id: "rockbrook", bagArt: "photos/bag-rockbrook.jpg", score: 3, scoreNote: "The house espresso. Balanced and the one I reach for most.",
       status: "bar",
-      name: "Rockbrook Espresso",
+      name: "Rockbrook Espresso", short: "Rockbrook", cue: "Rich, smooth, balanced",
       roaster: "A Hill of Beans Coffee Roasters",
       roasterCity: "Omaha, NE",
       type: "Espresso blend",
@@ -37,7 +37,7 @@ window.FOREUNDER = {
     {
       id: "malabar", score: 3, scoreNote: "Heavy, nutty and outstanding in a mocha.",
       status: "bar",
-      name: "India Monsooned Malabar",
+      name: "India Monsooned Malabar", short: "Malabar", cue: "Heavy, nutty, earthy",
       roaster: "A Hill of Beans Coffee Roasters",
       roasterCity: "Omaha, NE",
       type: "Single origin",
@@ -57,7 +57,7 @@ window.FOREUNDER = {
     {
       id: "brazil", bagArt: "photos/bag-brazil.jpg",
       status: "bar",
-      name: "Brazil · Natural Legender Especial",
+      name: "Brazil · Natural Legender Especial", short: "Brazil", cue: "Sweet, silky, nutty",
       roaster: "A Hill of Beans Coffee Roasters",
       roasterCity: "Omaha, NE",
       type: "Single origin",
@@ -76,7 +76,7 @@ window.FOREUNDER = {
     {
       id: "ethiopia-kochere", bagArt: "photos/bag-ethiopia.jpg",
       status: "bar",
-      name: "Ethiopian Yirgacheffe 'Kochere'",
+      name: "Ethiopian Yirgacheffe 'Kochere'", short: "Ethiopia", cue: "Bright, floral, complex",
       roaster: "A Hill of Beans Coffee Roasters",
       roasterCity: "Omaha, NE",
       type: "Single origin",
@@ -95,7 +95,7 @@ window.FOREUNDER = {
     {
       id: "colombia", bagArt: "photos/bag-colombia.jpg", score: 4, scoreNote: "Friendly and sweet; better in the press than as espresso.",
       status: "press",
-      name: "Colombia",
+      name: "Colombia", short: "Colombia", cue: "Round, sweet, cocoa",
       roaster: "Stories Coffee Co.",
       roasterCity: "Omaha, NE",
       type: "Single origin",
