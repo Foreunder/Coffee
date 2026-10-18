@@ -90,7 +90,7 @@ window.FOREUNDER = {
       elevation: "5,900–6,500 ft", cert: "Fair Trade Certified Organic",
       expect: "Heirloom coffee from the birthplace of coffee, grown very high and fully washed. Bright, floral and complex, with crisp acidity balanced by natural sweetness. The lightest coffee on the bar.",
       scale: { body: 2, acidity: 4, roast: 2 },
-      recipe: "18 g in · about 40 g out · 94–96 °C", dialNote: "New bag. Light roast: start finer than 10 and run hotter. Kealey's oat-milk latte coffee."
+      recipe: "18 g in · 40 g out · grind 10 · 94 °C · about 30 s", dialNote: "Grind 10 at 94 °C ran 29.8 s to 39.4 g on 10/18: cleaner, fruity, tastes like dates. Grind 9 at 93 °C ran 38.5 s and came out lighter. Kealey's oat-milk latte coffee."
     },
     {
       id: "colombia", bagArt: "photos/bag-colombia.jpg", score: 4, scoreNote: "Friendly and sweet; better in the press than as espresso.",
