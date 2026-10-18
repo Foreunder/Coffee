@@ -937,5 +937,19 @@
     "drink": "Espresso (photo)",
     "session": "Morning (GaggiMate shot #10, 10:35 AM, 'Foreunder HOB Brazil' profile, 93°C, BBW 36 g)",
     "notes": "Bracket test, coarse side of grind 13 (#64). 27.0s, 1:1.99, peak 9.9 bar, avg pump flow 3.0 ml/s, 81.5 ml pumped, avg temp 95.3°C. Lighter crema than #64."
+  },
+  {
+    "n": 66,
+    "date": "2026-10-18",
+    "bean": "Hill of Beans Brazil Natural Legender Especial (Cerrado)",
+    "dose": 18,
+    "yield": 36.0,
+    "time": 46.8,
+    "grind": 12,
+    "estimated": false,
+    "taste": "",
+    "drink": "Espresso (photo)",
+    "session": "Morning (GaggiMate shot #11, 10:54 AM, 'Foreunder HOB Brazil' profile, 93°C, BBW 36 g)",
+    "notes": "Bracket test, fine side of grind 13. 46.8s, 1:2.00, peak 10.0 bar, avg pump flow 2.6 ml/s, 121.2 ml pumped, avg temp 97.0°C. Much slower than expected: one step finer than 13 added ~16 s (Brazil curve: 11=54s, 12=46.8s, 13=31s, 14=27s)."
   }
 ]
