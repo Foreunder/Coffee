@@ -59,6 +59,11 @@ header.crest{text-align:center;padding-block:28px 20px;display:flex;flex-directi
 section{padding-block:22px}
 h2{font:400 26px/1.15 var(--display);letter-spacing:.04em;margin:0 0 4px;text-wrap:balance}
 .sub{color:var(--muted);margin:0 0 16px;font-style:italic}
+/* Menu section headers: centered brass banner between rules, so they read as chapters, not items */
+body:not(.board) section > h2{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:14px;font-size:30px;letter-spacing:.14em;color:var(--brass);text-align:center;margin:8px 0 6px}
+body:not(.board) section > h2::before,body:not(.board) section > h2::after{content:"";height:3px;border-top:1px solid var(--brass);border-bottom:1px solid var(--brass);opacity:.6}
+body:not(.board) section > h2 + .sub{text-align:center;margin-bottom:20px;text-wrap:balance}
+body:not(.board) #past > h2{color:var(--muted)}
 
 /* Drinks list: menu-card rows */
 .drinks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
