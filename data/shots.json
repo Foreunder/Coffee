@@ -867,5 +867,19 @@
     "drink": "Milk drink, latte art pour (photo)",
     "session": "Evening (GaggiMate shot #4, 8:31 PM, Foreunder profile)",
     "notes": "26.7s, 1:2.0, peak 9.9 bar, avg pump flow 3.0 ml/s, 80.2 ml pumped, avg temp 94.5°C. Back-to-back with #59: second shot 3s slower at the same grind, the same first-fast/second-slower pattern seen with Rockbrook (#54/#55) and on 10/13."
+  },
+  {
+    "n": 61,
+    "date": "2026-10-18",
+    "bean": "Hill of Beans Ethiopian Yirgacheffe 'Kochere'",
+    "dose": 18,
+    "yield": 36.1,
+    "time": 38.5,
+    "grind": 9,
+    "estimated": false,
+    "taste": "",
+    "drink": "Espresso (photo)",
+    "session": "Morning (GaggiMate shot #5, 7:00 AM, Foreunder profile)",
+    "notes": "First Ethiopian shot. Profile unchanged (93°C, BBW 36 g); grind only. 38.5s, 1:2.0, peak 10.1 bar, avg pump flow 2.7 ml/s, 102.0 ml pumped, avg temp 96.5°C. Ran long: going back to grind 10 next shot."
   }
 ]
