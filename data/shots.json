@@ -839,5 +839,33 @@
     "drink": "Straight espresso (photo)",
     "session": "Morning (GaggiMate shot #2, 8:27 AM, Foreunder profile)",
     "notes": "30.5s, 1:2.01, peak 10.0 bar, avg pump flow 2.8 ml/s, 86.4 ml pumped, avg temp 95.7°C. One grind step finer (11 to 10) added 9s, far more than the ~3s estimate: this bean is very sensitive below 11. In range (slightly long). Crema much fuller and more even than #57, golden-tan across the whole surface. Grind 10 is the setting; try 94°C next only if it tastes flat."
+  },
+  {
+    "n": 59,
+    "date": "2026-10-17",
+    "bean": "Stories Colombia",
+    "dose": 18,
+    "yield": 35.5,
+    "time": 23.7,
+    "grind": 10,
+    "estimated": false,
+    "taste": "Not noted",
+    "drink": "Not noted",
+    "session": "Evening (GaggiMate shot #3, 8:27 PM, Foreunder profile)",
+    "notes": "23.7s, 1:1.97, peak 9.8 bar, avg pump flow 3.2 ml/s, 77.6 ml pumped, avg temp 93.8°C. First shot of the session ran ~7s faster than this morning's #58 at the same grind (30.5s)."
+  },
+  {
+    "n": 60,
+    "date": "2026-10-17",
+    "bean": "Stories Colombia",
+    "dose": 18,
+    "yield": 36.1,
+    "time": 26.7,
+    "grind": 10,
+    "estimated": false,
+    "taste": "Balanced (GaggiMate)",
+    "drink": "Milk drink, latte art pour (photo)",
+    "session": "Evening (GaggiMate shot #4, 8:31 PM, Foreunder profile)",
+    "notes": "26.7s, 1:2.0, peak 9.9 bar, avg pump flow 3.0 ml/s, 80.2 ml pumped, avg temp 94.5°C. Back-to-back with #59: second shot 3s slower at the same grind, the same first-fast/second-slower pattern seen with Rockbrook (#54/#55) and on 10/13."
   }
 ]
