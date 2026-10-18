@@ -94,7 +94,7 @@ window.FOREUNDER = {
     },
     {
       id: "colombia", bagArt: "photos/bag-colombia.jpg", score: 4, scoreNote: "Friendly and sweet; better in the press than as espresso.",
-      status: "press",
+      status: "bar",
       name: "Colombia", short: "Colombia", cue: "Round, sweet, cocoa",
       roaster: "Stories Coffee Co.",
       roasterCity: "Omaha, NE",
@@ -104,12 +104,12 @@ window.FOREUNDER = {
       roastLevel: "Medium",
       roastDate: "2026-08-12",
       opened: "2026-09-21",
-      bestFor: ["French press"],
+      bestFor: ["Espresso", "Milk drinks", "French press"],
       roasterNotes: "Peanut butter, orange, cocoa, fresh pastry",
-      expect: "A friendly, sweet Colombian. Past its espresso peak, so it now goes in the French press, where it still makes a round, cocoa-forward cup.",
+      expect: "A friendly, sweet Colombian from Huila with notes of peanut butter, orange and cocoa. Pulls a round, cocoa-forward double and makes a good French press too.",
       take: "My weekend French press coffee.",
       scale: { body: 3, acidity: 2, roast: 3 },
-      recipe: "30 g · Timemore C3S 25 clicks · 450 g water · 4 min steep"
+      recipe: "Espresso: 18 g in · 36 g out · grind 10. Press: 30 g · Timemore C3S 25 clicks · 450 g water · 4 min steep"
     },
     {
       id: "stories-espresso", score: 4, scoreNote: "A good chocolatey starter blend.",

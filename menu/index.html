@@ -61,7 +61,8 @@ h2{font:400 26px/1.15 var(--display);letter-spacing:.04em;margin:0 0 4px;text-wr
 .sub{color:var(--muted);margin:0 0 16px;font-style:italic}
 .ontap{margin:0 0 22px}
 .ontap .label{text-align:center;margin-bottom:10px}
-.taps{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.taps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.tap:last-child:nth-child(odd){grid-column:1/-1}
 .tap{display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left;background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--brass);border-radius:6px;padding:10px 12px;color:var(--ink);font:inherit;cursor:pointer;min-width:0}
 .tap .tn{font:400 20px/1.1 var(--display);letter-spacing:.03em}
 .tap .tm{font:500 12px/1.2 var(--label);letter-spacing:.08em;color:var(--brass)}
@@ -355,7 +356,7 @@ const STATUS_LABEL = { queued:"in the queue", making:"being made", ready:"ready 
 
 const beanById = Object.fromEntries(M.beans.map(b => [b.id, b]));
 const onBar = M.beans.filter(b => b.status === "bar");
-const pressBeans = M.beans.filter(b => b.status === "press");
+const pressBeans = M.beans.filter(b => b.status === "press" || (b.status === "bar" && (b.bestFor || []).includes("French press")));
 function beansFor(drink){ return drink.uses === "espresso" ? onBar : drink.uses === "press" ? pressBeans : []; }
 
 function freshness(b){
