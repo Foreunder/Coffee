@@ -881,5 +881,19 @@
     "drink": "Espresso (photo)",
     "session": "Morning (GaggiMate shot #5, 7:00 AM, Foreunder profile)",
     "notes": "First Ethiopian shot. Profile unchanged (93°C, BBW 36 g); grind only. 38.5s, 1:2.0, peak 10.1 bar, avg pump flow 2.7 ml/s, 102.0 ml pumped, avg temp 96.5°C. Ran long: going back to grind 10 next shot."
+  },
+  {
+    "n": 62,
+    "date": "2026-10-18",
+    "bean": "Hill of Beans Ethiopian Yirgacheffe 'Kochere'",
+    "dose": 18,
+    "yield": 39.4,
+    "time": 29.8,
+    "grind": 10,
+    "estimated": false,
+    "taste": "",
+    "drink": "Espresso (photo)",
+    "session": "Morning (GaggiMate shot #6, 7:33 AM, new 'Foreunder HOB Ethiopian' profile)",
+    "notes": "Roaster's recipe test vs #61: grind 10, 94°C, BBW 40 g. 29.8s, 1:2.19, peak 10.1 bar, avg pump flow 2.8 ml/s, 83.8 ml pumped, avg temp 97.2°C. On target time; even, thick crema."
   }
 ]
