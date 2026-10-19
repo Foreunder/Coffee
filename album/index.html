@@ -64,8 +64,8 @@ body.hold .paused{display:block}
   var qs = new URLSearchParams(location.search), store = {};
   try { store = JSON.parse(localStorage.getItem("foreunder.album") || "{}"); } catch(e) {}
   var order = qs.get("order") || store.order || "date";
-  var secs = Math.max(4, Number(qs.get("s")) || store.s || 12);
-  function save(){ try { localStorage.setItem("foreunder.album", JSON.stringify({order: order, s: secs})); } catch(e) {} }
+  var secs = Math.max(3, Number(qs.get("s")) || 8);   // seconds per photo; ?s= overrides
+  function save(){ try { localStorage.setItem("foreunder.album", JSON.stringify({order: order})); } catch(e) {} }
 
   var stage = document.getElementById("stage"), cap = document.getElementById("cap");
   var photos = [], seq = [], pos = -1, timer = null, held = false, cur = null, sig = "";
