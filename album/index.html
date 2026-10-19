@@ -21,14 +21,14 @@ body.ui{cursor:default}
 .slide img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transform:scale(1);transition:transform linear}
 .slide.on img{transform:scale(1.06)}
 /* caption: small, bottom-left, readable on any photo */
-.cap{position:fixed;left:max(2.4vw,16px);bottom:max(2.6vh,14px);display:flex;align-items:center;gap:.9em;font:400 clamp(14px,1.45vw,26px)/1.2 "Alegreya",Georgia,serif;color:var(--ink);text-shadow:0 1px 3px rgba(0,0,0,.9),0 0 18px rgba(0,0,0,.6);opacity:0;transition:opacity 1.2s ease;pointer-events:none}
+.cap{position:fixed;left:max(2.4vw,16px);bottom:max(2.6vh,14px);display:flex;align-items:center;gap:.9em;font:400 clamp(14px,1.45vw,26px)/1.2 "Alegreya",Georgia,serif;color:var(--ink);text-shadow:0 1px 3px rgba(0,0,0,.9),0 0 18px rgba(0,0,0,.6);opacity:0;transition:opacity 1.2s ease;pointer-events:none;background:rgba(8,14,11,.62);padding:.7em 1.1em .7em .8em;border-radius:.6em;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .cap.on{opacity:.92}
 .cap .crest{height:2.1em;width:auto;opacity:.9;filter:drop-shadow(0 1px 3px rgba(0,0,0,.8))}
 .cap .pl{font-style:italic}
-.cap .dt{font:500 .72em/1 "Alegreya Sans SC",sans-serif;letter-spacing:.16em;text-transform:lowercase;color:var(--brass);margin-top:.35em}
+.cap .tm{font:500 .9em/1.1 "Alegreya Sans SC",sans-serif;letter-spacing:.08em;color:var(--ink);margin-top:.3em}
+.cap .tm:empty{display:none}
+.cap .dt{font:500 .72em/1.2 "Alegreya Sans SC",sans-serif;letter-spacing:.12em;color:var(--ink);opacity:.85;margin-top:.3em}
 .cap .ex{display:block;font-size:.85em;color:var(--muted);margin-top:.2em}
-.cap .by{font-size:.78em;color:var(--muted);margin-top:.3em}
-.cap .by:empty{display:none}
 /* controls: appear on tap / remote key, fade after a few seconds */
 .ctl{position:fixed;left:50%;bottom:max(4vh,18px);transform:translateX(-50%);display:flex;gap:10px;align-items:center;background:var(--panel);border:1px solid var(--rule);border-radius:999px;padding:8px;opacity:0;transition:opacity .4s;pointer-events:none;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 body.ui .ctl{opacity:1;pointer-events:auto}
@@ -48,7 +48,7 @@ body.hold .paused{display:block}
 </head>
 <body>
 <div id="stage"></div>
-<div class="cap" id="cap"><img class="crest" src="../menu/crest-xs.png" alt=""><div><div class="pl" id="pl"></div><div class="dt" id="dt"></div><div class="by" id="by"></div></div></div>
+<div class="cap" id="cap"><img class="crest" src="../menu/crest-xs.png" alt=""><div><div class="pl" id="pl"></div><div class="tm" id="tm"></div><div class="dt" id="dt"></div></div></div>
 <div class="paused">paused</div>
 <div class="ctl" id="ctl" role="toolbar" aria-label="Album controls">
   <button type="button" id="b-prev" aria-label="Previous photo">‹ back</button>
@@ -75,10 +75,10 @@ body.hold .paused{display:block}
 
   // Camera time is local to where the photo was taken; read the digits as-is (no timezone shifting)
   function fmtDate(iso){
-    var m = /^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}):(\d{2}))?/.exec(iso || ""); if (!m) return "";
-    var out = MONTHS[+m[2] - 1] + " " + (+m[3]) + ", " + m[1];
-    if (m[4]){ var h = +m[4], ap = h < 12 ? "am" : "pm"; h = h % 12 || 12; out += " \u00b7 " + h + ":" + m[5] + " " + ap; }
-    return out;
+    var m = /^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}):(\d{2}))?/.exec(iso || ""); if (!m) return {date: "", time: ""};
+    var t = "";
+    if (m[4]){ var h = +m[4], ap = h < 12 ? "AM" : "PM"; h = h % 12 || 12; t = h + ":" + m[5] + " " + ap; }
+    return {date: MONTHS[+m[2] - 1] + " " + (+m[3]) + ", " + m[1], time: t};
   }
   function shuffle(a){ a = a.slice(); for (var i = a.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
   function build(keepId){
@@ -103,8 +103,9 @@ body.hold .paused{display:block}
       cap.classList.remove("on");
       setTimeout(function(){
         document.getElementById("pl").textContent = p.caption || p.place || "";
-        document.getElementById("dt").textContent = fmtDate(p.date);
-        document.getElementById("by").textContent = p.by ? p.by + "\u2019s photo" : "";
+        var f = fmtDate(p.date);
+        document.getElementById("tm").textContent = f.time;
+        document.getElementById("dt").textContent = f.date + (p.by ? "  \u00b7  " + p.by : "");
         cap.classList.add("on");
       }, 500);
       document.getElementById("count").textContent = (pos + 1) + " of " + seq.length;
