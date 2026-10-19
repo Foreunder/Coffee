@@ -42,6 +42,8 @@ SPOTS = [
     (56.3431, -2.8030, 4.00, "St Andrews, Scotland"),
     (55.9530, -3.1880, 9.00, "Edinburgh, Scotland"),
     (51.5072, -0.1276, 22.0, "London, England"),
+    (41.3032, -95.8941, 3.0, "Omaha Eppley Airfield"),
+    (33.4342, -112.0116, 3.0, "Phoenix Sky Harbor"),
     (33.4484, -112.0740, 60.0, "Phoenix, Arizona"),
     (41.2565, -96.0, 40.0, "Omaha, Nebraska"),
 ]
