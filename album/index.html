@@ -94,7 +94,7 @@ body.hold .paused{display:block}
       if (old){ old.classList.remove("on"); setTimeout(function(){ old.remove(); }, 1800); }
       cap.classList.remove("on");
       setTimeout(function(){
-        document.getElementById("pl").textContent = p.caption || p.place || "Foreunder Coffee House";
+        document.getElementById("pl").textContent = p.caption || p.place || "";
         document.getElementById("dt").textContent = fmtDate(p.date);
         cap.classList.add("on");
       }, 500);
@@ -164,7 +164,8 @@ body.hold .paused{display:block}
 
   function load(first){
     fetch("album.json?t=" + Date.now(), { cache: "no-store" }).then(function(r){ return r.json(); }).then(function(d){
-      var list = (d.photos || []).filter(function(p){ return p.src && !p.hide; });
+      var want = (qs.get("set") || "").toLowerCase();   // ?set=london shows one collection only
+      var list = (d.photos || []).filter(function(p){ return p.src && !p.hide && (!want || (p.set || "").toLowerCase().indexOf(want) !== -1); });
       list.sort(function(a, b){ return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
       var s = list.map(function(p){ return p.id + p.place + (p.caption || ""); }).join("|");
       if (s === sig) return; sig = s;
