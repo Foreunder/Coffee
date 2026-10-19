@@ -27,6 +27,8 @@ body.ui{cursor:default}
 .cap .pl{font-style:italic}
 .cap .tm{font:500 .9em/1.1 "Alegreya Sans SC",sans-serif;letter-spacing:.08em;color:var(--brass);margin-top:.3em}
 .cap .tm:empty{display:none}
+.cap .by{font-size:.78em;color:var(--muted);margin-top:.3em}
+.cap .by:empty{display:none}
 .cap .dt{font:500 .72em/1.2 "Alegreya Sans SC",sans-serif;letter-spacing:.12em;color:var(--brass);margin-top:.3em}
 .cap .ex{display:block;font-size:.85em;color:var(--muted);margin-top:.2em}
 /* controls: appear on tap / remote key, fade after a few seconds */
@@ -48,7 +50,7 @@ body.hold .paused{display:block}
 </head>
 <body>
 <div id="stage"></div>
-<div class="cap" id="cap"><img class="crest" src="../menu/crest-xs.png" alt=""><div><div class="pl" id="pl"></div><div class="tm" id="tm"></div><div class="dt" id="dt"></div></div></div>
+<div class="cap" id="cap"><img class="crest" src="../menu/crest-xs.png" alt=""><div><div class="pl" id="pl"></div><div class="tm" id="tm"></div><div class="dt" id="dt"></div><div class="by" id="by"></div></div></div>
 <div class="paused">paused</div>
 <div class="ctl" id="ctl" role="toolbar" aria-label="Album controls">
   <button type="button" id="b-prev" aria-label="Previous photo">‹ back</button>
@@ -105,7 +107,8 @@ body.hold .paused{display:block}
         document.getElementById("pl").textContent = p.caption || p.place || "";
         var f = fmtDate(p.date);
         document.getElementById("tm").textContent = f.time;
-        document.getElementById("dt").textContent = f.date + (p.by ? "  \u00b7  " + p.by : "");
+        document.getElementById("dt").textContent = f.date;
+        document.getElementById("by").textContent = p.by || "";
         cap.classList.add("on");
       }, 500);
       document.getElementById("count").textContent = (pos + 1) + " of " + seq.length;
