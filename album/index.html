@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Foreunder Album">
+<link rel="apple-touch-icon" href="../menu/icon.png">
+<link rel="icon" href="../menu/icon.png">
+<title>Foreunder Album</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=Alegreya:ital,wght@0,400;1,400&family=Alegreya+Sans+SC:wght@500&display=swap">
+<style>
+:root{--bg:#0b130f;--ink:#f0e7d3;--muted:#b9b09b;--brass:#c9a24f;--panel:rgba(15,28,22,.82);--rule:rgba(201,162,79,.35)}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);overflow:hidden;cursor:none;-webkit-user-select:none;user-select:none}
+body.ui{cursor:default}
+.slide{position:fixed;inset:0;opacity:0;transition:opacity 1.6s ease}
+.slide.on{opacity:1}
+.slide .bg{position:absolute;inset:-6%;background-size:cover;background-position:center;filter:blur(36px) brightness(.42) saturate(1.1)}
+.slide img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transform:scale(1);transition:transform linear}
+.slide.on img{transform:scale(1.06)}
+/* caption: small, bottom-left, readable on any photo */
+.cap{position:fixed;left:max(2.4vw,16px);bottom:max(2.6vh,14px);display:flex;align-items:center;gap:.9em;font:400 clamp(14px,1.45vw,26px)/1.2 "Alegreya",Georgia,serif;color:var(--ink);text-shadow:0 1px 3px rgba(0,0,0,.9),0 0 18px rgba(0,0,0,.6);opacity:0;transition:opacity 1.2s ease;pointer-events:none}
+.cap.on{opacity:.92}
+.cap .crest{height:2.1em;width:auto;opacity:.9;filter:drop-shadow(0 1px 3px rgba(0,0,0,.8))}
+.cap .pl{font-style:italic}
+.cap .dt{font:500 .72em/1 "Alegreya Sans SC",sans-serif;letter-spacing:.16em;text-transform:lowercase;color:var(--brass);margin-top:.35em}
+.cap .ex{display:block;font-size:.85em;color:var(--muted);margin-top:.2em}
+/* controls: appear on tap / remote key, fade after a few seconds */
+.ctl{position:fixed;left:50%;bottom:max(4vh,18px);transform:translateX(-50%);display:flex;gap:10px;align-items:center;background:var(--panel);border:1px solid var(--rule);border-radius:999px;padding:8px;opacity:0;transition:opacity .4s;pointer-events:none;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+body.ui .ctl{opacity:1;pointer-events:auto}
+.ctl button{border:1px solid transparent;background:transparent;color:var(--ink);font:500 clamp(13px,1.1vw,20px)/1 "Alegreya Sans SC",sans-serif;letter-spacing:.12em;text-transform:lowercase;border-radius:999px;padding:.75em 1.15em;cursor:pointer;min-height:44px}
+.ctl button.sel{border-color:var(--brass);color:var(--brass)}
+.ctl button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.ctl .sep{width:1px;align-self:stretch;background:var(--rule);margin:4px 2px}
+.ctl .n{color:var(--muted);font:400 clamp(12px,1vw,18px)/1 "Alegreya",serif;padding:0 .8em 0 .4em;white-space:nowrap}
+.paused{position:fixed;top:max(3vh,14px);right:max(2.4vw,16px);font:500 clamp(12px,1vw,18px)/1 "Alegreya Sans SC",sans-serif;letter-spacing:.16em;color:var(--brass);background:var(--panel);border:1px solid var(--rule);border-radius:999px;padding:.6em 1em;display:none}
+body.hold .paused{display:block}
+.empty{position:fixed;inset:0;display:grid;place-items:center;text-align:center;padding:24px}
+.empty h1{font:400 clamp(28px,4vw,56px)/1.1 "IM Fell English SC",Georgia,serif;letter-spacing:.04em;margin:.4em 0 .2em}
+.empty p{color:var(--muted);font:400 clamp(16px,1.6vw,26px)/1.4 "Alegreya",serif;margin:0}
+.empty img{height:clamp(90px,14vw,200px);width:auto}
+@media (prefers-reduced-motion:reduce){.slide img,.slide.on img{transform:none!important;transition:none}}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="cap" id="cap"><img class="crest" src="../menu/crest-xs.png" alt=""><div><div class="pl" id="pl"></div><div class="dt" id="dt"></div></div></div>
+<div class="paused">paused</div>
+<div class="ctl" id="ctl" role="toolbar" aria-label="Album controls">
+  <button type="button" id="b-prev" aria-label="Previous photo">‹ back</button>
+  <button type="button" id="b-play" aria-label="Pause or play">pause</button>
+  <button type="button" id="b-next" aria-label="Next photo">next ›</button>
+  <span class="sep"></span>
+  <button type="button" id="b-date">in order</button>
+  <button type="button" id="b-shuf">shuffle</button>
+  <span class="sep"></span>
+  <span class="n" id="count"></span>
+</div>
+<script>
+(function(){
+  // Settings: ?order=date|shuffle  ?s=seconds per photo  (remembered on this screen)
+  var qs = new URLSearchParams(location.search), store = {};
+  try { store = JSON.parse(localStorage.getItem("foreunder.album") || "{}"); } catch(e) {}
+  var order = qs.get("order") || store.order || "date";
+  var secs = Math.max(4, Number(qs.get("s")) || store.s || 12);
+  function save(){ try { localStorage.setItem("foreunder.album", JSON.stringify({order: order, s: secs})); } catch(e) {} }
+
+  var stage = document.getElementById("stage"), cap = document.getElementById("cap");
+  var photos = [], seq = [], pos = -1, timer = null, held = false, cur = null, sig = "";
+  var MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+  function fmtDate(iso){ var d = new Date(iso); return isNaN(d) ? "" : MONTHS[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear(); }
+  function shuffle(a){ a = a.slice(); for (var i = a.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function build(keepId){
+    seq = order === "shuffle" ? shuffle(photos) : photos.slice();
+    pos = -1;
+    if (keepId){ for (var i = 0; i < seq.length; i++) if (seq[i].id === keepId){ pos = i; break; } }
+  }
+
+  function show(p){
+    var s = document.createElement("div"); s.className = "slide";
+    var bg = document.createElement("div"); bg.className = "bg"; bg.style.backgroundImage = "url('" + p.src + "')";
+    var im = new Image(); im.alt = p.caption || p.place || "";
+    im.style.transitionDuration = (secs + 2) + "s";
+    // gentle pan direction varies per photo
+    im.style.transformOrigin = ["30% 40%","70% 40%","50% 30%","40% 65%","60% 60%"][Math.floor(Math.random() * 5)];
+    s.appendChild(bg); s.appendChild(im);
+    im.onload = function(){
+      stage.appendChild(s);
+      requestAnimationFrame(function(){ requestAnimationFrame(function(){ s.classList.add("on"); }); });
+      var old = cur; cur = s;
+      if (old){ old.classList.remove("on"); setTimeout(function(){ old.remove(); }, 1800); }
+      cap.classList.remove("on");
+      setTimeout(function(){
+        document.getElementById("pl").textContent = p.caption || p.place || "Foreunder Coffee House";
+        document.getElementById("dt").textContent = fmtDate(p.date);
+        cap.classList.add("on");
+      }, 500);
+      document.getElementById("count").textContent = (pos + 1) + " of " + seq.length;
+      preload();
+    };
+    im.onerror = function(){ step(1); };
+    im.src = p.src;
+  }
+  function preload(){ var n = seq[(pos + 1) % seq.length]; if (n){ var i = new Image(); i.src = n.src; } }
+
+  function step(d){
+    if (!seq.length) return;
+    pos += d;
+    if (pos >= seq.length){ if (order === "shuffle"){ var last = seq[seq.length - 1]; seq = shuffle(photos); if (seq.length > 1 && seq[0] === last){ seq.push(seq.shift()); } } pos = 0; }
+    if (pos < 0) pos = seq.length - 1;
+    show(seq[pos]);
+    schedule();
+  }
+  function schedule(){ clearTimeout(timer); if (!held) timer = setTimeout(function(){ step(1); }, secs * 1000); }
+
+  function setHeld(h){ held = h; document.body.classList.toggle("hold", h); document.getElementById("b-play").textContent = h ? "play" : "pause"; schedule(); }
+  function setOrder(o){
+    order = o; save();
+    document.getElementById("b-date").classList.toggle("sel", o === "date");
+    document.getElementById("b-shuf").classList.toggle("sel", o === "shuffle");
+    var id = seq[pos] && seq[pos].id; build(id);
+    if (seq.length) document.getElementById("count").textContent = (Math.max(pos, 0) + 1) + " of " + seq.length;
+    schedule();
+  }
+
+  // Controls appear on any tap or remote key, then fade
+  var uiT = null;
+  function poke(){ document.body.classList.add("ui"); clearTimeout(uiT); uiT = setTimeout(function(){ document.body.classList.remove("ui"); if (document.activeElement && document.activeElement.blur) document.activeElement.blur(); }, 5000); }
+  document.getElementById("b-prev").onclick = function(){ step(-1); poke(); };
+  document.getElementById("b-next").onclick = function(){ step(1); poke(); };
+  document.getElementById("b-play").onclick = function(){ setHeld(!held); poke(); };
+  document.getElementById("b-date").onclick = function(){ setOrder("date"); poke(); };
+  document.getElementById("b-shuf").onclick = function(){ setOrder("shuffle"); poke(); };
+  document.addEventListener("pointerup", function(e){
+    if (e.target.closest && e.target.closest(".ctl")) return;
+    if (!document.body.classList.contains("ui")){ poke(); return; }
+    var x = e.clientX / innerWidth;           // controls already showing: side taps flip photos
+    if (x < .25) step(-1); else if (x > .75) step(1);
+    poke();
+  });
+  document.addEventListener("mousemove", poke);
+  document.addEventListener("keydown", function(e){
+    var k = e.key;
+    var uiOn = document.body.classList.contains("ui");
+    poke();
+    if (!uiOn && (k === "Enter" || k === " ")){ e.preventDefault(); document.getElementById("b-play").focus(); return; }
+    if (uiOn && (k === "ArrowLeft" || k === "ArrowRight")){            // move between buttons with the remote
+      var bs = Array.prototype.slice.call(document.querySelectorAll(".ctl button")), i = bs.indexOf(document.activeElement);
+      if (i !== -1){ e.preventDefault(); bs[Math.max(0, Math.min(bs.length - 1, i + (k === "ArrowRight" ? 1 : -1)))].focus(); return; }
+    }
+    if (k === "ArrowRight" || k === "MediaTrackNext" || k === "MediaFastForward"){ e.preventDefault(); step(1); }
+    else if (k === "ArrowLeft" || k === "MediaTrackPrevious" || k === "MediaRewind"){ e.preventDefault(); step(-1); }
+    else if (k === "MediaPlayPause" || k === "p"){ setHeld(!held); }
+    else if (k === "s" || k === "ArrowUp" || k === "ArrowDown"){ e.preventDefault(); setOrder(order === "shuffle" ? "date" : "shuffle"); }
+  });
+
+  // Keep the iPad screen awake while the album runs
+  var lock = null;
+  function wake(){ if (navigator.wakeLock && document.visibilityState === "visible") navigator.wakeLock.request("screen").then(function(l){ lock = l; }).catch(function(){}); }
+  document.addEventListener("visibilitychange", wake); wake();
+
+  function load(first){
+    fetch("album.json?t=" + Date.now(), { cache: "no-store" }).then(function(r){ return r.json(); }).then(function(d){
+      var list = (d.photos || []).filter(function(p){ return p.src && !p.hide; });
+      list.sort(function(a, b){ return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
+      var s = list.map(function(p){ return p.id + p.place + (p.caption || ""); }).join("|");
+      if (s === sig) return; sig = s;
+      photos = list;
+      if (!photos.length){ empty(); return; }
+      var e = document.querySelector(".empty"); if (e) e.remove();
+      var id = seq[pos] && seq[pos].id;
+      build(id);
+      if (first || !cur) step(1);
+    }).catch(function(){ if (first) empty(); });
+  }
+  function empty(){
+    if (document.querySelector(".empty")) return;
+    var e = document.createElement("div"); e.className = "empty";
+    e.innerHTML = '<div><img src="../menu/crest-sm.png" alt=""><h1>The Foreunder Album</h1><p>No photos yet. Send some to Claude to add them.</p></div>';
+    document.body.appendChild(e);
+  }
+
+  setOrder(order); load(true);
+  setInterval(load, 30 * 60 * 1000);   // pick up new photos without touching the TV
+})();
+</script>
+</body>
+</html>
