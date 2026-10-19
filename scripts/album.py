@@ -69,6 +69,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("paths", nargs="+")
     ap.add_argument("--place"); ap.add_argument("--date"); ap.add_argument("--caption")
+    ap.add_argument("--place-fallback", help="place to use when the photo has no GPS")
     a = ap.parse_args()
     os.makedirs(PHOTOS, exist_ok=True)
     data = json.load(open(MANIFEST)) if os.path.exists(MANIFEST) else {"photos": []}
@@ -86,7 +87,7 @@ def main():
         place = a.place
         if not place:
             g = gps(exif)
-            place = nearest_place(*g) if g else ""
+            place = nearest_place(*g) if g else (a.place_fallback or "")
         im = ImageOps.exif_transpose(im).convert("RGB")
         im.thumbnail((LONG_EDGE, LONG_EDGE), Image.LANCZOS)
         name = f"{when:%Y%m%d-%H%M%S}-{pid}.jpg"
