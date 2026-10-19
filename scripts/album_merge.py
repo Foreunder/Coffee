@@ -14,6 +14,17 @@ from album import nearest_place, ALBUM, PHOTOS, MANIFEST
 
 # (lat, lon, radius_km, label) — checked smallest radius first
 SPOTS = [
+    (51.5163, -0.0809, 0.12, "Duck & Waffle, London"),
+    (51.5128, -0.0835, 0.12, "Leadenhall Market, London"),
+    (51.5195, -0.1816, 0.30, "Novotel Paddington, London"),
+    (51.5100, -0.1345, 0.18, "Piccadilly Circus, London"),
+    (51.5103, -0.1301, 0.12, "Leicester Square, London"),
+    (51.5130, -0.1340, 0.30, "West End, London"),
+    (51.5048, -0.1284, 0.12, "Horse Guards, Whitehall"),
+    (51.5025, -0.1340, 0.35, "St James's Park, London"),
+    (56.3432, -2.8027, 0.18, "Old Course 18th, St Andrews"),
+    (56.3450, -2.8080, 1.10, "Old Course, St Andrews"),
+    (56.0300, -2.8450, 0.90, "Gullane Golf Club"),
     (51.5194, -0.1270, 0.30, "British Museum, London"),
     (51.5021, -0.1291, 0.12, "Churchill War Rooms, London"),
     (51.4993, -0.1273, 0.20, "Westminster Abbey, London"),
@@ -54,14 +65,18 @@ def km(a, b, c, d):
     x = (d - b) * p * math.cos((a + c) / 2 * p); y = (c - a) * p
     return 6371 * math.hypot(x, y)
 
-def name(ll):
+def name(ll, when=""):
     for la, lo, r, label in SPOTS:
-        if km(ll[0], ll[1], la, lo) <= r: return label
+        if km(ll[0], ll[1], la, lo) <= r:
+            if label.startswith("Wembley Stadium") and not ("2026-09-19T14" <= when <= "2026-09-19T22"):
+                return "Wembley Park, London"
+            return label
     return nearest_place(*ll)
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("stage"); ap.add_argument("--set", default="")
+    ap.add_argument("--relabel", action="store_true", help="also refresh place names of photos already in the album")
     ap.add_argument("--from", dest="dfrom"); ap.add_argument("--to", dest="dto")
     a = ap.parse_args()
     recs = [json.load(open(f)) for f in glob.glob(os.path.join(a.stage, "*.json"))]
@@ -69,7 +84,7 @@ def main():
     recs = [r for r in recs if r["date"]]
     if a.dfrom: recs = [r for r in recs if r["date"][:10] >= a.dfrom]
     if a.dto: recs = [r for r in recs if r["date"][:10] <= a.dto]
-    for r in recs: r["place"] = name(r["ll"]) if r.get("ll") else ""
+    for r in recs: r["place"] = name(r["ll"], r["date"]) if r.get("ll") else ""
     # borrow a place from the nearest photo in time (within 90 min)
     placed = sorted([(datetime.fromisoformat(r["date"]), r["place"]) for r in recs if r["place"]])
     for r in recs:
@@ -82,7 +97,11 @@ def main():
     os.makedirs(PHOTOS, exist_ok=True)
     added = 0
     for r in recs:
-        if r["id"] in have: continue
+        if r["id"] in have:
+            if a.relabel:
+                for p in data["photos"]:
+                    if p["id"] == r["id"]: p["place"] = r["place"]
+            continue
         fn = f"{r['date'].replace('-', '').replace(':', '').replace('T', '-')}-{r['id']}.jpg"
         shutil.copy(os.path.join(a.stage, r["id"] + ".jpg"), os.path.join(PHOTOS, fn))
         rec = {"id": r["id"], "src": "photos/" + fn, "date": r["date"], "place": r["place"], "w": r["w"], "h": r["h"]}
