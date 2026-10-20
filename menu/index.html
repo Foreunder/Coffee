@@ -41,9 +41,7 @@ a{color:var(--brass)}
 button,input,select,textarea{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--brass);outline-offset:3px}
 .wrap{max-width:720px;margin:0 auto}
-.tartan{height:10px;margin-inline:-16px;background:
-  repeating-linear-gradient(90deg,transparent 0 22px,rgba(201,162,79,.55) 22px 24px,transparent 24px 46px,rgba(138,42,53,.8) 46px 52px,transparent 52px 70px),
-  repeating-linear-gradient(0deg,var(--panel-2) 0 3px,var(--ground) 3px 6px)}
+.tartan{height:18px;flex:none;margin-inline:-16px;background:repeating-linear-gradient(45deg,rgba(0,0,0,.22) 0 1px,transparent 1px 3px),repeating-linear-gradient(90deg,transparent 0 10px,rgba(122,36,48,.78) 10px 17px,transparent 17px 19px,rgba(201,162,79,.9) 19px 20px,transparent 20px 22px,rgba(122,36,48,.78) 22px 29px,transparent 29px 38px,rgba(5,10,8,.55) 38px 46px,transparent 46px 48px),repeating-linear-gradient(0deg,transparent 0 10px,rgba(122,36,48,.78) 10px 17px,transparent 17px 19px,rgba(201,162,79,.9) 19px 20px,transparent 20px 22px,rgba(122,36,48,.78) 22px 29px,transparent 29px 38px,rgba(5,10,8,.55) 38px 46px,transparent 46px 48px),#1b3a2a;box-shadow:inset 0 -1px 0 rgba(201,162,79,.55)}
 .label{font:500 13px/1.2 var(--label);letter-spacing:.14em;text-transform:lowercase;color:var(--brass)}
 
 /* Crest */
@@ -186,6 +184,7 @@ textarea{resize:vertical;min-height:64px}
 footer{color:var(--muted);text-align:center;font-size:14px;padding-block:28px 8px;font-style:italic}
 
 /* ===== TV board ===== */
+body.board .tartan{height:calc(1.4*var(--u));flex:none}
 body.board{--u:min(1vw,1.7778vh);padding-block:0;overflow:hidden;font-size:clamp(16px,calc(1.35*var(--u)),26px);height:100vh}
 .board-grid{display:grid;grid-template-columns:1.25fr 1.25fr .9fr;gap:calc(3*var(--u));padding:calc(2.5*var(--u)) calc(3*var(--u));height:calc(100vh - 10px);box-sizing:border-box}
 .board-grid > div{min-width:0;display:flex;flex-direction:column;gap:calc(1.2*var(--u))}
