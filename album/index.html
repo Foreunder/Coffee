@@ -141,6 +141,14 @@ body.hold .paused{display:block}
 
   // Controls appear on any tap or remote key, then fade
   var uiT = null;
+  // Browsers only allow full screen after a button press, so the first OK / tap hides Silk's address bar
+  function full(){
+    var el = document.documentElement, fs = document.fullscreenElement || document.webkitFullscreenElement;
+    if (fs) return;
+    try { (el.requestFullscreen || el.webkitRequestFullscreen || function(){}).call(el); } catch(e) {}
+  }
+  document.addEventListener("keydown", full, true);
+  document.addEventListener("pointerup", full, true);
   function poke(){ document.body.classList.add("ui"); clearTimeout(uiT); uiT = setTimeout(function(){ document.body.classList.remove("ui"); if (document.activeElement && document.activeElement.blur) document.activeElement.blur(); }, 5000); }
   document.getElementById("b-prev").onclick = function(){ step(-1); poke(); };
   document.getElementById("b-next").onclick = function(){ step(1); poke(); };
