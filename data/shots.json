@@ -951,5 +951,61 @@
     "drink": "Espresso (photo)",
     "session": "Morning (GaggiMate shot #11, 10:54 AM, 'Foreunder HOB Brazil' profile, 93°C, BBW 36 g)",
     "notes": "Bracket test, fine side of grind 13. 46.8s, 1:2.00, peak 10.0 bar, avg pump flow 2.6 ml/s, 121.2 ml pumped, avg temp 97.0°C. Much slower than expected: one step finer than 13 added ~16 s (Brazil curve: 11=54s, 12=46.8s, 13=31s, 14=27s)."
+  },
+  {
+    "n": 67,
+    "date": "2026-10-22",
+    "bean": "Hill of Beans Ethiopian Yirgacheffe 'Kochere'",
+    "dose": 18,
+    "yield": 39.5,
+    "time": 34.7,
+    "grind": 10,
+    "estimated": false,
+    "taste": "Marked Balanced, 5 stars in GaggiMate",
+    "drink": "Espresso (photo)",
+    "session": "Evening (GaggiMate shot #12, 7:04 PM, 'Foreunder HOB Ethiopian' profile, 94°C, BBW 40 g)",
+    "notes": "Grind 10 repeat. 34.7s, 1:2.19, peak 10.1 bar, avg pump flow 2.8 ml/s, 98.2 ml pumped, avg temp 96.6°C. Evening set ranged 24.7-34.7 s at the same grind."
+  },
+  {
+    "n": 68,
+    "date": "2026-10-22",
+    "bean": "Hill of Beans Ethiopian Yirgacheffe 'Kochere'",
+    "dose": 18,
+    "yield": 39.7,
+    "time": 24.7,
+    "grind": 10,
+    "estimated": false,
+    "taste": "Marked Balanced, 5 stars in GaggiMate",
+    "drink": "Espresso (photo)",
+    "session": "Evening (GaggiMate shot #13, 7:09 PM, 'Foreunder HOB Ethiopian' profile, 94°C, BBW 40 g)",
+    "notes": "Grind 10 repeat. 24.7s, 1:2.21, peak 9.8 bar, avg pump flow 3.2 ml/s, 78.8 ml pumped, avg temp 94.9°C. Evening set ranged 24.7-34.7 s at the same grind."
+  },
+  {
+    "n": 69,
+    "date": "2026-10-22",
+    "bean": "Hill of Beans Ethiopian Yirgacheffe 'Kochere'",
+    "dose": 18,
+    "yield": 39.6,
+    "time": 30.7,
+    "grind": 10,
+    "estimated": false,
+    "taste": "Marked Balanced, 5 stars in GaggiMate",
+    "drink": "Espresso (photo)",
+    "session": "Evening (GaggiMate shot #14, 7:23 PM, 'Foreunder HOB Ethiopian' profile, 94°C, BBW 40 g)",
+    "notes": "Grind 10 repeat. 30.7s, 1:2.20, peak 10.0 bar, avg pump flow 3.0 ml/s, 93.0 ml pumped, avg temp 97.6°C. Evening set ranged 24.7-34.7 s at the same grind."
+  },
+  {
+    "n": 70,
+    "date": "2026-10-22",
+    "bean": "Hill of Beans Ethiopian Yirgacheffe 'Kochere'",
+    "dose": 18,
+    "yield": 40.0,
+    "time": 34.5,
+    "grind": 10,
+    "estimated": false,
+    "taste": "Marked Balanced, 5 stars in GaggiMate",
+    "drink": "Espresso (photo)",
+    "session": "Evening (GaggiMate shot #15, 7:26 PM, 'Foreunder HOB Ethiopian' profile, 94°C, BBW 40 g)",
+    "notes": "Grind 10 repeat. 34.5s, 1:2.22, peak 9.9 bar, avg pump flow 2.8 ml/s, 96.0 ml pumped, avg temp 97.1°C. Evening set ranged 24.7-34.7 s at the same grind."
   }
 ]
