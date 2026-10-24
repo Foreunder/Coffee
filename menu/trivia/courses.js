@@ -1,5 +1,6 @@
 // Courses for the Foreunder Pub Quiz. Each hole's par sets the question: par 3 = easy, par 4 = normal, par 5 = hard.
-// pars = championship setup from the most recent Masters / Open / U.S. Open played there.
+// pars = championship setup from the most recent Masters / Open / U.S. Open played there
+// (Open venues last used before 1933 show today's club card; Riviera shows its current tour card).
 // names = famous hole names shown on the tee countdown.
 window.COURSES = [
   {"id": "foreunder", "name": "Foreunder Links", "loc": "The pub room", "tour": "house", "pars": [4, 3, 5, 4, 4, 3, 4, 5, 4, 4, 3, 5, 4, 4, 3, 4, 5, 4], "names": {}, "note": "House course"},
@@ -17,5 +18,32 @@ window.COURSES = [
   {"id": "prestwick", "name": "Prestwick", "loc": "Prestwick, Scotland", "tour": "open", "pars": [4, 3, 5, 4, 3, 4, 4, 4, 4, 4, 3, 5, 4, 4, 4, 4, 4, 4], "names": {"3": "Cardinal", "5": "Himalayas", "17": "Alps"}, "note": "24 Opens, last 1925 (today's card)"},
   {"id": "musselburgh", "name": "Musselburgh Old Links", "loc": "Musselburgh, Scotland", "tour": "open", "pars": [3, 4, 4, 4, 3, 4, 5, 3, 4], "names": {}, "note": "6 Opens, last 1889 (9 holes)"},
   {"id": "cinqueports", "name": "Royal Cinque Ports", "loc": "Deal, England", "tour": "open", "pars": [4, 4, 5, 3, 5, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 5, 4, 4], "names": {}, "note": "2 Opens, last 1920 (today's card)"},
-  {"id": "princes", "name": "Prince's", "loc": "Sandwich Bay, England", "tour": "open", "pars": [4, 3, 5, 4, 4, 5, 4, 3, 4, 4, 5, 3, 4, 4, 4, 5, 3, 4], "names": {}, "note": "1 Open, 1932 (today's Dunes/Shore)"}
+  {"id": "princes", "name": "Prince's", "loc": "Sandwich Bay, England", "tour": "open", "pars": [4, 3, 5, 4, 4, 5, 4, 3, 4, 4, 5, 3, 4, 4, 4, 5, 3, 4], "names": {}, "note": "1 Open, 1932 (today's Dunes/Shore)"},
+  {"id": "pebblebeach", "name": "Pebble Beach", "loc": "Pebble Beach, CA", "tour": "usopen", "pars": [4, 4, 4, 4, 3, 5, 3, 4, 4, 4, 4, 3, 4, 5, 4, 4, 3, 5], "names": {}, "note": "6 U.S. Opens, last 2019; next 2027, 2032"},
+  {"id": "oakmont", "name": "Oakmont", "loc": "Oakmont, PA", "tour": "usopen", "pars": [4, 4, 4, 5, 4, 3, 4, 3, 4, 4, 4, 5, 3, 4, 4, 3, 4, 4], "names": {"3": "Church Pews"}, "note": "10 U.S. Opens, last 2025; next 2033"},
+  {"id": "shinnecockhills", "name": "Shinnecock Hills", "loc": "Southampton, NY", "tour": "usopen", "pars": [4, 3, 4, 4, 5, 4, 3, 4, 4, 4, 3, 4, 4, 4, 4, 5, 3, 4], "names": {"7": "Redan"}, "note": "6 U.S. Opens, last 2026"},
+  {"id": "wingedfootwest", "name": "Winged Foot West", "loc": "Mamaroneck, NY", "tour": "usopen", "pars": [4, 4, 3, 4, 4, 4, 3, 4, 5, 3, 4, 5, 3, 4, 4, 4, 4, 4], "names": {"10": "Pulpit"}, "note": "6 U.S. Opens, last 2020; next 2028"},
+  {"id": "pinehurstno2", "name": "Pinehurst No. 2", "loc": "Pinehurst, NC", "tour": "usopen", "pars": [4, 4, 4, 4, 5, 3, 4, 4, 3, 5, 4, 4, 4, 4, 3, 4, 3, 4], "names": {}, "note": "4 U.S. Opens, last 2024; next 2029, 2035"},
+  {"id": "merioneast", "name": "Merion East", "loc": "Ardmore, PA", "tour": "usopen", "pars": [4, 5, 3, 5, 4, 4, 4, 4, 3, 4, 4, 4, 3, 4, 4, 4, 3, 4], "names": {}, "note": "5 U.S. Opens, last 2013; next 2030"},
+  {"id": "thecountryclub", "name": "The Country Club", "loc": "Brookline, MA", "tour": "usopen", "pars": [4, 3, 4, 4, 4, 3, 4, 5, 4, 4, 3, 4, 4, 5, 4, 3, 4, 4], "names": {"10": "Himalayas", "11": "Redan"}, "note": "4 U.S. Opens, last 2022"},
+  {"id": "torreypinessouth", "name": "Torrey Pines South", "loc": "San Diego, CA", "tour": "usopen", "pars": [4, 4, 3, 4, 4, 4, 4, 3, 5, 4, 3, 4, 5, 4, 4, 3, 4, 5], "names": {}, "note": "2 U.S. Opens, last 2021"},
+  {"id": "bethpageblack", "name": "Bethpage Black", "loc": "Farmingdale, NY", "tour": "usopen", "pars": [4, 4, 3, 5, 4, 4, 4, 3, 4, 4, 4, 4, 5, 3, 4, 4, 3, 4], "names": {}, "note": "2 U.S. Opens, last 2009"},
+  {"id": "olympicclublake", "name": "Olympic Club Lake", "loc": "San Francisco, CA", "tour": "usopen", "pars": [4, 4, 3, 4, 4, 4, 4, 3, 4, 4, 4, 4, 3, 4, 3, 5, 5, 4], "names": {}, "note": "5 U.S. Opens, last 2012"},
+  {"id": "oaklandhillssout", "name": "Oakland Hills South", "loc": "Bloomfield Hills, MI", "tour": "usopen", "pars": [4, 5, 3, 4, 4, 4, 4, 4, 3, 4, 4, 5, 3, 4, 4, 4, 3, 4], "names": {}, "note": "6 U.S. Opens, last 1996; next 2034"},
+  {"id": "baltusrollower", "name": "Baltusrol Lower", "loc": "Springfield, NJ", "tour": "usopen", "pars": [4, 4, 4, 3, 4, 4, 4, 4, 3, 4, 4, 3, 4, 4, 4, 3, 5, 5], "names": {}, "note": "4 U.S. Opens, last 1993"},
+  {"id": "chambersbay", "name": "Chambers Bay", "loc": "University Place, WA", "tour": "usopen", "pars": [4, 4, 3, 4, 4, 4, 4, 5, 3, 4, 4, 4, 4, 4, 3, 4, 3, 5], "names": {}, "note": "1 U.S. Open, last 2015"},
+  {"id": "erinhills", "name": "Erin Hills", "loc": "Erin, WI", "tour": "usopen", "pars": [5, 4, 4, 4, 4, 3, 5, 4, 3, 4, 4, 4, 3, 5, 4, 3, 4, 5], "names": {}, "note": "1 U.S. Open, last 2017"},
+  {"id": "losangelesccnort", "name": "Los Angeles CC North", "loc": "Los Angeles, CA", "tour": "usopen", "pars": [5, 4, 4, 3, 4, 4, 3, 5, 3, 4, 3, 4, 4, 5, 3, 4, 4, 4], "names": {}, "note": "1 U.S. Open, last 2023"},
+  {"id": "southernhills", "name": "Southern Hills", "loc": "Tulsa, OK", "tour": "usopen", "pars": [4, 4, 4, 4, 5, 3, 4, 3, 4, 4, 3, 4, 5, 3, 4, 4, 4, 4], "names": {}, "note": "3 U.S. Opens, last 2001"},
+  {"id": "congressionalblu", "name": "Congressional Blue", "loc": "Bethesda, MD", "tour": "usopen", "pars": [4, 3, 4, 4, 4, 5, 3, 4, 5, 3, 4, 4, 3, 4, 4, 5, 4, 4], "names": {}, "note": "3 U.S. Opens, last 2011"},
+  {"id": "olympiafieldsnor", "name": "Olympia Fields North", "loc": "Olympia Fields, IL", "tour": "usopen", "pars": [5, 4, 4, 3, 4, 5, 3, 4, 4, 4, 4, 4, 4, 4, 3, 4, 3, 4], "names": {}, "note": "2 U.S. Opens, last 2003"},
+  {"id": "hazeltinenationa", "name": "Hazeltine National", "loc": "Chaska, MN", "tour": "usopen", "pars": [4, 4, 5, 3, 4, 4, 5, 3, 4, 4, 5, 4, 3, 4, 5, 4, 3, 4], "names": {}, "note": "2 U.S. Opens, last 1991"},
+  {"id": "medinahno3", "name": "Medinah No. 3", "loc": "Medinah, IL", "tour": "usopen", "pars": [4, 3, 4, 4, 5, 4, 5, 3, 4, 5, 4, 4, 3, 5, 4, 4, 3, 4], "names": {}, "note": "3 U.S. Opens, last 1990"},
+  {"id": "oakhilleast", "name": "Oak Hill East", "loc": "Rochester, NY", "tour": "usopen", "pars": [4, 4, 3, 5, 4, 3, 4, 4, 4, 4, 3, 4, 5, 4, 3, 4, 4, 4], "names": {}, "note": "3 U.S. Opens, last 1989"},
+  {"id": "inverness", "name": "Inverness", "loc": "Toledo, OH", "tour": "usopen", "pars": [4, 4, 3, 4, 4, 3, 4, 5, 4, 4, 4, 3, 5, 4, 4, 4, 4, 4], "names": {}, "note": "4 U.S. Opens, last 1979"},
+  {"id": "cherryhills", "name": "Cherry Hills", "loc": "Cherry Hills Village, CO", "tour": "usopen", "pars": [4, 4, 4, 4, 5, 3, 4, 3, 4, 4, 5, 3, 4, 4, 3, 4, 5, 4], "names": {}, "note": "3 U.S. Opens, last 1978"},
+  {"id": "atlantaathleticc", "name": "Atlanta Athletic Club", "loc": "Johns Creek, GA", "tour": "usopen", "pars": [4, 4, 4, 3, 5, 4, 3, 4, 4, 4, 4, 5, 4, 4, 3, 4, 3, 4], "names": {}, "note": "1 U.S. Open, last 1976"},
+  {"id": "championscypress", "name": "Champions (Cypress Creek)", "loc": "Houston, TX", "tour": "usopen", "pars": [4, 4, 4, 3, 4, 4, 4, 3, 5, 4, 4, 3, 5, 4, 4, 3, 4, 4], "names": {}, "note": "1 U.S. Open, last 1969"},
+  {"id": "bellerive", "name": "Bellerive", "loc": "Town and Country, MO", "tour": "usopen", "pars": [4, 4, 3, 4, 4, 3, 4, 5, 4, 4, 4, 4, 3, 4, 4, 3, 5, 4], "names": {}, "note": "1 U.S. Open, last 1965"},
+  {"id": "riviera", "name": "Riviera", "loc": "Pacific Palisades, CA", "tour": "usopen", "pars": [5, 4, 4, 3, 4, 3, 4, 4, 4, 4, 5, 4, 4, 3, 4, 3, 5, 4], "names": {}, "note": "1 U.S. Open, last 1948; next 2031"}
 ];
