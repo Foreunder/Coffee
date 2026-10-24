@@ -60,12 +60,12 @@ a{color:var(--brass)}
 <script>
 (function(){
   // The Range: solo practice on your phone, no TV. Pick a hickory club for the difficulty:
-  // Brassie (driver) = hard, Mashie (5-iron) = normal, Putting Cleek (putter) = easy.
+  // Brassie (driver) = hard, Mashie-Niblick (5-iron) = normal, Putting Cleek (putter) = easy.
   // Questions come from Open Trivia DB (opentdb.com, CC BY-SA 4.0) by difficulty, topped up with house questions.
   var app = document.getElementById("app");
   var CLUBS = [
     { id: "play", name: "Brassie", now: "driver", level: "hard", hit: "Split the fairway!", miss: ["Into the gorse.", "Out of bounds.", "Snap hook."] },
-    { id: "mashie", name: "Mashie", now: "5-iron", level: "medium", hit: "Pin high!", miss: ["Thinned it.", "Short-sided.", "In the pot bunker."] },
+    { id: "mashie", name: "Mashie-Niblick", now: "5-iron", level: "medium", hit: "Pin high!", miss: ["Thinned it.", "Short-sided.", "In the pot bunker."] },
     { id: "cleek", name: "Putting Cleek", now: "putter", level: "easy", hit: "Holed it!", miss: ["Lipped out.", "Three-jacked.", "Never up, never in."] }
   ];
   var BUCKET = 10, LETTERS = ["A","B","C","D"], colors = ["var(--A)","var(--B)","var(--C)","var(--D)"];
@@ -94,7 +94,7 @@ a{color:var(--brass)}
 
   // ---- questions ----
   function house(level){
-    // Our own questions are untagged; they count as Mashie (normal) shots.
+    // Our own questions are untagged; they count as Mashie-Niblick (normal) shots.
     return level === "medium" ? (window.QUIZ || []).map(function(q){ return { c: q.c, q: q.q, a: q.a, f: q.f || "" }; }) : [];
   }
   function fetchLevel(level){
