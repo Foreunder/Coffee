@@ -88,7 +88,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
   // The quizmaster phone has two views: "play" looks exactly like everyone else's; "host" adds the controls on top.
   var HOST = PQ.store("foreunder.quiz.view") === "host";
   var room = (PQ.qs.get("room") || "").toUpperCase().replace(/[^A-Z]/g, "").slice(0, 4);
-  var V = null, endsAt = 0, status = "", sub = null, retry = null, lastSeen = 0, rejoinAt = 0, finding = false;
+  var V = null, endsAt = 0, status = "", sub = null, retry = null, lastSeen = 0, rejoinAt = 0, finding = false, myPick = null;
   var pending = { name: PQ.store("foreunder.name") || "", team: PQ.store("foreunder.quiz.team") || "", newTeam: false };
 
   function header(){ return el("div",{class:"top"}, el("img",{src:"../crest-sm.png",alt:""}), el("div",null, el("h1",{text:"Pub Quiz"}), el("div",{class:"sub",text: room ? "Room " + room + (V && V.me && V.me.team ? " · " + V.me.team : "") : "foreunder coffee house"}))); }
@@ -119,9 +119,16 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
     if (age > PQ.STALE_SECS){ if (!V) { status = "The quiz isn't running on the TV right now. Open foreunder.github.io/Coffee/quiz on the TV to start one."; render(); } return; }
     lastSeen = Date.now(); status = "";
     // Keep my own pick on screen until the TV's batched update catches up.
-    var keep = V && V.phase === "question" && d.phase === "question" && V.i === d.i && V.mine ? V.mine : null;
     V = toView(d);
-    if (keep && !V.mine && (V.q.gone || []).indexOf(keep.choice) === -1) V.mine = keep;
+    // My latest pick wins over an older answer still in flight from the TV (its updates are batched).
+    // If the TV still disagrees a few seconds later, the change was lost on the way: send it again once.
+    if (myPick && V.phase === "question" && myPick.i === V.i && (V.q.gone || []).indexOf(myPick.choice) === -1){
+      if (V.mine && V.mine.choice === myPick.choice) myPick = null;
+      else if (Date.now() - myPick.at < 10000){
+        if (!myPick.resent && Date.now() - myPick.at > 3500){ myPick.resent = true; send({ t: "answer", choice: myPick.choice }); }
+        V.mine = { choice: myPick.choice, by: V.me.name };
+      } else myPick = null;
+    } else if (myPick && (V.phase !== "question" || myPick.i !== V.i)) myPick = null;
     endsAt = Date.now() + Math.max(0, (d.left || 0) - age * 1000);
     // After a TV refresh the TV forgets players: quietly join again.
     if (!V.me.teamId && pending.name && PQ.store("foreunder.quiz.room") === room && PQ.store("foreunder.quiz.joined") === "1" && Date.now() > rejoinAt){ rejoinAt = Date.now() + 8000; join(true); }
@@ -204,7 +211,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
       el("div",{class:"ans"}, q.opts.map(function(o, k){
         var gone = !rev && (q.gone || []).indexOf(k) !== -1;
         var cls = "a" + (rev ? (k === V.correct ? " win" : (mine && mine.choice === k ? " was" : " dim")) : gone ? " gone" : (mine && mine.choice === k ? " on" : ""));
-        return el("button",{type:"button",class:cls,style:"--c:" + colors[k],disabled: rev || gone ? "" : null,onclick: rev || gone ? null : function(){ send({ t: "answer", choice: k }); if (!V.mine) V.mine = {}; V.mine.choice = k; V.mine.by = V.me.name; render(); }},
+        return el("button",{type:"button",class:cls,style:"--c:" + colors[k],disabled: rev || gone ? "" : null,onclick: rev || gone ? null : function(){ send({ t: "answer", choice: k }); myPick = { i: V.i, choice: k, at: Date.now() }; V.mine = { choice: k, by: V.me.name }; render(); }},
           el("span",{class:"L",text:PQ.LETTERS[k]}), el("span",{text:o}), rev && mine && mine.choice === k ? el("span",{class:"yp",text: V.mode === "teams" ? "your team" : "you"}) : null);
       }))];
     if (!rev){
