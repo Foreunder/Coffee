@@ -61,6 +61,19 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
 .opt.win .t,.opt.win .who{color:#14110a}
 .opt.win .L{background:var(--ink)}
 .status{display:flex;gap:calc(1*var(--u));flex-wrap:wrap;margin-top:calc(1*var(--u));padding-top:calc(2*var(--u));align-items:center}
+.lb{display:grid;grid-template-columns:repeat(auto-fill,minmax(calc(14.5*var(--u)),1fr));gap:calc(.8*var(--u));width:100%;margin-top:calc(.8*var(--u))}
+.lt{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:calc(.9*var(--u));background:var(--panel);border:calc(.2*var(--u)) solid var(--rule);border-radius:calc(.8*var(--u));padding:calc(.8*var(--u)) calc(1.2*var(--u));opacity:.55}
+.lt .p{font:400 calc(2.2*var(--u))/1 "IM Fell English SC",Georgia,serif;color:var(--brass)}
+.lt .n{font:400 calc(1.9*var(--u))/1.1 "IM Fell English SC",Georgia,serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lt .s{font:400 calc(1.9*var(--u))/1 "IM Fell English SC",Georgia,serif;text-align:right}
+.lt .g{display:block;font:700 calc(1.15*var(--u))/1.2 "Alegreya Sans SC",sans-serif;letter-spacing:.08em;color:#8fd0a8}
+.rv .qtext{font-size:calc(3.2*var(--u));padding-bottom:calc(1.4*var(--u))}
+.rv .opt{min-height:calc(6*var(--u));padding:calc(.9*var(--u)) calc(1.6*var(--u))}
+.rv .opt .L{width:calc(4*var(--u));height:calc(4*var(--u));font-size:calc(2*var(--u))}
+.rv .opt .t{font-size:calc(2.3*var(--u))}
+.rv .fact{margin-top:calc(1*var(--u));font-size:calc(1.7*var(--u))}
+.rv .status{padding-top:calc(1*var(--u))}
+.lt.ok{opacity:1;border-color:#5fae80;background:rgba(79,138,106,.32);box-shadow:0 0 calc(1.6*var(--u)) rgba(95,174,128,.35)}
 .chip{font:500 calc(1.25*var(--u))/1 "Alegreya Sans SC",sans-serif;letter-spacing:.1em;text-transform:lowercase;border:1px solid var(--rule);color:var(--muted);border-radius:999px;padding:calc(.6*var(--u)) calc(1.1*var(--u))}
 .chip.on{border-color:var(--brass);color:var(--ink);background:rgba(201,162,79,.18)}
 .fact{font:italic calc(2*var(--u))/1.3 "IM Fell English",Georgia,serif;color:var(--brass);margin-top:calc(2*var(--u))}
@@ -90,7 +103,7 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
 <script>
 (function(){
   var el = PQ.el, M = window.FOREUNDER || {}, app = document.getElementById("app");
-  var Q_SECONDS = Number(PQ.qs.get("secs")) || 30, REVEAL_SECONDS = 9, BOARD_SECONDS = 20, PER_ROUND = 6;
+  var Q_SECONDS = Number(PQ.qs.get("secs")) || 30, REVEAL_SECONDS = 13, BOARD_SECONDS = 20, PER_ROUND = 6;
 
   // ---- game state (lives only on the TV) ----
   var S = { phase: "boot", mode: PQ.store("foreunder.quiz.mode") === "solo" ? "solo" : "teams", holes: Number(PQ.store("foreunder.quiz.holes")) || 12, preset: PQ.store("foreunder.quiz.preset") || "pub", diff: PQ.store("foreunder.quiz.diff") || "mixed", cats: storedCats(), qs: [], i: -1, teams: {}, players: {}, answers: {}, gone: [], endsAt: 0, qStart: 0, room: "", err: "" };
@@ -367,7 +380,7 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
   var colors = ["var(--A)", "var(--B)", "var(--C)", "var(--D)"];
   function questionView(){
     var q = S.qs[S.i];
-    var wrap = el("div",{style:"display:flex;flex-direction:column;flex:1;min-height:0"},
+    var wrap = el("div",{id:"qw",style:"display:flex;flex-direction:column;flex:1;min-height:0"},
       el("div",{class:"qhead"},
         el("div",null, el("span",{class:"hole",text:"Question " + (S.i + 1) + " of " + S.qs.length}), el("span",{class:"k",style:"margin-left:calc(1.4*var(--u))",text:q.c}), isDouble(S.i) ? el("span",{class:"dbl",text:"double points"}) : null),
         el("div",{class:"qright"}, el("span",{class:"worth",id:"worth"}), el("div",{class:"clock",id:"clock"}))),
@@ -385,6 +398,7 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
   function updateQuestion(){
     var q = S.qs[S.i]; if (!q) return;
     var rev = S.phase === "reveal";
+    var qw = document.getElementById("qw"); if (qw) qw.classList.toggle("rv", rev);
     for (var k = 0; k < 4; k++){
       var o = document.getElementById("opt" + k); if (!o) return;
       o.className = "opt" + (rev ? (k === q.correct ? " win" : " dim") : (S.gone.indexOf(k) !== -1 ? " gone" : ""));
@@ -394,8 +408,15 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
     document.getElementById("fact").textContent = rev && q.f ? q.f : "";
     var st = document.getElementById("status"); st.replaceChildren();
     if (rev){
-      var right = Object.keys(S.answers).filter(function(t){ return S.answers[t].ok && S.teams[t]; }).sort(function(a, b){ return S.answers[b].pts - S.answers[a].pts; });
-      st.append.apply(st, [el("span",{class:"k",text: right.length ? "got it" : "nobody got this one"})].concat(right.map(function(t){ return el("span",{class:"chip on",text:S.teams[t].name + " +" + S.answers[t].pts}); })));
+      // Quick leaderboard after every question: everyone ranked, the teams that got it lit up.
+      var nRight = Object.keys(S.answers).filter(function(t){ return S.answers[t].ok && S.teams[t]; }).length;
+      st.append(el("span",{class:"k",text: nRight ? "standings · got it in green" : "standings · nobody got this one"}),
+        el("div",{class:"lb"}, standings().slice(0, 12).map(function(t, i){
+          var a = S.answers[t.id], ok = a && a.ok;
+          return el("div",{class:"lt" + (ok ? " ok" : "")}, el("span",{class:"p",text:String(i + 1)}),
+            el("span",{class:"n",text:t.name}),
+            el("span",{class:"s"}, t.score.toLocaleString(), ok ? el("span",{class:"g",text:"+" + a.pts.toLocaleString()}) : null));
+        })));
     } else {
       st.append.apply(st, [el("span",{class:"k",text:"answered"})].concat(activeTeams().map(function(t){ return el("span",{class:"chip" + (S.answers[t] ? " on" : ""),text:S.teams[t].name}); })));
     }

@@ -56,6 +56,8 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
 .result.bad .big{color:var(--muted)}
 .rows{display:grid;gap:8px;margin-top:10px}
 .row{display:grid;grid-template-columns:30px 1fr auto;gap:10px;align-items:center;background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:10px 12px}
+.row.ok{border-color:#5fae80;background:rgba(79,138,106,.3)}
+.row .g{color:#8fd0a8;font-weight:700}
 .row.me{border-color:var(--brass);background:rgba(201,162,79,.14)}
 .row b{font:400 20px/1 "IM Fell English SC",Georgia,serif;color:var(--brass)}
 .row .n{font:400 19px/1.1 "IM Fell English SC",Georgia,serif}
@@ -96,7 +98,8 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
   // Turn the TV's shared game state into this phone's view.
   function toView(d){
     var me = (d.players || {})[PID] || null, teams = (d.teams || []).map(function(t){
-      return { id: t[0], name: t[1], score: t[2], members: Object.keys(d.players || {}).filter(function(k){ return d.players[k][1] === t[0]; }).map(function(k){ return d.players[k][0]; }) };
+      var ta = d.phase === "reveal" && d.ans ? d.ans[t[0]] : null;
+      return { id: t[0], name: t[1], score: t[2], ok: !!(ta && ta[2]), pts: ta ? (ta[3] || 0) : 0, members: Object.keys(d.players || {}).filter(function(k){ return d.players[k][1] === t[0]; }).map(function(k){ return d.players[k][0]; }) };
     });
     var tid = me && me[1] ? me[1] : null, team = tid ? teams.filter(function(t){ return t.id === tid; })[0] : null;
     var a = tid && d.ans ? d.ans[tid] : null, rank = team ? teams.indexOf(team) + 1 : 0;
@@ -210,6 +213,9 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
       var right = mine && mine.ok;
       out.push(el("div",{class:"result" + (right ? "" : " bad")}, el("div",{class:"big",text: right ? "Correct! +" + V.gained : mine ? "Not this time" : "No answer"}), el("div",{class:"muted",text:"The answer: " + PQ.LETTERS[V.correct] + ", " + q.opts[V.correct] + " · " + V.score + " pts, " + ordinal(V.rank) + " place"})));
       if (q.fact) out.push(el("p",{class:"fact",text:q.fact}));
+      out.push(el("span",{class:"k",text:"standings · got it in green"}), el("div",{class:"rows"}, V.teams.slice(0, 10).map(function(t, i){
+        return el("div",{class:"row" + (t.id === V.me.teamId ? " me" : "") + (t.ok ? " ok" : "")}, el("b",{text:String(i + 1)}), el("div",{class:"n",text:t.name}), el("span",null, t.score + " pts", t.ok ? el("span",{class:"g",text:" +" + t.pts}) : null));
+      })));
     }
     return [header()].concat(out);
   }
