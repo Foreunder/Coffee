@@ -505,7 +505,8 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
     else if (cmd === "again") toLobby();
   }
   function start(){
-    if (!activeTeams().length || !activeCats().length) return;
+    if (!activeTeams().length){ SFX.say("Nobody's on the tee yet. Scan the code to join.", { cut: true }); return; }
+    if (!activeCats().length){ SFX.say("Pick at least one question category.", { cut: true }); return; }
     S.qs = pickQuestions(S.holes); S.i = -1;
     Object.keys(S.teams).forEach(function(k){ var t = S.teams[k]; t.score = 0; t.correct = 0; t.ms = 0; t.par = 0; t.hist = []; t.hcp = teamHcp(t); });
     S.newRecord = false; lastLeader = null;
@@ -851,6 +852,14 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
     else if (S.phase === "board") { e.preventDefault(); next(); }
     else if (S.phase === "final") { e.preventDefault(); toLobby(); }
   });
+  // Pick up new versions on its own: while the lobby is showing, check every 3 minutes and reload if the page changed.
+  (function(){
+    var url = location.pathname, sig = null;
+    function get(){ return fetch(url + "?v=" + Date.now(), { cache: "no-store" }).then(function(r){ return r.ok ? r.text() : null; }).catch(function(){ return null; }); }
+    function hash(t){ var h = 0; for (var i = 0; i < t.length; i += 7) h = (h * 31 + t.charCodeAt(i)) | 0; return t.length + ":" + h; }
+    get().then(function(t){ if (t) sig = hash(t); });
+    setInterval(function(){ if (S.phase !== "lobby" || picker) return; get().then(function(t){ if (t && sig && hash(t) !== sig) location.reload(); }); }, 180000);
+  })();
   // Keep the TV awake.
   try { if (navigator.wakeLock) { var lock = function(){ navigator.wakeLock.request("screen").catch(function(){}); }; lock(); document.addEventListener("visibilitychange", function(){ if (!document.hidden) lock(); }); } } catch(e) {}
 

@@ -196,6 +196,17 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
     PQ.store("foreunder.quiz.team", pending.team);
     PQ.store("foreunder.quiz.room", room); PQ.store("foreunder.quiz.joined", "1");
     send({ t: "join", name: name, team: pending.team });
+    if (silent) return;
+    // Show it's working, resend twice if the TV hasn't confirmed, then say what to check.
+    status = "Joining\u2026"; render();
+    var tries = 0;
+    (function check(){
+      setTimeout(function(){
+        if (V && V.me && V.me.teamId){ if (status === "Joining\u2026") { status = ""; render(); } return; }
+        if (++tries < 3){ send({ t: "join", name: name, team: pending.team }); return check(); }
+        status = "The TV didn't answer. Make sure the TV is on the quiz page showing room " + room + ", then tap again."; render();
+      }, 3000);
+    })();
   }
 
   // ---- screens ----
@@ -207,11 +218,18 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
   }
   function joinScreen(){
     var teams = V.mode === "teams" ? V.teams : [];
-    var nameIn = el("input",{type:"text",maxlength:"20",autocomplete:"given-name",placeholder:"Your name",value:pending.name,oninput:function(e){ pending.name = e.target.value; btn.disabled = !ok(); }});
-    var teamIn = el("input",{type:"text",maxlength:"24",placeholder:"Team name",value: pending.newTeam ? pending.team : "",oninput:function(e){ pending.team = e.target.value; btn.disabled = !ok(); }});
+    var nameIn = el("input",{type:"text",maxlength:"20",autocomplete:"given-name",placeholder:"Your name",value:pending.name,oninput:function(e){ pending.name = e.target.value; },onchange:function(e){ pending.name = e.target.value; }});
+    var teamIn = el("input",{type:"text",maxlength:"24",placeholder:"Team name",value: pending.newTeam ? pending.team : "",oninput:function(e){ pending.team = e.target.value; },onchange:function(e){ pending.team = e.target.value; }});
     function ok(){ return pending.name.trim() && (V.mode === "solo" || pending.team.trim()); }
-    var btn = el("button",{class:"btn",type:"button",onclick:function(){ join(); }}, V.mode === "teams" ? "join team" : "i'm in");
-    btn.disabled = !ok();
+    // Read the boxes on tap too: iPhone autofill can fill a name without telling the page.
+    var btn = el("button",{class:"btn",type:"button",onclick:function(){
+      if (nameIn.value) pending.name = nameIn.value;
+      if (teamIn.value && (pending.newTeam || !teams.length)) pending.team = teamIn.value;
+      if (!pending.name.trim()){ status = "Type your name first."; render(); return; }
+      if (V.mode === "teams" && !pending.team.trim()){ status = "Pick a team or name a new one."; return render(); }
+      if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+      join();
+    }}, V.mode === "teams" ? "join team" : "i'm in");
     var known = teams.some(function(t){ return t.name === pending.team; });
     if (!known && pending.team && !pending.newTeam) pending.newTeam = true;
     return [header(),
