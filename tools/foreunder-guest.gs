@@ -27,7 +27,7 @@ function doGet() {
     ratings[coffee][n]++;
     ratings[coffee].count++;
   });
-  return json({ok: true, ratings: ratings, records: records()});
+  return json({ok: true, ratings: ratings, records: records(), history: history()});
 }
 
 // Best round per course and length: lowest to par, then most points. Rows: Time, Course ID, Course, Holes, Player, To par, Points, Place, Players, Device.
@@ -42,6 +42,12 @@ function records() {
     }
   });
   return Object.keys(best).map(function (k) { return best[k]; });
+}
+
+// Recent rounds for handicaps and player history: [time ms, course ID, holes, player, to par, points, place, players].
+function history() {
+  const rows = quizSheet().getDataRange().getValues().slice(1).slice(-1500);
+  return rows.map(function (r) { return [new Date(r[0]).getTime(), String(r[1]), Number(r[3]), String(r[4]), Number(r[5]), Number(r[6]), Number(r[7]), Number(r[8])]; });
 }
 
 function quizSheet() {

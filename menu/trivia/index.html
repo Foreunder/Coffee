@@ -88,6 +88,8 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
 .gb td.h{width:calc(3.2*var(--u));font-size:calc(1.7*var(--u))}
 .gb td.tp{font:700 calc(2.6*var(--u))/1 "Alegreya Sans SC",sans-serif;width:calc(6*var(--u));border-left:2px solid #1b3a2a}
 .gb td.pt{font:500 calc(1.4*var(--u))/1 "Alegreya",Georgia,serif;color:#5b5446;width:calc(8*var(--u))}
+.gb td.gr2{font-size:calc(1.8*var(--u));width:calc(5*var(--u))}
+.gb td.hc{font-size:calc(1.6*var(--u));color:#5b5446;width:calc(4*var(--u))}
 .gb .under{color:#b3261e}.gb .even,.gb .over{color:#151515}
 .gb tr.ok td.nm{background:rgba(79,138,106,.22)}
 .gb tr:last-child td{border-bottom:0}
@@ -144,7 +146,7 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
   var HOLE_OPTS = [9, 18, 72];
 
   // ---- game state (lives only on the TV) ----
-  var S = { phase: "boot", mode: PQ.store("foreunder.quiz.mode") === "solo" ? "solo" : "teams", holes: HOLE_OPTS.indexOf(Number(PQ.store("foreunder.quiz.holes"))) !== -1 ? Number(PQ.store("foreunder.quiz.holes")) : 9, preset: PQ.store("foreunder.quiz.preset") || "pub", course: PQ.store("foreunder.quiz.course") || "foreunder", diff: PQ.store("foreunder.quiz.diff") || "mixed", cats: storedCats(), qs: [], i: -1, teams: {}, players: {}, answers: {}, gone: [], endsAt: 0, qStart: 0, room: "", err: "" };
+  var S = { phase: "boot", mode: PQ.store("foreunder.quiz.mode") === "solo" ? "solo" : "teams", holes: HOLE_OPTS.indexOf(Number(PQ.store("foreunder.quiz.holes"))) !== -1 ? Number(PQ.store("foreunder.quiz.holes")) : 9, preset: PQ.store("foreunder.quiz.preset") || "pub", course: PQ.store("foreunder.quiz.course") || "foreunder", hcp: PQ.store("foreunder.quiz.hcp") === "1", diff: PQ.store("foreunder.quiz.diff") || "mixed", cats: storedCats(), qs: [], i: -1, teams: {}, players: {}, answers: {}, gone: [], endsAt: 0, qStart: 0, room: "", err: "" };
   var timer = null, elimTimers = [];
   // Bar-trivia scoring: a correct answer is worth 1,000 the instant the question appears, falling
   // steadily to 100 when time runs out (last question doubles). Two wrong answers drop out at the
@@ -159,6 +161,39 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
   function course(){ var cs = window.COURSES || []; return cs.filter(function(c){ return c.id === S.course; })[0] || cs[0]; }
   function recKey(){ return "foreunder.quiz.record." + course().id + "." + S.holes; }
   function record(){ try { var r = JSON.parse(PQ.store(recKey()) || "null"); return r && typeof r.par === "number" ? r : null; } catch(e) { return null; } }
+  // ---- player history and handicaps ----
+  // Every finished round, one row per player: [time ms, course, holes, name, to par, points, place, players].
+  // Kept on this TV and merged with the Google Sheet copy on load.
+  var HIST = []; try { HIST = JSON.parse(PQ.store("foreunder.quiz.history") || "[]"); } catch(e) { HIST = []; }
+  function histKey(r){ return r[0] + "|" + String(r[3]).toLowerCase(); }
+  function mergeHistory(rows){
+    var seen = {}, added = 0; HIST.forEach(function(r){ seen[histKey(r)] = 1; });
+    (rows || []).forEach(function(r){ if (Array.isArray(r) && r.length >= 8 && !seen[histKey(r)]){ HIST.push(r); seen[histKey(r)] = 1; added++; } });
+    if (added){ HIST.sort(function(a, b){ return a[0] - b[0]; }); HIST = HIST.slice(-3000); PQ.store("foreunder.quiz.history", JSON.stringify(HIST)); }
+    return added;
+  }
+  function norm(n){ return String(n || "").trim().toLowerCase(); }
+  // Handicap index, golf style: each round becomes an 18-hole differential (to par x 18 / holes); the index is
+  // the average of the best 40% of the last 20 rounds. Needs 3 rounds; until then a player plays off scratch (0).
+  // A strong player ends up with a "plus" (negative) index, so net = gross - handicap evens the field.
+  function profile(name){
+    var me = norm(name), rows = HIST.filter(function(r){ return norm(r[3]) === me; });
+    var last = rows.slice(-20).map(function(r){ return r[4] * 18 / (r[2] || 18); }).sort(function(a, b){ return a - b; });
+    var idx = null;
+    if (last.length >= 3){ var k = Math.max(1, Math.round(last.length * 0.4)), sum = 0; for (var i = 0; i < k; i++) sum += last[i]; idx = Math.round(sum / k * 10) / 10; }
+    var best = null; rows.forEach(function(r){ var d = r[4] * 18 / (r[2] || 18); if (!best || d < best.d) best = { d: d, par: r[4], holes: r[2], course: r[1] }; });
+    return { rounds: rows.length, wins: rows.filter(function(r){ return r[6] === 1 && r[7] > 1; }).length, idx: idx, best: best };
+  }
+  function fmtIdx(x){ return x == null ? "new" : x < 0 ? "+" + (-x).toFixed(1) : x.toFixed(1); }
+  // Strokes a team gets over this many holes (team = average of its players' indexes).
+  function teamHcp(t){
+    var ms = Object.keys(S.players).filter(function(k){ return S.players[k].team === t.id; }).map(function(k){ return profile(S.players[k].name).idx || 0; });
+    var avg = ms.length ? ms.reduce(function(a, b){ return a + b; }, 0) / ms.length : 0;
+    return Math.round(avg * S.holes / 18);
+  }
+  function strokes(h){ return h < 0 ? "+" + (-h) + " (gives strokes)" : String(h); }
+  function net(t){ return (t.par || 0) - (S.hcp ? (t.hcp || 0) : 0); }
+
   // ---- course records: kept on this TV, backed up to Jamey's Google Sheet (every round logged) and to the
   // message broker. On load the TV merges all three, so clearing the TV's browser loses nothing. ----
   function better(a, b){ return !b || a.par < b.par || (a.par === b.par && a.pts > b.pts); }
@@ -183,6 +218,7 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
     if (!api) return;
     fetch(api + (api.indexOf("?") === -1 ? "?" : "&") + "t=" + Date.now()).then(function(r){ return r.json(); }).then(function(d){
       (d.records || []).forEach(function(x){ if (mergeRecord(x.course, x.holes, x)) changed = true; });
+      if (mergeHistory(d.history)) changed = true;
       if (changed){ pushRecordsToBroker(); if (S.phase === "lobby" || S.phase === "final") render(); }
     }).catch(function(){});
     flushRounds();
@@ -191,7 +227,14 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
   function queueRound(){
     var st = standings(); if (!st.length) return;
     var q = []; try { q = JSON.parse(PQ.store("foreunder.quiz.pending") || "[]"); } catch(e) {}
-    q.push({ type: "round", course: course().id, courseName: course().name, holes: S.holes, players: st.map(function(t){ return [t.name, t.par || 0, t.score]; }), device: "tv " + S.room });
+    // History is per player: in team mode each player gets the team's score.
+    var now = Date.now(), rows = [], ppl = [];
+    st.forEach(function(t, i){
+      var names = S.mode === "teams" ? membersOf(t.id) : [t.name];
+      names.forEach(function(n){ ppl.push([n, t.par || 0, t.score]); rows.push([now, course().id, S.holes, n, t.par || 0, t.score, i + 1, st.length]); });
+    });
+    mergeHistory(rows);
+    q.push({ type: "round", course: course().id, courseName: course().name, holes: S.holes, players: ppl, device: "tv " + S.room });
     PQ.store("foreunder.quiz.pending", JSON.stringify(q.slice(-50)));
     flushRounds(); pushRecordsToBroker();
   }
@@ -327,7 +370,9 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
       q: q && (S.phase === "question" || S.phase === "reveal") ? { text: q.q, opts: q.opts, cat: q.c, par: q.par, dbl: isDouble(S.i), fact: S.phase === "reveal" ? q.f : "", gone: S.gone.slice() } : null,
       correct: S.phase === "reveal" ? q.correct : null,
       secs: Q_SECONDS, max: MAX_PTS, min: MIN_PTS,
-      teams: standings().map(function(x){ return [x.id, x.name, x.score, x.par || 0]; }),
+      teams: standings().map(function(x){ return [x.id, x.name, x.score, x.par || 0, S.hcp ? (S.phase === "lobby" ? teamHcp(x) : (x.hcp || 0)) : 0, net(x)]; }),
+      hcp: S.hcp,
+      prof: S.phase === "lobby" || S.phase === "final" ? (function(){ var o = {}; Object.keys(S.players).forEach(function(k){ var p = S.players[k]; if (p.name){ var f = profile(p.name); o[k] = [f.idx, f.rounds, f.wins, f.best ? f.best.par : null, f.best ? f.best.holes : null]; } }); return o; })() : undefined,
       nxt: S.phase === "count" && S.qs[S.i + 1] ? { n: S.i + 2, par: S.qs[S.i + 1].par, dbl: isDouble(S.i + 1) } : null,
       snow: S.phase === "reveal" || S.phase === "question" ? Object.keys(S.knocked || {}) : [],
       rec: (function(){ var r = record(); return r ? [r.par, r.name, r.pts, r.date] : null; })(), newRec: !!S.newRecord,
@@ -403,6 +448,7 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
       S.preset = "pick"; PQ.store("foreunder.quiz.preset", "pick"); PQ.store("foreunder.quiz.cats", JSON.stringify(S.cats));
     }
     else if (cmd === "course" && S.phase === "lobby" && (window.COURSES || []).some(function(c){ return c.id === d.course; })){ S.course = d.course; PQ.store("foreunder.quiz.course", d.course); }
+    else if (cmd === "hcp" && S.phase === "lobby"){ S.hcp = !!d.on; PQ.store("foreunder.quiz.hcp", S.hcp ? "1" : ""); }
     else if (cmd === "diff" && S.phase === "lobby" && ["easy", "mixed", "hard"].indexOf(d.diff) !== -1){ S.diff = d.diff; PQ.store("foreunder.quiz.diff", d.diff); }
     else if (cmd === "start" && S.phase === "lobby") start();
     else if (cmd === "next") next();
@@ -412,7 +458,7 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
   function start(){
     if (!activeTeams().length || !activeCats().length) return;
     S.qs = pickQuestions(S.holes); S.i = -1;
-    Object.keys(S.teams).forEach(function(k){ var t = S.teams[k]; t.score = 0; t.correct = 0; t.ms = 0; t.par = 0; t.hist = []; });
+    Object.keys(S.teams).forEach(function(k){ var t = S.teams[k]; t.score = 0; t.correct = 0; t.ms = 0; t.par = 0; t.hist = []; t.hcp = teamHcp(t); });
     S.newRecord = false;
     countdown(COUNT_LONG);
   }
@@ -462,7 +508,8 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
   }
   function finish(){
     clearTimeout(timer); clearElims(); S.phase = "final"; S.endsAt = 0;
-    var lead = standings()[0], r = record();
+    // Course records are always gross (scratch), whatever the event.
+    var lead = standings().slice().sort(function(a, b){ return (a.par || 0) - (b.par || 0) || b.score - a.score; })[0], r = record();
     if (lead && S.i >= S.qs.length - 1 && (!r || lead.par < r.par || (lead.par === r.par && lead.score > r.pts))){
       var dt = new Date();
       PQ.store(recKey(), JSON.stringify({ par: lead.par, pts: lead.score, name: lead.name, date: dt.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) }));
@@ -485,7 +532,7 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
   function standings(){
     return Object.keys(S.teams).map(function(k){ return S.teams[k]; })
       .filter(function(t){ return Object.keys(S.players).some(function(p){ return S.players[p].team === t.id; }); })
-      .sort(function(a, b){ return (a.par || 0) - (b.par || 0) || b.score - a.score || a.ms - b.ms; });
+      .sort(function(a, b){ return net(a) - net(b) || (a.par || 0) - (b.par || 0) || b.score - a.score || a.ms - b.ms; });
   }
   function membersOf(tid){ return Object.keys(S.players).filter(function(k){ return S.players[k].team === tid; }).map(function(k){ return S.players[k].name; }); }
 
@@ -525,16 +572,20 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
         el("div",{class:"join"}, qrSvg(joinUrl()),
           el("div",null, el("div",{class:"k",text:"room code"}), el("div",{class:"code",text:S.room}),
             el("ol",{class:"steps"}, el("li",{text:"Scan the code with your phone camera."}), el("li",{text: S.mode === "teams" ? "Enter your name and pick or start a team." : "Enter your name."}), el("li",{text:"Answer on your phone before the clock runs out."})))),
-        el("div",{class:"settings"}, el("span",{class:"pill",text: S.mode === "teams" ? "team mode" : "everyone for themselves"}), el("span",{class:"pill",text: modeLabel()}), el("span",{class:"pill",text: course().name + " \u00b7 " + (S.holes === 72 ? "72 holes, full tournament" : S.holes === 9 ? "front nine" : "18 holes")}), ),
+        el("div",{class:"settings"}, el("span",{class:"pill",text: S.mode === "teams" ? "team mode" : "everyone for themselves"}), el("span",{class:"pill",text: modeLabel()}), el("span",{class:"pill",text: course().name + " \u00b7 " + (S.holes === 72 ? "72 holes, full tournament" : S.holes === 9 ? "front nine" : "18 holes")}), el("span",{class:"pill",text: S.hcp ? "handicap event (net)" : "scratch event"}), ),
         el("div",{class:"rec",text:recordText()}),
         el("div",{class:"wait" + (S.err ? " err" : ""), text: S.err || (st.length ? "The quizmaster starts the game from their phone, or press OK on the remote." : "Waiting for players…")}),
         st.length ? el("button",{class:"btn",id:"startBtn",type:"button",onclick:function(){ start(); }}, "start the game") : null
       ),
       el("div",{class:"teams"}, el("h2",{text: S.mode === "teams" ? "Teams" : "Players"}),
-        st.length ? el("div",{class:"tlist"}, st.map(function(t){ var m = membersOf(t.id); return el("div",{class:"team"}, el("b",{text:t.name}), S.mode === "teams" ? el("span",{text:m.join(", ")}) : null); }))
+        st.length ? el("div",{class:"tlist"}, st.map(function(t){
+          var m = membersOf(t.id), f = S.mode === "teams" ? null : profile(t.name);
+          var line = S.mode === "teams" ? m.map(function(n){ return n + " (" + fmtIdx(profile(n).idx) + ")"; }).join(", ") + (S.hcp ? " \u00b7 team gets " + strokes(teamHcp(t)) : "")
+            : "hcp " + fmtIdx(f.idx) + " \u00b7 " + f.rounds + (f.rounds === 1 ? " round" : " rounds") + " \u00b7 " + f.wins + (f.wins === 1 ? " win" : " wins") + (f.best ? " \u00b7 best " + fmtPar(f.best.par) + " (" + f.best.holes + ")" : "") + (S.hcp ? " \u00b7 gets " + strokes(teamHcp(t)) : "");
+          return el("div",{class:"team"}, el("b",{text:t.name}), el("span",{text:line})); }))
           : el("p",{class:"empty",text:"Nobody yet. Be the first."}),
         recordsPanel(6),
-        el("div",{class:"rules",text:"Scored like golf: right answer is a birdie, wrong is a bogey, no answer is par. Leave a knocked-out answer sitting there and it's a double bogey. Par 3s are easy, par 4s normal, par 5s hard. Lowest score wins; points (up to 1,000 a hole, faster pays more) break ties. Two wrong answers drop out as the clock runs. Last hole doubles points."}),
+        el("div",{class:"rules",text:(S.hcp ? "Handicap event: your handicap comes off your score, so everyone has a shot. " : "") + "Scored like golf: right answer is a birdie, wrong is a bogey, no answer is par. Leave a knocked-out answer sitting there and it's a double bogey. Par 3s are easy, par 4s normal, par 5s hard. Lowest score wins; points (up to 1,000 a hole, faster pays more) break ties. Two wrong answers drop out as the clock runs. Last hole doubles points."}),
         el("p",{class:"credit",text: selCount().toLocaleString() + " questions ready for this game" + (window.OTDB && OTDB.busy() ? " (still downloading more)" : "") + ". Many from Open Trivia DB (opentdb.com), CC BY-SA 4.0."}))
     );
   }
@@ -609,20 +660,24 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
     var st = standings().slice(0, max), n0 = nineStart(), holes = [];
     for (var h = n0; h < Math.min(n0 + 9, S.qs.length || S.holes); h++) holes.push(h);
     var played = S.phase === "reveal" || S.phase === "board" || S.phase === "final" || S.phase === "count" ? S.i : S.i - 1;
-    var head = el("tr",null, el("th",{text:"pos"}), el("th",{style:"text-align:left;padding-left:calc(1*var(--u))",text: S.mode === "teams" ? "team" : "player"}), holes.map(function(h){ return el("th",{text:String(h + 1)}); }), el("th",{text:"to par"}), el("th",{text:"pts"}));
+    var head = el("tr",null, el("th",{text:"pos"}), el("th",{style:"text-align:left;padding-left:calc(1*var(--u))",text: S.mode === "teams" ? "team" : "player"}), holes.map(function(h){ return el("th",{text:String(h + 1)}); }), el("th",{text: S.hcp ? "gross" : "to par"}), S.hcp ? el("th",{text:"hcp"}) : null, S.hcp ? el("th",{text:"net"}) : null, el("th",{text:"pts"}));
     var lastPos = 0, lastKey = null;
     var rows = st.map(function(t, i){
-      var key = (t.par || 0) + "|" + t.score; if (key !== lastKey){ lastPos = i + 1; lastKey = key; }
-      var tie = st.some(function(o, j){ return j !== i && (o.par || 0) === (t.par || 0) && o.score === t.score; });
+      var key = net(t) + "|" + (t.par || 0) + "|" + t.score; if (key !== lastKey){ lastPos = i + 1; lastKey = key; }
+      var tie = st.some(function(o, j){ return j !== i && net(o) === net(t) && (o.par || 0) === (t.par || 0) && o.score === t.score; });
       var run = 0, hist = t.hist || [];
       for (var k = 0; k < n0; k++) run += hist[k] || 0;
       var a = S.answers[t.id], ok = S.phase === "reveal" && a && a.ok;
       return el("tr",{class: ok ? "ok" : ""}, el("td",{class:"pos",text:(tie ? "T" : "") + lastPos}), el("td",{class:"nm",text:t.name}),
         holes.map(function(h){ if (h > played) return el("td",{class:"h"}); run += hist[h] || 0; return el("td",{class:"h " + parClass(run),text:fmtPar(run)}); }),
-        el("td",{class:"tp " + parClass(t.par || 0),text:fmtPar(t.par || 0)}), el("td",{class:"pt",text:"(" + t.score.toLocaleString() + ")"}));
+        el("td",{class:(S.hcp ? "gr2 " : "tp ") + parClass(t.par || 0),text:fmtPar(t.par || 0)}),
+        S.hcp ? el("td",{class:"hc",text: hcpText(t)}) : null,
+        S.hcp ? el("td",{class:"tp " + parClass(net(t)),text:fmtPar(net(t))}) : null,
+        el("td",{class:"pt",text:"(" + t.score.toLocaleString() + ")"}));
     });
-    var parRow = el("tr",{class:"parrow"}, el("td"), el("td",{class:"nm",style:"font-size:calc(1.3*var(--u))",text:"par"}), holes.map(function(h){ return el("td",{text: S.qs[h] ? String(S.qs[h].par) : ""}); }), el("td",{class:"tp",style:"font-size:calc(1.3*var(--u))",text:String(holes.reduce(function(a, h){ return a + (S.qs[h] ? S.qs[h].par : 0); }, 0))}), el("td"));
-    return el("div",{class:"gb"}, el("div",{class:"gb-h",text:title || "Leaders"}), el("table",null, el("thead",null, head, parRow), el("tbody",null, rows.length ? rows : el("tr",null, el("td",{colspan:String(holes.length + 4),class:"nm",text:"No players yet"})))));
+    function hcpText(t){ var h = S.phase === "lobby" ? teamHcp(t) : (t.hcp || 0); return h < 0 ? "+" + (-h) : String(h); }
+    var parRow = el("tr",{class:"parrow"}, el("td"), el("td",{class:"nm",style:"font-size:calc(1.3*var(--u))",text:"par"}), holes.map(function(h){ return el("td",{text: S.qs[h] ? String(S.qs[h].par) : ""}); }), el("td",{class:"tp",style:"font-size:calc(1.3*var(--u))",text:String(holes.reduce(function(a, h){ return a + (S.qs[h] ? S.qs[h].par : 0); }, 0))}), S.hcp ? el("td") : null, S.hcp ? el("td") : null, el("td"));
+    return el("div",{class:"gb"}, el("div",{class:"gb-h",text:title || "Leaders"}), el("table",null, el("thead",null, head, parRow), el("tbody",null, rows.length ? rows : el("tr",null, el("td",{colspan:String(holes.length + (S.hcp ? 6 : 4)),class:"nm",text:"No players yet"})))));
   }
   function countView(){
     var nq = S.qs[S.i + 1];
@@ -638,12 +693,12 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
   }
   function boardView(final){
     var st = standings(), top = st[0];
-    var tie = final && st[1] && (st[1].par || 0) === (top.par || 0) && st[1].score === top.score;
+    var tie = final && st[1] && net(st[1]) === net(top) && (st[1].par || 0) === (top.par || 0) && st[1].score === top.score;
     var label = final ? "final round" : (S.holes === 72 ? "after hole " + (S.i + 1) + " \u00b7 round " + Math.ceil((S.i + 1) / 18) : "the turn \u00b7 after hole " + (S.i + 1));
     return el("div",{class:"board"},
-      el("div",{class:"k",text: label}),
-      final && top ? el("div",{class:"winner",text: top.name + " wins at " + fmtPar(top.par || 0) + "!"}) : el("h1",{text:"The Leaderboard"}),
-      final && S.newRecord ? el("div",null, el("span",{class:"rec new",text:"New course record: " + fmtPar(top.par || 0)})) : null,
+      el("div",{class:"k",text: label + (S.hcp ? " \u00b7 handicap event" : " \u00b7 scratch")}),
+      final && top ? el("div",{class:"winner",text: top.name + " wins at " + (S.hcp ? "net " + fmtPar(net(top)) : fmtPar(top.par || 0)) + "!"}) : el("h1",{text:"The Leaderboard"}),
+      final && S.newRecord ? el("div",null, el("span",{class:"rec new",text:"New course record: " + (record() ? fmtPar(record().par) + " \u00b7 " + record().name : "")})) : null,
       el("div",{style:"margin-top:calc(1.4*var(--u))"}, golfBoard(final ? 8 : 10)),
       el("div",{class:"rec",text:recordText()}),
       final ? recordsPanel(5) : null,

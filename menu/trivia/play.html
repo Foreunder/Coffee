@@ -118,7 +118,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
   function toView(d){
     var me = (d.players || {})[PID] || null, teams = (d.teams || []).map(function(t){
       var ta = d.phase === "reveal" && d.ans ? d.ans[t[0]] : null;
-      return { id: t[0], name: t[1], score: t[2], par: t[3] || 0, ok: !!(ta && ta[2]), pts: ta ? (ta[3] || 0) : 0, members: Object.keys(d.players || {}).filter(function(k){ return d.players[k][1] === t[0]; }).map(function(k){ return d.players[k][0]; }) };
+      return { id: t[0], name: t[1], score: t[2], par: t[3] || 0, hcp: t[4] || 0, net: t[5] != null ? t[5] : (t[3] || 0), ok: !!(ta && ta[2]), pts: ta ? (ta[3] || 0) : 0, members: Object.keys(d.players || {}).filter(function(k){ return d.players[k][1] === t[0]; }).map(function(k){ return d.players[k][0]; }) };
     });
     var tid = me && me[1] ? me[1] : null, team = tid ? teams.filter(function(t){ return t.id === tid; })[0] : null;
     var a = tid && d.ans ? d.ans[tid] : null, rank = team ? teams.indexOf(team) + 1 : 0;
@@ -127,8 +127,8 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
       me: { name: me ? me[0] : "", team: team ? team.name : null, teamId: tid, qm: !!(me && me[2]), mates: team ? team.members : [] },
       mine: a ? { choice: a[0], by: a[1], ok: d.phase === "reveal" ? !!a[2] : null } : null,
       gained: d.phase === "reveal" && a && a[2] ? (a[3] || 0) : 0, secs: d.secs || 30, max: d.max || 1000, min: d.min || 100,
-      rank: rank, score: team ? team.score : 0, par: team ? team.par : 0, teams: teams, playing: d.playing, nxt: d.nxt || null, snow: !!(tid && (d.snow || []).indexOf(tid) !== -1), rec: d.rec || null, newRec: !!d.newRec,
-      preset: d.preset || "pub", course: d.course || "", recs: d.recs || (V && V.recs) || [], courseName: d.courseName || "", courses: d.courses || [], diff: d.diff || "mixed", bank: d.bank || 0, cats: d.cats || [], all: d.all || [],
+      rank: rank, score: team ? team.score : 0, par: team ? team.par : 0, net: team ? team.net : 0, myHcp: team ? team.hcp : 0, teams: teams, playing: d.playing, nxt: d.nxt || null, snow: !!(tid && (d.snow || []).indexOf(tid) !== -1), rec: d.rec || null, newRec: !!d.newRec,
+      preset: d.preset || "pub", hcp: !!d.hcp, prof: d.prof || (V && V.prof) || {}, course: d.course || "", recs: d.recs || (V && V.recs) || [], courseName: d.courseName || "", courses: d.courses || [], diff: d.diff || "mixed", bank: d.bank || 0, cats: d.cats || [], all: d.all || [],
       answered: Object.keys(d.ans || {}).length, players: Object.keys(d.players || {}).length
     };
   }
@@ -224,7 +224,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
       el("p",{class:"muted",text:"Watch the TV. The questions show up there, and you answer here."}),
       el("p",{class:"muted",style:"font-size:14px"}, "Waiting on the first tee? ", el("a",{href:"range.html",style:"color:var(--brass)",text:"Hit the range"}), " for practice questions."),
       el("p",{class:"muted",style:"font-size:14px",text:"Scored like golf: right = birdie, wrong = bogey, no answer = par. If your answer gets knocked out, pick again or it's a double bogey. Par 3 = easy, par 4 = normal, par 5 = hard. Lowest score wins."}),
-      el("p",{class:"rec",text:recLine()})), recList(),
+      el("p",{class:"rec",text:recLine()})), myCard(), recList(),
       el("button",{class:"btn ghost",type:"button",onclick:function(){ PQ.store("foreunder.quiz.joined",""); V.me.team = null; pending.newTeam = false; render(); }}, V.mode === "teams" ? "switch team" : "change name")];
   }
   function questionScreen(){
@@ -243,7 +243,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
       out.push(!mine && V.snow ? el("p",{class:"pick",style:"color:#e7a3a3;font-weight:700",text:"Your answer got knocked out. Pick again or it's a double bogey."}) : el("p",{class:"pick",text: mine ? (V.mode === "teams" && mine.by && mine.by !== V.me.name ? mine.by + " locked in " + PQ.LETTERS[mine.choice] + ". Anyone on the team can change it until time's up." : "Locked in " + PQ.LETTERS[mine.choice] + ". You can change it until time's up.") : (V.mode === "teams" ? "One answer per team. Faster pays more; two wrong answers drop out as the clock runs." : "Faster pays more. Two wrong answers drop out as the clock runs.")}));
     } else {
       var right = mine && mine.ok;
-      out.push(el("div",{class:"result" + (right ? "" : " bad")}, el("div",{class:"big",text: right ? "Birdie! +" + V.gained : mine ? "Bogey" : V.snow ? "Double bogey" : "Par \u00b7 no answer"}), el("div",{class:"muted",text:"The answer: " + PQ.LETTERS[V.correct] + ", " + q.opts[V.correct] + " \u00b7 you're " + fmtPar(V.par) + " (" + V.score.toLocaleString() + " pts), " + ordinal(V.rank)})));
+      out.push(el("div",{class:"result" + (right ? "" : " bad")}, el("div",{class:"big",text: right ? "Birdie! +" + V.gained : mine ? "Bogey" : V.snow ? "Double bogey" : "Par \u00b7 no answer"}), el("div",{class:"muted",text:"The answer: " + PQ.LETTERS[V.correct] + ", " + q.opts[V.correct] + " \u00b7 you're " + (V.hcp ? "net " + fmtPar(V.net) + " (gross " + fmtPar(V.par) + ")" : fmtPar(V.par) + " (" + V.score.toLocaleString() + " pts)") + ", " + ordinal(V.rank)})));
       if (q.fact) out.push(el("p",{class:"fact",text:q.fact}));
       out.push(golfRows(10));
     }
@@ -253,12 +253,22 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
   function recLine(){ var r = V.rec; return r ? "Course record: " + fmtPar(r[0]) + " \u00b7 " + r[1] + " (" + Number(r[2]).toLocaleString() + " pts) \u00b7 " + r[3] : "Course record: open \u2014 set it tonight"; }
   function golfRows(max){
     var pos = 0, lastK = null;
-    return el("div",{class:"gbp"}, el("div",{class:"gbp-h",text:"Leaders"}), V.teams.slice(0, max).map(function(t, i){
-      var k = t.par + "|" + t.score; if (k !== lastK){ pos = i + 1; lastK = k; }
-      var tie = V.teams.some(function(o){ return o !== t && o.par === t.par && o.score === t.score; });
+    return el("div",{class:"gbp"}, el("div",{class:"gbp-h",text: V.hcp ? "Leaders \u00b7 Net" : "Leaders"}), V.teams.slice(0, max).map(function(t, i){
+      var k = t.net + "|" + t.par + "|" + t.score; if (k !== lastK){ pos = i + 1; lastK = k; }
+      var tie = V.teams.some(function(o){ return o !== t && o.net === t.net && o.par === t.par && o.score === t.score; });
       return el("div",{class:"gr" + (t.id === V.me.teamId ? " me" : "") + (t.ok ? " ok" : "")}, el("b",{text:(tie ? "T" : "") + pos}), el("span",{class:"n",text:t.name}),
-        el("span",{class:"tp " + (t.par < 0 ? "under" : ""),text:fmtPar(t.par)}), el("span",{class:"pt",text:"(" + t.score.toLocaleString() + ")"}));
+        el("span",{class:"tp " + ((V.hcp ? t.net : t.par) < 0 ? "under" : ""),text: V.hcp ? fmtPar(t.net) : fmtPar(t.par)}),
+        el("span",{class:"pt",text: V.hcp ? "gross " + fmtPar(t.par) + " \u00b7 hcp " + (t.hcp < 0 ? "+" + (-t.hcp) : t.hcp) : "(" + t.score.toLocaleString() + ")"}));
     }));
+  }
+  function fmtIdx(x){ return x == null ? "new" : x < 0 ? "+" + (-x).toFixed(1) : Number(x).toFixed(1); }
+  function myCard(){
+    var f = V.prof && V.prof[PID]; if (!f) return null;
+    return el("div",{class:"gbp"}, el("div",{class:"gbp-h",text:"Your Card"}),
+      el("div",{class:"gr rr"}, el("span",{class:"n",text:"Handicap index"}), el("span",{class:"tp",text:fmtIdx(f[0])}), el("span",{class:"pt",text: f[0] == null ? "3 rounds to get one" : ""})),
+      el("div",{class:"gr rr"}, el("span",{class:"n",text:"Rounds \u00b7 wins"}), el("span",{class:"tp",text: f[1] + " \u00b7 " + f[2]}), el("span",{class:"pt",text:""})),
+      f[3] != null ? el("div",{class:"gr rr"}, el("span",{class:"n",text:"Best round"}), el("span",{class:"tp " + (f[3] < 0 ? "under" : ""),text:fmtPar(f[3])}), el("span",{class:"pt",text: f[4] + " holes"})) : null,
+      V.hcp ? el("div",{class:"gr rr"}, el("span",{class:"n",text:"Strokes this event"}), el("span",{class:"tp",text: V.myHcp < 0 ? "+" + (-V.myHcp) : String(V.myHcp)}), el("span",{class:"pt",text:"off your score"})) : null);
   }
   function recList(){
     if (!V.recs || !V.recs.length) return null;
@@ -279,7 +289,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
   function boardScreen(final){
     var top = V.teams[0];
     return [header(),
-      final ? el("div",{class:"big",text: top ? (top.id === V.me.teamId ? "You win at " + fmtPar(top.par) + "!" : top.name + " wins at " + fmtPar(top.par)) : "Game over"}) : el("div",{class:"big",text:"The Leaderboard"}),
+      final ? el("div",{class:"big",text: top ? (top.id === V.me.teamId ? "You win at " + (V.hcp ? "net " + fmtPar(top.net) : fmtPar(top.par)) + "!" : top.name + " wins at " + (V.hcp ? "net " + fmtPar(top.net) : fmtPar(top.par))) : "Game over"}) : el("div",{class:"big",text:"The Leaderboard"}),
       final && V.newRec ? el("p",{class:"rec new",text:"New course record!"}) : null,
       el("p",{class:"muted",text: V.rank ? "You're " + ordinal(V.rank) + " at " + fmtPar(V.par) + " (" + V.score.toLocaleString() + " pts)." : ""}),
       golfRows(20),
@@ -309,6 +319,9 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
             return el("option",{value:c[0],selected: c[0] === V.course ? "" : null}, c[1] + " (par " + c[3] + ")" + (best ? " \u00b7 record " + fmtPar(best[2]) + " " + best[3] : "")); })) : null;
         }));
       body.push(el("span",{class:"k",text:"course \u00b7 par 3 easy, 4 normal, 5 hard"}), sel);
+      body.push(el("span",{class:"k",text:"event"}), el("div",{class:"chips"},
+        el("button",{type:"button",class:"chip" + (!V.hcp ? " on" : ""),onclick:function(){ send({ t:"qm", cmd:"hcp", on:false }); V.hcp = false; render(); }}, "scratch"),
+        el("button",{type:"button",class:"chip" + (V.hcp ? " on" : ""),onclick:function(){ send({ t:"qm", cmd:"hcp", on:true }); V.hcp = true; render(); }}, "handicap (net)")));
       body.push(el("span",{class:"k",text:"teams & length"}));
       body.push(el("div",{class:"chips"},
         el("button",{type:"button",class:"chip" + (V.mode === "teams" ? " on" : ""),onclick:function(){ send({ t:"qm", cmd:"mode", mode:"teams" }); }}, "teams"),
