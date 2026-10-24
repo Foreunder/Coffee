@@ -1058,12 +1058,12 @@
     "dose": 18,
     "yield": 35.7,
     "time": 26.0,
-    "grind": 2.5,
+    "grind": 13,
     "estimated": false,
     "taste": "Not recorded",
     "drink": "Not recorded",
     "session": "Morning (GaggiMate shot #26, ~9:55-10:00 AM, 'Foreunder HOB Rockbrook' profile, 93°C, BBW)",
-    "notes": "Grind field reads 2.5 in GaggiMate (as entered). Last of the Rockbrook bag. 26.0s, 1:1.98, peak 9.9 bar, avg pump flow 3.1 ml/s, 79.4 ml pumped, avg temp 94.6°C."
+    "notes": "Grind 13 (GaggiMate field showed 2.5 by mistake). Last of the Rockbrook bag. 26.0s, 1:1.98, peak 9.9 bar, avg pump flow 3.1 ml/s, 79.4 ml pumped, avg temp 94.6°C."
   },
   {
     "n": 75,
