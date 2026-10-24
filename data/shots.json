@@ -1148,5 +1148,19 @@
     "drink": "Not recorded",
     "session": "Evening (GaggiMate shot #23, 10:00 PM, 'Foreunder HOB Brazil' profile, 93°C, BBW 36 g)",
     "notes": "Grind 13. 32.2s, 1:2.01, peak 10.0 bar, avg pump flow 3.0 ml/s, 96.4 ml pumped, avg temp 96.1°C. Evening set at 13 ran 22-32 s."
+  },
+  {
+    "n": 81,
+    "date": "2026-10-24",
+    "bean": "Hill of Beans India Monsooned Malabar",
+    "dose": 18,
+    "yield": 35.9,
+    "time": 55,
+    "grind": 6.2,
+    "estimated": false,
+    "taste": "Not recorded",
+    "drink": "Not recorded",
+    "session": "Afternoon (~4 PM, GaggiMate shot after #28, BBW 36 g)",
+    "notes": "Grind 6.2 (slightly coarser than #71's 6) yet ~55s vs 28.5s; first weight ~17s. Not a grind change; suspect stacked top papers or prep. 1:1.99, peak 10.1 bar, avg pump flow 2.6 ml/s, 142.0 ml pumped, avg temp 96.4°C."
   }
 ]
