@@ -96,6 +96,7 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
 <div id="app"></div>
 <script src="../data.js"></script>
 <script src="../qrcode.js"></script>
+<script src="mqtt.min.js"></script>
 <script src="quiz.js"></script>
 <script src="questions.js"></script>
 <script src="otdb.js"></script>
@@ -172,7 +173,7 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
     });
   }
 
-  // ---- networking (ntfy relay) ----
+  // ---- networking (MQTT broker, see quiz.js) ----
   var IN, OUT, sub = null, live = false, pubTimer = null, lastPubKey = "", beat = null;
   function startRelay(){
     S.room = (PQ.qs.get("room") || PQ.store("foreunder.quiz.tvroom") || code()).toUpperCase();
@@ -213,13 +214,13 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
     if (!live) return;
     lastPubKey = S.phase + "|" + S.i + "|" + S.gone.length;
     // A dropped or rate-limited post is retried, so phones never get stuck on an old screen.
-    PQ.publish(OUT, pubState()).catch(function(){ if (!pubTimer) pubTimer = setTimeout(publishNow, 3000); });
+    PQ.publish(OUT, pubState()).catch(function(){ if (!pubTimer) pubTimer = setTimeout(publishNow, 1500); });
   }
-  // New phase or question goes out at once; joins and answers are batched (ntfy allows a burst of about 60 posts, then one every 5 s per home connection).
+  // New phase or question goes out at once; joins and answers are batched briefly.
   function broadcast(){
     if (!live) return;
     if (S.phase + "|" + S.i + "|" + S.gone.length !== lastPubKey) return publishNow();
-    if (!pubTimer) pubTimer = setTimeout(publishNow, 1500);
+    if (!pubTimer) pubTimer = setTimeout(publishNow, 400);
   }
   function teamOf(pid){ var p = S.players[pid]; return p && p.team ? S.teams[p.team] : null; }
   function onMsg(d){
@@ -350,7 +351,15 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
       if (S.phase === "lobby"){ var b = document.getElementById("startBtn"); if (b) b.focus(); }
     }
     lastPhase = S.phase; lastI = S.i;
+    fit();
   }
+  // Long questions or a big field of teams: shrink the whole screen until it fits the TV.
+  function fit(){
+    app.style.removeProperty("--u");
+    var u = Math.min(window.innerWidth / 100, window.innerHeight * 1.78 / 100);
+    for (var n = 0; n < 12 && app.scrollHeight > app.clientHeight + 1; n++){ u *= 0.93; app.style.setProperty("--u", u + "px"); }
+  }
+  window.addEventListener("resize", fit);
   function bootView(){ return el("div",null, el("h1",{text:"Foreunder Pub Quiz"}), el("p",{class:"it" + (S.err ? " err" : ""), text: S.err || "Setting up the game…"})); }
   function qrSvg(url){
     if (typeof qrcode !== "function") return el("div",{style:"color:#111"}, url);
@@ -420,6 +429,7 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
     } else {
       st.append.apply(st, [el("span",{class:"k",text:"answered"})].concat(activeTeams().map(function(t){ return el("span",{class:"chip" + (S.answers[t] ? " on" : ""),text:S.teams[t].name}); })));
     }
+    fit();
   }
   function tick(){
     if (S.phase === "question" || S.phase === "reveal"){
