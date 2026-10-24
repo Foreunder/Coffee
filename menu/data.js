@@ -17,7 +17,7 @@ window.FOREUNDER = {
   beans: [
     {
       id: "rockbrook", bagArt: "photos/bag-rockbrook.jpg", score: 3, scoreNote: "The house espresso. Balanced and the one I reach for most.",
-      status: "bar",
+      status: "out",
       name: "Rockbrook Espresso", short: "Rockbrook", cue: "Rich, smooth, balanced",
       roaster: "A Hill of Beans Coffee Roasters",
       roasterCity: "Omaha, NE",

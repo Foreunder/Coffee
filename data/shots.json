@@ -1022,5 +1022,47 @@
     "session": "Afternoon (GaggiMate shot #28, 3:09 PM, 'Foreunder - India Monsooned' profile, 93°C, BBW)",
     "notes": "Grind 6 (Malabar was dialed at 7.5 on 10/13). 28.5s, 1:1.97, peak 10.2 bar, avg pump flow 3.0 ml/s, 85.2 ml pumped, avg temp 95.9°C (set 93; same late climb).",
     "dialed": true
+  },
+  {
+    "n": 72,
+    "date": "2026-10-24",
+    "bean": "Hill of Beans Rockbrook Espresso",
+    "dose": 18,
+    "yield": 36,
+    "time": null,
+    "grind": 13,
+    "estimated": true,
+    "taste": "Not recorded",
+    "drink": "Not recorded",
+    "session": "Morning (3 shots, details not sent)",
+    "notes": "Logged from Jamey's count: three Rockbrook shots this morning finished the bag."
+  },
+  {
+    "n": 73,
+    "date": "2026-10-24",
+    "bean": "Hill of Beans Rockbrook Espresso",
+    "dose": 18,
+    "yield": 36,
+    "time": null,
+    "grind": 13,
+    "estimated": true,
+    "taste": "Not recorded",
+    "drink": "Not recorded",
+    "session": "Morning (3 shots, details not sent)",
+    "notes": "Logged from Jamey's count: three Rockbrook shots this morning finished the bag."
+  },
+  {
+    "n": 74,
+    "date": "2026-10-24",
+    "bean": "Hill of Beans Rockbrook Espresso",
+    "dose": 18,
+    "yield": 36,
+    "time": null,
+    "grind": 13,
+    "estimated": true,
+    "taste": "Not recorded",
+    "drink": "Not recorded",
+    "session": "Morning (3 shots, details not sent)",
+    "notes": "Logged from Jamey's count: three Rockbrook shots this morning finished the bag. Last of the bag."
   }
 ]
