@@ -328,7 +328,10 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
   }
   function qmPanel(){
     if (!V || !V.me.qm) return null;
-    if (!HOST) return V.phase === "lobby" ? el("p",{class:"pick",text:"Switch to host to set up and start the game."}) : null;
+    if (!HOST){
+      if (V.phase === "final") return el("button",{class:"btn",type:"button",onclick:function(){ send({ t:"qm", cmd:"again" }); }}, "play again");
+      return V.phase === "lobby" ? el("p",{class:"pick",text:"You're the quizmaster. Switch to host to set up and start the game."}) : null;
+    }
     var p = V.phase, active = V.teams.filter(function(t){ return t.members.length; }).length;
     var body = [el("span",{class:"k",style:"margin-top:0",text: "host · " + V.players + (V.players === 1 ? " player" : " players") + (p === "question" ? " · " + V.answered + " of " + active + " answered" : "")})];
     if (p === "lobby"){

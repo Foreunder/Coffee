@@ -445,6 +445,8 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
     var p = S.players[pid] || (S.players[pid] = { name: "", team: null, qm: false, online: true });
     p.online = true;
     if (d.qm) p.qm = true;
+    // No quizmaster in the room? The first person to join runs the game from their phone.
+    if (d.t === "join" && !Object.keys(S.players).some(function(k){ return S.players[k].qm; })) p.qm = true;
     if (d.t === "hello"){ broadcast(); return; }
     if (d.t === "join"){
       var name = String(d.name || "").trim().slice(0, 20) || "Player";
