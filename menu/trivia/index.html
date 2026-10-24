@@ -17,7 +17,8 @@ html,body{margin:0;height:100%;overflow:hidden;background:var(--ground);color:va
 h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spacing:.03em;margin:0}
 .it{font:italic 400 calc(2*var(--u))/1.25 "IM Fell English",Georgia,serif;color:var(--brass)}
 /* lobby */
-.lobby{display:grid;grid-template-columns:1.25fr 1fr;gap:calc(4*var(--u));flex:1;min-height:0}
+.lobby > *{min-width:0}
+.lobby{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:calc(4*var(--u));flex:1;min-height:0}
 .brand{display:flex;align-items:center;gap:calc(2*var(--u));margin-bottom:calc(1.6*var(--u))}
 .brand img{height:calc(9*var(--u));width:auto}
 .join{display:flex;gap:calc(2.5*var(--u));align-items:center;background:var(--panel);border:1px solid var(--rule);border-radius:calc(1.2*var(--u));padding:calc(2*var(--u))}
@@ -590,7 +591,7 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
   function fit(){
     app.style.removeProperty("--u");
     var u = Math.min(window.innerWidth / 100, window.innerHeight * 1.78 / 100);
-    for (var n = 0; n < 12 && app.scrollHeight > app.clientHeight + 1; n++){ u *= 0.93; app.style.setProperty("--u", u + "px"); }
+    for (var n = 0; n < 14 && (app.scrollHeight > app.clientHeight + 1 || app.scrollWidth > app.clientWidth + 1 || document.documentElement.scrollWidth > window.innerWidth + 1); n++){ u *= 0.93; app.style.setProperty("--u", u + "px"); }
   }
   window.addEventListener("resize", fit);
   function bootView(){ return el("div",null, el("h1",{text:"Foreunder Pub Quiz"}), el("p",{class:"it" + (S.err ? " err" : ""), text: S.err || "Setting up the game…"})); }
