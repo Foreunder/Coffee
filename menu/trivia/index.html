@@ -159,6 +159,54 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
   function course(){ var cs = window.COURSES || []; return cs.filter(function(c){ return c.id === S.course; })[0] || cs[0]; }
   function recKey(){ return "foreunder.quiz.record." + course().id + "." + S.holes; }
   function record(){ try { var r = JSON.parse(PQ.store(recKey()) || "null"); return r && typeof r.par === "number" ? r : null; } catch(e) { return null; } }
+  // ---- course records: kept on this TV, backed up to Jamey's Google Sheet (every round logged) and to the
+  // message broker. On load the TV merges all three, so clearing the TV's browser loses nothing. ----
+  function better(a, b){ return !b || a.par < b.par || (a.par === b.par && a.pts > b.pts); }
+  function mergeRecord(cid, holes, r){
+    if (!r || typeof r.par !== "number" || !cid || [9, 18, 72].indexOf(Number(holes)) === -1) return false;
+    var k = "foreunder.quiz.record." + cid + "." + holes, cur = null;
+    try { cur = JSON.parse(PQ.store(k) || "null"); } catch(e) {}
+    if (!better(r, cur)) return false;
+    PQ.store(k, JSON.stringify({ par: r.par, pts: r.pts, name: r.name, date: r.date })); return true;
+  }
+  var REC_TOPIC = (((window.FOREUNDER || {}).ntfyTopic || "foreunder-bar-q7m4x2k9vz") + "-quiz-records");
+  function pushRecordsToBroker(){
+    var list = allRecords().map(function(x){ return [x[0].id, x[1], x[2]]; });
+    PQ.publish(REC_TOPIC.replace(/-quiz-records$/, "-quiz-records-tv"), { recs: list }).catch(function(){});
+  }
+  function syncRecords(){
+    var changed = false, api = M.guestApi;
+    PQ.latest(REC_TOPIC + "-tv").then(function(r){
+      if (r && r.data && Array.isArray(r.data.recs)) r.data.recs.forEach(function(x){ if (mergeRecord(x[0], x[1], x[2])) changed = true; });
+      if (changed && S.phase === "lobby") render();
+    });
+    if (!api) return;
+    fetch(api + (api.indexOf("?") === -1 ? "?" : "&") + "t=" + Date.now()).then(function(r){ return r.json(); }).then(function(d){
+      (d.records || []).forEach(function(x){ if (mergeRecord(x.course, x.holes, x)) changed = true; });
+      if (changed){ pushRecordsToBroker(); if (S.phase === "lobby" || S.phase === "final") render(); }
+    }).catch(function(){});
+    flushRounds();
+  }
+  // Finished rounds wait in a queue until the sheet confirms them, so a Wi-Fi blip loses nothing.
+  function queueRound(){
+    var st = standings(); if (!st.length) return;
+    var q = []; try { q = JSON.parse(PQ.store("foreunder.quiz.pending") || "[]"); } catch(e) {}
+    q.push({ type: "round", course: course().id, courseName: course().name, holes: S.holes, players: st.map(function(t){ return [t.name, t.par || 0, t.score]; }), device: "tv " + S.room });
+    PQ.store("foreunder.quiz.pending", JSON.stringify(q.slice(-50)));
+    flushRounds(); pushRecordsToBroker();
+  }
+  var flushing = false;
+  function flushRounds(){
+    var api = M.guestApi; if (!api || flushing) return;
+    var q = []; try { q = JSON.parse(PQ.store("foreunder.quiz.pending") || "[]"); } catch(e) {}
+    if (!q.length) return;
+    flushing = true;
+    fetch(api, { method: "POST", body: JSON.stringify(q[0]) }).then(function(r){ return r.json(); }).then(function(d){
+      flushing = false;
+      if (d && d.ok){ q.shift(); PQ.store("foreunder.quiz.pending", JSON.stringify(q)); (d.records || []).forEach(function(x){ mergeRecord(x.course, x.holes, x); }); if (q.length) flushRounds(); }
+      else setTimeout(flushRounds, 60000);
+    }).catch(function(){ flushing = false; setTimeout(flushRounds, 60000); });
+  }
   // Every course record set on this TV: [course, holes, record], newest first.
   function allRecords(){
     var out = [];
@@ -258,7 +306,7 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
     sub = PQ.subscribe([IN], String(Math.floor(Date.now() / 1000)), function(d){ onMsg(d); }, function(ok){
       if (ok){
         live = true; S.err = "";
-        if (S.phase === "boot") S.phase = "lobby";
+        if (S.phase === "boot"){ S.phase = "lobby"; syncRecords(); }
         announce(); render(); publishNow();
       } else if (live || S.phase === "boot"){
         live = false; S.err = "Can't reach the game server. Check the Wi-Fi; retrying…"; render();
@@ -420,6 +468,7 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
       PQ.store(recKey(), JSON.stringify({ par: lead.par, pts: lead.score, name: lead.name, date: dt.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) }));
       S.newRecord = true;
     }
+    if (S.i >= S.qs.length - 1) queueRound();
     render();
   }
   function toLobby(){

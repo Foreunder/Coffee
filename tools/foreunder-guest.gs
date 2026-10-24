@@ -4,7 +4,9 @@
  * The menu site sends two kinds of posts here:
  *   {type:"rating", coffee, rating (2-6, or 0 to clear), name, device}
  *   {type:"photo",  drink, data (base64 JPEG), name, device}
- * and reads family ratings back with a plain GET.
+ * The pub quiz TV sends one post per finished round:
+ *   {type:"round", course, courseName, holes, players:[[name, toPar, points], ...] (finishing order), device}
+ * A plain GET returns family ratings and the course record for every course and length.
  *
  * Ratings go to the "Ratings" tab. Photos are saved to the Drive folder "Foreunder Pours"
  * and logged on the "Photos" tab. Nothing a guest sends is shown publicly until Jamey picks it.
@@ -25,7 +27,32 @@ function doGet() {
     ratings[coffee][n]++;
     ratings[coffee].count++;
   });
-  return json({ok: true, ratings: ratings});
+  return json({ok: true, ratings: ratings, records: records()});
+}
+
+// Best round per course and length: lowest to par, then most points. Rows: Time, Course ID, Course, Holes, Player, To par, Points, Place, Players, Device.
+function records() {
+  const sh = quizSheet(), best = {};
+  sh.getDataRange().getValues().slice(1).forEach(function (r) {
+    if (String(r[7]) !== '1') return;
+    const k = r[1] + '|' + r[3], par = Number(r[5]), pts = Number(r[6]), b = best[k];
+    if (!b || par < b.par || (par === b.par && pts > b.pts)) {
+      best[k] = {course: String(r[1]), holes: Number(r[3]), par: par, pts: pts, name: String(r[4]),
+        date: Utilities.formatDate(new Date(r[0]), 'America/Chicago', 'MMM d, yyyy')};
+    }
+  });
+  return Object.keys(best).map(function (k) { return best[k]; });
+}
+
+function quizSheet() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sh = ss.getSheetByName('Quiz Rounds');
+  if (!sh) {
+    sh = ss.insertSheet('Quiz Rounds');
+    sh.getRange(1, 1, 1, 10).setValues([['Time', 'Course ID', 'Course', 'Holes', 'Player', 'To par', 'Points', 'Place', 'Players', 'Device']]).setFontWeight('bold');
+    sh.setFrozenRows(1);
+  }
+  return sh;
 }
 
 function doPost(e) {
@@ -52,6 +79,16 @@ function doPost(e) {
       const file = folder().createFile(blob);
       ss.getSheetByName('Photos').appendRow([new Date(), drink, name, file.getUrl(), file.getId(), 'new', device]);
       return json({ok: true});
+    }
+
+    if (d.type === 'round') {
+      if (!/^[a-z0-9-]{1,40}$/.test(String(d.course)) || [9, 18, 72].indexOf(Number(d.holes)) === -1 || !Array.isArray(d.players)) return json({ok: false});
+      const sh = quizSheet(), now = new Date(), n = Math.min(d.players.length, 40);
+      const rows = d.players.slice(0, 40).map(function (p, i) {
+        return [now, d.course, String(d.courseName || d.course).slice(0, 60), Number(d.holes), String(p[0]).slice(0, 40), Number(p[1]) || 0, Number(p[2]) || 0, i + 1, n, device];
+      });
+      if (rows.length) sh.getRange(sh.getLastRow() + 1, 1, rows.length, 10).setValues(rows);
+      return json({ok: true, records: records()});
     }
 
     return json({ok: false});
