@@ -80,6 +80,8 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
 .row .n{font:400 19px/1.1 "IM Fell English SC",Georgia,serif}
 .row .m{font-size:13px;color:var(--muted)}
 .sel{width:100%;background:var(--panel);color:var(--ink);border:1px solid var(--rule);border-radius:10px;padding:12px;font:17px/1.2 "Alegreya",Georgia,serif;min-height:48px}
+.top{position:relative}
+.mute{position:absolute;right:0;top:6px;background:transparent;border:1.5px solid var(--rule);border-radius:999px;color:var(--ink);font-size:18px;width:44px;height:44px;cursor:pointer}
 .seg{display:flex;margin:14px 0 4px;border:1.5px solid var(--rule);border-radius:999px;padding:3px}
 .seg button{flex:1;border:0;background:transparent;color:var(--muted);font:600 14px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.12em;text-transform:lowercase;border-radius:999px;padding:11px;min-height:42px;cursor:pointer}
 .seg button.on{background:var(--brass);color:#1a1408}
@@ -97,6 +99,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
 <script src="../data.js"></script>
 <script src="mqtt.min.js"></script>
 <script src="quiz.js"></script>
+<script src="sounds.js"></script>
 <script>
 (function(){
   var el = PQ.el, app = document.getElementById("app");
@@ -110,7 +113,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
   var V = null, endsAt = 0, status = "", sub = null, retry = null, lastSeen = 0, rejoinAt = 0, finding = false, myPick = null, prevKey = "";
   var pending = { name: PQ.store("foreunder.name") || "", team: PQ.store("foreunder.quiz.team") || "", newTeam: false };
 
-  function header(){ return el("div",{class:"top"}, el("img",{src:"../crest-sm.png",alt:""}), el("div",null, el("h1",{text:"Pub Quiz"}), el("div",{class:"sub",text: room ? "Room " + room + (V && V.me && V.me.team ? " · " + V.me.team : "") : "foreunder coffee house"}))); }
+  function header(){ return el("div",{class:"top"}, el("img",{src:"../crest-sm.png",alt:""}), el("button",{type:"button",class:"mute",title:"Sound on this phone",onclick:function(){ SFX.on(!SFX.on()); if (SFX.on()) SFX.fx.cup(); render(); }}, SFX.on() ? "\ud83d\udd0a" : "\ud83d\udd07"), el("div",null, el("h1",{text:"Pub Quiz"}), el("div",{class:"sub",text: room ? "Room " + room + (V && V.me && V.me.team ? " · " + V.me.team : "") : "foreunder coffee house"}))); }
   function send(o){ o.pid = PID; if (QM) o.qm = true; if (!room) return; PQ.publish(PQ.topic(room, "in"), o).catch(function(){ status = "Couldn't reach the TV. Check your signal and try again."; render(); }); }
 
   // ---- connecting (ntfy relay) ----
@@ -128,7 +131,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
       mine: a ? { choice: a[0], by: a[1], ok: d.phase === "reveal" ? !!a[2] : null } : null,
       gained: d.phase === "reveal" && a && a[2] ? (a[3] || 0) : 0, secs: d.secs || 30, max: d.max || 1000, min: d.min || 100,
       rank: rank, score: team ? team.score : 0, par: team ? team.par : 0, net: team ? team.net : 0, myHcp: team ? team.hcp : 0, teams: teams, playing: d.playing, nxt: d.nxt || null, snow: !!(tid && (d.snow || []).indexOf(tid) !== -1), rec: d.rec || null, newRec: !!d.newRec,
-      preset: d.preset || "pub", hcp: !!d.hcp, prof: d.prof || (V && V.prof) || {}, course: d.course || "", recs: d.recs || (V && V.recs) || [], courseName: d.courseName || "", courses: d.courses || [], diff: d.diff || "mixed", bank: d.bank || 0, cats: d.cats || [], all: d.all || [],
+      preset: d.preset || "pub", hcp: !!d.hcp, sound: d.sound !== false, prof: d.prof || (V && V.prof) || {}, course: d.course || "", recs: d.recs || (V && V.recs) || [], courseName: d.courseName || "", courses: d.courses || [], diff: d.diff || "mixed", bank: d.bank || 0, cats: d.cats || [], all: d.all || [],
       answered: Object.keys(d.ans || {}).length, players: Object.keys(d.players || {}).length
     };
   }
@@ -138,7 +141,12 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
     if (age > PQ.STALE_SECS){ if (!V) { status = "The quiz isn't running on the TV right now. Open foreunder.github.io/Coffee/quiz on the TV to start one."; render(); } return; }
     lastSeen = Date.now(); status = "";
     // Keep my own pick on screen until the TV's batched update catches up.
+    var wasPhase = V ? V.phase + "|" + V.i : "";
     V = toView(d);
+    if (d.phase === "reveal" && wasPhase !== "reveal|" + d.i && V.me.teamId){
+      if (V.mine && V.mine.ok) { SFX.fx.cup(); if (navigator.vibrate) navigator.vibrate([30, 40, 30]); }
+      else if (V.mine || V.snow) { SFX.fx.groan(); if (navigator.vibrate) navigator.vibrate(120); }
+    }
     // My latest pick wins over an older answer still in flight from the TV (its updates are batched).
     // If the TV still disagrees a few seconds later, the change was lost on the way: send it again once.
     if (myPick && V.phase === "question" && myPick.i === V.i && (V.q.gone || []).indexOf(myPick.choice) === -1){
@@ -319,6 +327,9 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
             return el("option",{value:c[0],selected: c[0] === V.course ? "" : null}, c[1] + " (par " + c[3] + ")" + (best ? " \u00b7 record " + fmtPar(best[2]) + " " + best[3] : "")); })) : null;
         }));
       body.push(el("span",{class:"k",text:"course \u00b7 par 3 easy, 4 normal, 5 hard"}), sel);
+      body.push(el("span",{class:"k",text:"tv sound"}), el("div",{class:"chips"},
+        el("button",{type:"button",class:"chip" + (V.sound ? " on" : ""),onclick:function(){ send({ t:"qm", cmd:"sound", on:true }); V.sound = true; render(); }}, "on"),
+        el("button",{type:"button",class:"chip" + (!V.sound ? " on" : ""),onclick:function(){ send({ t:"qm", cmd:"sound", on:false }); V.sound = false; render(); }}, "off")));
       body.push(el("span",{class:"k",text:"event"}), el("div",{class:"chips"},
         el("button",{type:"button",class:"chip" + (!V.hcp ? " on" : ""),onclick:function(){ send({ t:"qm", cmd:"hcp", on:false }); V.hcp = false; render(); }}, "scratch"),
         el("button",{type:"button",class:"chip" + (V.hcp ? " on" : ""),onclick:function(){ send({ t:"qm", cmd:"hcp", on:true }); V.hcp = true; render(); }}, "handicap (net)")));
@@ -332,6 +343,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
       body.push(el("button",{class:"btn",type:"button",onclick:function(){ send({ t:"qm", cmd:"again" }); }}, "play again"));
     } else {
       body.push(el("button",{class:"btn",type:"button",onclick:function(){ send({ t:"qm", cmd:"next" }); }}, p === "question" ? "reveal the answer" : p === "count" ? "tee off now" : "next hole"));
+      body.push(el("button",{class:"btn ghost",type:"button",onclick:function(){ send({ t:"qm", cmd:"sound", on:!V.sound }); V.sound = !V.sound; render(); }}, V.sound ? "mute the tv" : "tv sound on"));
       body.push(el("button",{class:"btn ghost",type:"button",onclick:function(){ send({ t:"qm", cmd:"end" }); }}, "end the game"));
     }
     return el("div",{class:"qm host"}, body);

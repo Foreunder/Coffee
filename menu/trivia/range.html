@@ -51,12 +51,15 @@ main{max-width:520px;margin:0 auto;padding:14px 16px calc(40px + env(safe-area-i
 .muted{color:var(--muted)}
 .note{font-size:13px;color:var(--muted);margin-top:18px;text-align:center}
 a{color:var(--brass)}
+.top{position:relative}
+.mute{position:absolute;right:0;top:6px;background:transparent;border:1.5px solid var(--rule);border-radius:999px;color:var(--ink);font-size:18px;width:44px;height:44px;cursor:pointer}
 </style>
 </head>
 <body>
 <div class="band"></div>
 <main id="app"></main>
 <script src="questions.js"></script>
+<script src="sounds.js"></script>
 <script>
 (function(){
   // The Range: solo practice on your phone, no TV. Pick a hickory club for the difficulty:
@@ -136,11 +139,14 @@ a{color:var(--brass)}
     var s = stats[c.id] = stats[c.id] || { hit: 0, tot: 0, best: 0, run: 0 };
     s.tot++; if (ok){ s.hit++; s.run++; s.best = Math.max(s.best, s.run); } else s.run = 0;
     store("foreunder.range.stats", JSON.stringify(stats));
+    SFX.fx.strike();
+    if (ok) setTimeout(function(){ c.id === "cleek" ? SFX.fx.cup() : SFX.fx.clap(1.2); }, 350);
+    else setTimeout(function(){ c.id === "play" ? SFX.fx.whoosh() : c.id === "cleek" ? SFX.fx.groan() : SFX.fx.splash(); }, 300);
     R.phase = "result"; render();
   }
 
   // ---- screens ----
-  function header(){ return el("div",{class:"top"}, el("img",{src:"../crest-sm.png",alt:""}), el("div",null, el("h1",{text:"The Range"}), el("div",{class:"sub",text:"practice questions \u00b7 hickory bag"}))); }
+  function header(){ return el("div",{class:"top"}, el("img",{src:"../crest-sm.png",alt:""}), el("button",{type:"button",class:"mute",onclick:function(){ SFX.on(!SFX.on()); if (SFX.on()) SFX.fx.cup(); render(); }}, SFX.on() ? "\ud83d\udd0a" : "\ud83d\udd07"), el("div",null, el("h1",{text:"The Range"}), el("div",{class:"sub",text:"practice questions \u00b7 hickory bag"}))); }
   function bagScreen(){
     return [header(),
       el("p",{class:"muted",style:"margin:4px 0 0",text:"Pick a club and hit a bucket of " + BUCKET + ". Nothing counts but your own pride."}),
