@@ -124,7 +124,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
       me: { name: me ? me[0] : "", team: team ? team.name : null, teamId: tid, qm: !!(me && me[2]), mates: team ? team.members : [] },
       mine: a ? { choice: a[0], by: a[1], ok: d.phase === "reveal" ? !!a[2] : null } : null,
       gained: d.phase === "reveal" && a && a[2] ? (a[3] || 0) : 0, secs: d.secs || 30, max: d.max || 1000, min: d.min || 100,
-      rank: rank, score: team ? team.score : 0, par: team ? team.par : 0, teams: teams, playing: d.playing, nxt: d.nxt || null, rec: d.rec || null, newRec: !!d.newRec,
+      rank: rank, score: team ? team.score : 0, par: team ? team.par : 0, teams: teams, playing: d.playing, nxt: d.nxt || null, snow: !!(tid && (d.snow || []).indexOf(tid) !== -1), rec: d.rec || null, newRec: !!d.newRec,
       preset: d.preset || "pub", diff: d.diff || "mixed", bank: d.bank || 0, cats: d.cats || [], all: d.all || [],
       answered: Object.keys(d.ans || {}).length, players: Object.keys(d.players || {}).length
     };
@@ -219,14 +219,14 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
       el("div",{class:"big",text:"You're in, " + V.me.name + "."}),
       V.mode === "teams" ? el("p",null, "Team ", el("b",{text:V.me.team}), V.me.mates.length > 1 ? " with " + V.me.mates.filter(function(n){ return n !== V.me.name; }).join(", ") : ". Get others to pick it on their phones.") : null,
       el("p",{class:"muted",text:"Watch the TV. The questions show up there, and you answer here."}),
-      el("p",{class:"muted",style:"font-size:14px",text:"Scored like golf: right = birdie, wrong = bogey, no answer = par. Lowest score wins."}),
+      el("p",{class:"muted",style:"font-size:14px",text:"Scored like golf: right = birdie, wrong = bogey, no answer = par. If your answer gets knocked out, pick again or it's a double bogey. Par 3 = easy, par 4 = normal, par 5 = hard. Lowest score wins."}),
       el("p",{class:"rec",text:recLine()})),
       el("button",{class:"btn ghost",type:"button",onclick:function(){ PQ.store("foreunder.quiz.joined",""); V.me.team = null; pending.newTeam = false; render(); }}, V.mode === "teams" ? "switch team" : "change name")];
   }
   function questionScreen(){
     var q = V.q, rev = V.phase === "reveal", mine = V.mine;
     var colors = ["var(--A)","var(--B)","var(--C)","var(--D)"];
-    var out = [el("div",{class:"qmeta"}, el("span",{text:"question " + (V.i + 1) + " of " + V.total + " · " + q.cat + (q.dbl ? " · double points" : "")}), el("span",null, rev ? null : el("span",{class:"worth",id:"worth"}), " ", el("span",{class:"clock",id:"clock"}))),
+    var out = [el("div",{class:"qmeta"}, el("span",{text:"hole " + (V.i + 1) + " of " + V.total + (q.par ? " · par " + q.par : "") + " · " + q.cat + (q.dbl ? " · double points" : "")}), el("span",null, rev ? null : el("span",{class:"worth",id:"worth"}), " ", el("span",{class:"clock",id:"clock"}))),
       el("div",{class:"timer"}, el("i",{id:"bar"})),
       el("p",{class:"qtext",text:q.text}),
       el("div",{class:"ans"}, q.opts.map(function(o, k){
@@ -236,10 +236,10 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
           el("span",{class:"L",text:PQ.LETTERS[k]}), el("span",{text:o}), rev && mine && mine.choice === k ? el("span",{class:"yp",text: V.mode === "teams" ? "your team" : "you"}) : null);
       }))];
     if (!rev){
-      out.push(el("p",{class:"pick",text: mine ? (V.mode === "teams" && mine.by && mine.by !== V.me.name ? mine.by + " locked in " + PQ.LETTERS[mine.choice] + ". Anyone on the team can change it until time's up." : "Locked in " + PQ.LETTERS[mine.choice] + ". You can change it until time's up.") : (V.mode === "teams" ? "One answer per team. Faster pays more; two wrong answers drop out as the clock runs." : "Faster pays more. Two wrong answers drop out as the clock runs.")}));
+      out.push(!mine && V.snow ? el("p",{class:"pick",style:"color:#e7a3a3;font-weight:700",text:"Your answer got knocked out. Pick again or it's a double bogey."}) : el("p",{class:"pick",text: mine ? (V.mode === "teams" && mine.by && mine.by !== V.me.name ? mine.by + " locked in " + PQ.LETTERS[mine.choice] + ". Anyone on the team can change it until time's up." : "Locked in " + PQ.LETTERS[mine.choice] + ". You can change it until time's up.") : (V.mode === "teams" ? "One answer per team. Faster pays more; two wrong answers drop out as the clock runs." : "Faster pays more. Two wrong answers drop out as the clock runs.")}));
     } else {
       var right = mine && mine.ok;
-      out.push(el("div",{class:"result" + (right ? "" : " bad")}, el("div",{class:"big",text: right ? "Birdie! +" + V.gained : mine ? "Bogey" : "Par \u00b7 no answer"}), el("div",{class:"muted",text:"The answer: " + PQ.LETTERS[V.correct] + ", " + q.opts[V.correct] + " \u00b7 you're " + fmtPar(V.par) + " (" + V.score.toLocaleString() + " pts), " + ordinal(V.rank)})));
+      out.push(el("div",{class:"result" + (right ? "" : " bad")}, el("div",{class:"big",text: right ? "Birdie! +" + V.gained : mine ? "Bogey" : V.snow ? "Double bogey" : "Par \u00b7 no answer"}), el("div",{class:"muted",text:"The answer: " + PQ.LETTERS[V.correct] + ", " + q.opts[V.correct] + " \u00b7 you're " + fmtPar(V.par) + " (" + V.score.toLocaleString() + " pts), " + ordinal(V.rank)})));
       if (q.fact) out.push(el("p",{class:"fact",text:q.fact}));
       out.push(golfRows(10));
     }
@@ -259,7 +259,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
   function countScreen(){
     var n = V.nxt;
     return [header(),
-      el("div",{class:"cd"}, el("div",{class:"k",style:"margin:0",text: n ? "hole " + n.n + " of " + V.total + " \u00b7 " + n.cat + (n.dbl ? " \u00b7 double points" : "") : "get ready"}),
+      el("div",{class:"cd"}, el("div",{class:"k",style:"margin:0",text: n ? "hole " + n.n + " of " + V.total + " \u00b7 par " + n.par + (n.dbl ? " \u00b7 double points" : "") : "get ready"}),
         el("div",{class:"cnum",id:"cnum"}),
         V.rank ? el("p",{class:"muted",text:"You're " + ordinal(V.rank) + " at " + fmtPar(V.par) + " (" + V.score.toLocaleString() + " pts)."}) : null),
       golfRows(10),

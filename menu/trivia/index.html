@@ -97,6 +97,8 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
 .cnum{font:400 calc(26*var(--u))/1 "IM Fell English SC",Georgia,serif;color:var(--brass);text-align:center;text-shadow:0 0 calc(4*var(--u)) rgba(201,162,79,.35)}
 .chole{font:400 calc(4*var(--u))/1.1 "IM Fell English SC",Georgia,serif;text-align:center}
 .ccat{text-align:center;margin-top:calc(.8*var(--u))}
+.cpar{font:400 calc(3*var(--u))/1 "IM Fell English SC",Georgia,serif;color:var(--brass);letter-spacing:.08em}
+.gb tr.parrow td{font:700 calc(1.3*var(--u))/1 "Alegreya Sans SC",sans-serif;color:#1b3a2a;background:rgba(27,58,42,.08)}
 .lt .s .tp{font-size:calc(2.2*var(--u))}
 .lt .under{color:#ff8a7a}
 .lt .g{color:#8fd0a8}
@@ -173,6 +175,10 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
   function modeLabel(){ return S.preset === "pick" ? (S.cats.length === 1 ? S.cats[0] : S.cats.length + " categories") : PRESETS[S.preset].name; }
 
   // Pick questions from the active categories, dealt one category at a time, avoiding ones used recently on this TV.
+  // A real course: each nine plays 4-3-5-4-4-3-4-5-4 (par 36). Par 3 = easy, par 4 = normal, par 5 = hard.
+  // The difficulty setting tilts it: "easy" turns par 5s into 4s, "hard" turns par 3s into 4s.
+  var LAYOUT = [4, 3, 5, 4, 4, 3, 4, 5, 4];
+  function qPar(q){ return q.d === "hard" ? 5 : q.d === "easy" ? 3 : 4; }
   function pickQuestions(n){
     var cats = activeCats();
     var all = bank().filter(function(q){ return cats.indexOf(q.c) !== -1; }).map(function(q){ return Object.assign({ id: slug(q.q).slice(0, 48) }, q); });
@@ -183,9 +189,6 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
     if (fresh.length < n){ used = []; fresh = all; }
     // Difficulty: our own questions have no tag and count as easy/medium. If a category runs short
     // at the chosen level, it tops up from the other levels rather than shrinking the game.
-    var level = fresh.filter(function(q){ return fitsDiff(q); });
-    if (level.length >= n) fresh = level;
-    else { var lk = {}; level.forEach(function(q){ lk[q.id] = 1; }); fresh = level.concat(shuffle(fresh.filter(function(q){ return !lk[q.id]; })).slice(0, n - level.length)); }
     // Within a category, house questions get about 1 pick in 3 even when Open Trivia DB has far more,
     // so ours don't get buried (Video Games: 20 of ours vs ~1,100 downloaded).
     var house = {}, ext = {}, byCat = {};
@@ -195,18 +198,28 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
       while (h.length || x.length) list.push((h.length && (!x.length || Math.random() < 0.35)) ? h.shift() : x.shift());
       byCat[c] = list;
     });
-    var order = shuffle(Object.keys(byCat)), out = [];
+    var order = shuffle(Object.keys(byCat)), dealt = [];
     // Deal one question per category in turn, so every game mixes topics.
-    while (out.length < n){
+    while (true){
       var added = false;
-      order.forEach(function(c){ if (out.length < n && byCat[c].length){ out.push(byCat[c].shift()); added = true; } });
+      order.forEach(function(c){ if (byCat[c].length){ dealt.push(byCat[c].shift()); added = true; } });
       if (!added) break;
     }
-    out = shuffle(out);
+    // Fill the course hole by hole with the next question at that hole's par (nearest par if one runs out).
+    var out = [];
+    for (var h = 0; h < n && dealt.length; h++){
+      var want = LAYOUT[h % 9];
+      if (S.diff === "easy" && want === 5) want = 4;
+      if (S.diff === "hard" && want === 3) want = 4;
+      var tries = [want, 4, want === 5 ? 3 : 5], at = -1;
+      for (var t = 0; t < tries.length && at === -1; t++){ for (var j = 0; j < dealt.length; j++){ if (qPar(dealt[j]) === tries[t]){ at = j; break; } } }
+      if (at === -1) at = 0;
+      out.push(dealt.splice(at, 1)[0]);
+    }
     PQ.store("foreunder.quiz.used", JSON.stringify(used.concat(out.map(function(q){ return q.id; })).slice(-3000)));
     return out.map(function(q){
       var order = shuffle([0, 1, 2, 3]);
-      return { id: q.id, c: q.c, q: q.q, f: q.f || "", opts: order.map(function(k){ return q.a[k]; }), correct: order.indexOf(0) };
+      return { id: q.id, c: q.c, q: q.q, f: q.f || "", par: qPar(q), opts: order.map(function(k){ return q.a[k]; }), correct: order.indexOf(0) };
     });
   }
 
@@ -238,11 +251,12 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
     return {
       t: "state", phase: S.phase, mode: S.mode, holes: S.holes, room: S.room, i: S.i, total: S.qs.length,
       left: S.endsAt ? Math.max(0, S.endsAt - Date.now()) : 0,
-      q: q && (S.phase === "question" || S.phase === "reveal") ? { text: q.q, opts: q.opts, cat: q.c, dbl: isDouble(S.i), fact: S.phase === "reveal" ? q.f : "", gone: S.gone.slice() } : null,
+      q: q && (S.phase === "question" || S.phase === "reveal") ? { text: q.q, opts: q.opts, cat: q.c, par: q.par, dbl: isDouble(S.i), fact: S.phase === "reveal" ? q.f : "", gone: S.gone.slice() } : null,
       correct: S.phase === "reveal" ? q.correct : null,
       secs: Q_SECONDS, max: MAX_PTS, min: MIN_PTS,
       teams: standings().map(function(x){ return [x.id, x.name, x.score, x.par || 0]; }),
-      nxt: S.phase === "count" && S.qs[S.i + 1] ? { n: S.i + 2, cat: S.qs[S.i + 1].c, dbl: isDouble(S.i + 1) } : null,
+      nxt: S.phase === "count" && S.qs[S.i + 1] ? { n: S.i + 2, par: S.qs[S.i + 1].par, dbl: isDouble(S.i + 1) } : null,
+      snow: S.phase === "reveal" || S.phase === "question" ? Object.keys(S.knocked || {}) : [],
       rec: (function(){ var r = record(); return r ? [r.par, r.name, r.pts, r.date] : null; })(), newRec: !!S.newRecord,
       players: players, ans: ans, playing: activeTeams().length,
       preset: S.preset, diff: S.diff, cats: S.phase === "lobby" ? activeCats() : undefined, all: S.phase === "lobby" ? allCats() : undefined, bank: S.phase === "lobby" ? selCount() : undefined
@@ -283,6 +297,7 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
       var t = teamOf(pid), c = Number(d.choice);
       if (S.phase === "question" && t && c >= 0 && c <= 3 && S.gone.indexOf(c) === -1 && Date.now() < S.endsAt){
         S.answers[t.id] = { choice: c, by: p.name, ms: Date.now() - S.qStart };
+        if (S.knocked) delete S.knocked[t.id];
         // The clock always runs out: eliminations are the game. Changing an answer re-stamps the
         // time, so switching late still costs points. The quizmaster's "reveal" skips ahead if needed.
         render();
@@ -328,7 +343,7 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
   // 5-4-3-2-1 before the first hole and after the turn; 3-2-1 between holes.
   function countdown(n){ S.phase = "count"; S.countN = n; S.endsAt = Date.now() + n * 1000; schedule(); render(); }
   function ask(){
-    S.i++; S.answers = {}; S.gone = []; S.phase = "question"; S.qStart = Date.now(); S.endsAt = Date.now() + Q_SECONDS * 1000;
+    S.i++; S.answers = {}; S.gone = []; S.knocked = {}; S.phase = "question"; S.qStart = Date.now(); S.endsAt = Date.now() + Q_SECONDS * 1000;
     var q = S.qs[S.i], wrong = shuffle([0, 1, 2, 3].filter(function(k){ return k !== q.correct; }));
     clearElims();
     [1, 2].forEach(function(n){ elimTimers.push(setTimeout(function(){ eliminate(wrong[n - 1]); }, Q_SECONDS * 1000 * n / 3)); });
@@ -339,7 +354,7 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
     if (S.phase !== "question" || S.gone.indexOf(k) !== -1) return;
     S.gone.push(k);
     // Anyone sitting on the knocked-out answer has to pick again (at the lower value).
-    Object.keys(S.answers).forEach(function(t){ if (S.answers[t].choice === k) delete S.answers[t]; });
+    Object.keys(S.answers).forEach(function(t){ if (S.answers[t].choice === k){ delete S.answers[t]; S.knocked[t] = 1; } });
     render();
   }
   function isDouble(i){ return i === S.qs.length - 1; }
@@ -352,7 +367,8 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
       if (a.ok){ t.score += a.pts; t.correct++; t.ms += a.ms; }
     });
     standings().forEach(function(t){
-      var a = S.answers[t.id], r = a ? (a.ok ? -1 : 1) : 0;
+      // Sat on an answer that got knocked out and never picked again: double bogey (+2).
+      var a = S.answers[t.id], r = a ? (a.ok ? -1 : 1) : (S.knocked && S.knocked[t.id] ? 2 : 0);
       t.hist = t.hist || []; t.hist[S.i] = r; t.par = (t.par || 0) + r;
     });
     S.phase = "reveal"; S.endsAt = Date.now() + REVEAL_SECONDS * 1000; schedule(); render();
@@ -432,7 +448,7 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
         el("div",{class:"join"}, qrSvg(joinUrl()),
           el("div",null, el("div",{class:"k",text:"room code"}), el("div",{class:"code",text:S.room}),
             el("ol",{class:"steps"}, el("li",{text:"Scan the code with your phone camera."}), el("li",{text: S.mode === "teams" ? "Enter your name and pick or start a team." : "Enter your name."}), el("li",{text:"Answer on your phone before the clock runs out."})))),
-        el("div",{class:"settings"}, el("span",{class:"pill",text: S.mode === "teams" ? "team mode" : "everyone for themselves"}), el("span",{class:"pill",text: modeLabel()}), el("span",{class:"pill",text: (S.holes === 72 ? "72 holes · full tournament" : S.holes + " holes") + " · " + S.diff}), ),
+        el("div",{class:"settings"}, el("span",{class:"pill",text: S.mode === "teams" ? "team mode" : "everyone for themselves"}), el("span",{class:"pill",text: modeLabel()}), el("span",{class:"pill",text: (S.holes === 72 ? "72 holes · full tournament" : S.holes + " holes") + " \u00b7 " + (S.diff === "mixed" ? "championship course" : S.diff === "easy" ? "easy course (no par 5s)" : "hard course (no par 3s)")}), ),
         el("div",{class:"rec",text:recordText()}),
         el("div",{class:"wait" + (S.err ? " err" : ""), text: S.err || (st.length ? "The quizmaster starts the game from their phone, or press OK on the remote." : "Waiting for players…")}),
         st.length ? el("button",{class:"btn",id:"startBtn",type:"button",onclick:function(){ start(); }}, "start the game") : null
@@ -440,7 +456,7 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
       el("div",{class:"teams"}, el("h2",{text: S.mode === "teams" ? "Teams" : "Players"}),
         st.length ? el("div",{class:"tlist"}, st.map(function(t){ var m = membersOf(t.id); return el("div",{class:"team"}, el("b",{text:t.name}), S.mode === "teams" ? el("span",{text:m.join(", ")}) : null); }))
           : el("p",{class:"empty",text:"Nobody yet. Be the first."}),
-        el("div",{class:"rules",text:"Scored like golf: right answer is a birdie, wrong is a bogey, no answer is par. Lowest score wins; points (up to 1,000 a hole, faster pays more) break ties. Two wrong answers drop out as the clock runs. Last hole doubles points."}),
+        el("div",{class:"rules",text:"Scored like golf: right answer is a birdie, wrong is a bogey, no answer is par. Leave a knocked-out answer sitting there and it's a double bogey. Par 3s are easy, par 4s normal, par 5s hard. Lowest score wins; points (up to 1,000 a hole, faster pays more) break ties. Two wrong answers drop out as the clock runs. Last hole doubles points."}),
         el("p",{class:"credit",text: selCount().toLocaleString() + " questions ready for this game" + (window.OTDB && OTDB.busy() ? " (still downloading more)" : "") + ". Many from Open Trivia DB (opentdb.com), CC BY-SA 4.0."}))
     );
   }
@@ -449,7 +465,7 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
     var q = S.qs[S.i];
     var wrap = el("div",{id:"qw",style:"display:flex;flex-direction:column;flex:1;min-height:0"},
       el("div",{class:"qhead"},
-        el("div",null, el("span",{class:"hole",text:"Hole " + (S.i + 1) + " of " + S.qs.length}), el("span",{class:"k",style:"margin-left:calc(1.4*var(--u))",text:q.c}), isDouble(S.i) ? el("span",{class:"dbl",text:"double points"}) : null),
+        el("div",null, el("span",{class:"hole",text:"Hole " + (S.i + 1) + " \u00b7 Par " + q.par}), el("span",{class:"k",style:"margin-left:calc(1.4*var(--u))",text:q.c}), isDouble(S.i) ? el("span",{class:"dbl",text:"double points"}) : null),
         el("div",{class:"qright"}, el("span",{class:"worth",id:"worth"}), el("div",{class:"clock",id:"clock"}))),
       el("div",{class:"timer"}, el("i",{id:"bar"})),
       el("p",{class:"qtext",text:q.q}),
@@ -480,7 +496,7 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
       st.append(el("span",{class:"k",text: nRight ? "leaderboard · birdies in green" : "leaderboard · nobody birdied this one"}),
         el("div",{class:"lb"}, standings().slice(0, 12).map(function(t, i){
           var a = S.answers[t.id], ok = a && a.ok;
-          var res = a ? (ok ? "birdie" : "bogey") : "par";
+          var res = a ? (ok ? "birdie" : "bogey") : (S.knocked && S.knocked[t.id] ? "double bogey" : "par");
           return el("div",{class:"lt" + (ok ? " ok" : "")}, el("span",{class:"p",text:String(i + 1)}),
             el("span",{class:"n"}, t.name, el("span",{class:"bd",text:res})),
             el("span",{class:"s"}, el("span",{class:"tp " + parClass(t.par || 0),text:fmtPar(t.par || 0)}), el("span",{class:"g",style:"color:var(--muted)",text:"(" + t.score.toLocaleString() + ")"})));
@@ -527,14 +543,15 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
         holes.map(function(h){ if (h > played) return el("td",{class:"h"}); run += hist[h] || 0; return el("td",{class:"h " + parClass(run),text:fmtPar(run)}); }),
         el("td",{class:"tp " + parClass(t.par || 0),text:fmtPar(t.par || 0)}), el("td",{class:"pt",text:"(" + t.score.toLocaleString() + ")"}));
     });
-    return el("div",{class:"gb"}, el("div",{class:"gb-h",text:title || "Leaders"}), el("table",null, el("thead",null, head), el("tbody",null, rows.length ? rows : el("tr",null, el("td",{colspan:String(holes.length + 4),class:"nm",text:"No players yet"})))));
+    var parRow = el("tr",{class:"parrow"}, el("td"), el("td",{class:"nm",style:"font-size:calc(1.3*var(--u))",text:"par"}), holes.map(function(h){ return el("td",{text: S.qs[h] ? String(S.qs[h].par) : ""}); }), el("td",{class:"tp",style:"font-size:calc(1.3*var(--u))",text:String(holes.reduce(function(a, h){ return a + (S.qs[h] ? S.qs[h].par : 0); }, 0))}), el("td"));
+    return el("div",{class:"gb"}, el("div",{class:"gb-h",text:title || "Leaders"}), el("table",null, el("thead",null, head, parRow), el("tbody",null, rows.length ? rows : el("tr",null, el("td",{colspan:String(holes.length + 4),class:"nm",text:"No players yet"})))));
   }
   function countView(){
     var nq = S.qs[S.i + 1];
     return el("div",{class:"count"},
       el("div",null,
         el("div",{class:"chole",text: "Hole " + (S.i + 2) + " of " + S.qs.length}),
-        nq ? el("div",{class:"ccat"}, el("span",{class:"k",text:nq.c}), isDouble(S.i + 1) ? el("span",{class:"dbl",text:"double points"}) : null) : null,
+        nq ? el("div",{class:"ccat"}, el("span",{class:"cpar",text:"Par " + nq.par}), isDouble(S.i + 1) ? el("span",{class:"dbl",text:"double points"}) : null) : null,
         el("div",{class:"cnum",id:"cnum",text:String(S.countN)}),
         el("div",{class:"rec",style:"text-align:center",text:recordText()})),
       golfBoard(10, S.i < 0 ? "First tee" : "Leaders"));
