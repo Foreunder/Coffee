@@ -65,6 +65,8 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
 .gr .tp{font-size:20px;min-width:34px;text-align:right}
 .gr .tp.under{color:#b3261e}
 .gr .pt{font:500 13px/1 "Alegreya",Georgia,serif;color:#5b5446}
+.gr.rr{grid-template-columns:1fr auto auto}
+.gr.rr .n{white-space:normal;text-transform:none;font-size:15px}
 .gr.ok{background:rgba(79,138,106,.25)}
 .gr.me{box-shadow:inset 4px 0 0 var(--brass)}
 .cd{text-align:center;padding:10px 0 4px}
@@ -126,7 +128,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
       mine: a ? { choice: a[0], by: a[1], ok: d.phase === "reveal" ? !!a[2] : null } : null,
       gained: d.phase === "reveal" && a && a[2] ? (a[3] || 0) : 0, secs: d.secs || 30, max: d.max || 1000, min: d.min || 100,
       rank: rank, score: team ? team.score : 0, par: team ? team.par : 0, teams: teams, playing: d.playing, nxt: d.nxt || null, snow: !!(tid && (d.snow || []).indexOf(tid) !== -1), rec: d.rec || null, newRec: !!d.newRec,
-      preset: d.preset || "pub", course: d.course || "", courseName: d.courseName || "", courses: d.courses || [], diff: d.diff || "mixed", bank: d.bank || 0, cats: d.cats || [], all: d.all || [],
+      preset: d.preset || "pub", course: d.course || "", recs: d.recs || (V && V.recs) || [], courseName: d.courseName || "", courses: d.courses || [], diff: d.diff || "mixed", bank: d.bank || 0, cats: d.cats || [], all: d.all || [],
       answered: Object.keys(d.ans || {}).length, players: Object.keys(d.players || {}).length
     };
   }
@@ -222,7 +224,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
       el("p",{class:"muted",text:"Watch the TV. The questions show up there, and you answer here."}),
       el("p",{class:"muted",style:"font-size:14px"}, "Waiting on the first tee? ", el("a",{href:"range.html",style:"color:var(--brass)",text:"Hit the range"}), " for practice questions."),
       el("p",{class:"muted",style:"font-size:14px",text:"Scored like golf: right = birdie, wrong = bogey, no answer = par. If your answer gets knocked out, pick again or it's a double bogey. Par 3 = easy, par 4 = normal, par 5 = hard. Lowest score wins."}),
-      el("p",{class:"rec",text:recLine()})),
+      el("p",{class:"rec",text:recLine()})), recList(),
       el("button",{class:"btn ghost",type:"button",onclick:function(){ PQ.store("foreunder.quiz.joined",""); V.me.team = null; pending.newTeam = false; render(); }}, V.mode === "teams" ? "switch team" : "change name")];
   }
   function questionScreen(){
@@ -258,6 +260,12 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
         el("span",{class:"tp " + (t.par < 0 ? "under" : ""),text:fmtPar(t.par)}), el("span",{class:"pt",text:"(" + t.score.toLocaleString() + ")"}));
     }));
   }
+  function recList(){
+    if (!V.recs || !V.recs.length) return null;
+    return el("div",{class:"gbp"}, el("div",{class:"gbp-h",text:"Course Records"}), V.recs.slice(0, 10).map(function(r){
+      return el("div",{class:"gr rr"}, el("span",{class:"n",text: r[6] + " \u00b7 " + (r[1] === 72 ? "72" : r[1] === 9 ? "front 9" : "18")}), el("span",{class:"tp " + (r[2] < 0 ? "under" : ""),text:fmtPar(r[2])}), el("span",{class:"pt",text: r[3]}));
+    }));
+  }
   function countScreen(){
     var n = V.nxt;
     return [header(),
@@ -275,7 +283,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
       final && V.newRec ? el("p",{class:"rec new",text:"New course record!"}) : null,
       el("p",{class:"muted",text: V.rank ? "You're " + ordinal(V.rank) + " at " + fmtPar(V.par) + " (" + V.score.toLocaleString() + " pts)." : ""}),
       golfRows(20),
-      el("p",{class:"rec",text:recLine()})];
+      el("p",{class:"rec",text:recLine()}), final ? recList() : null];
   }
   function viewToggle(){
     if (!V || !V.me.qm) return null;
@@ -297,7 +305,8 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
       var sel = el("select",{class:"sel",onchange:function(e){ send({ t:"qm", cmd:"course", course:e.target.value }); V.course = e.target.value; }},
         [["house","Foreunder"],["masters","The Masters"],["open","The Open Championship"],["usopen","U.S. Open"]].map(function(g){
           var cs = V.courses.filter(function(c){ return c[2] === g[0]; });
-          return cs.length ? el("optgroup",{label:g[1]}, cs.map(function(c){ return el("option",{value:c[0],selected: c[0] === V.course ? "" : null}, c[1] + " (par " + c[3] + ")"); })) : null;
+          return cs.length ? el("optgroup",{label:g[1]}, cs.map(function(c){ var best = V.recs.filter(function(r){ return r[0] === c[0]; }).sort(function(a, b){ return a[2] - b[2]; })[0];
+            return el("option",{value:c[0],selected: c[0] === V.course ? "" : null}, c[1] + " (par " + c[3] + ")" + (best ? " \u00b7 record " + fmtPar(best[2]) + " " + best[3] : "")); })) : null;
         }));
       body.push(el("span",{class:"k",text:"course \u00b7 par 3 easy, 4 normal, 5 hard"}), sel);
       body.push(el("span",{class:"k",text:"teams & length"}));

@@ -105,6 +105,13 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
 .lt .bd{display:block;font:700 calc(1.05*var(--u))/1.2 "Alegreya Sans SC",sans-serif;letter-spacing:.1em;text-transform:lowercase;color:var(--muted)}
 .lt.ok .bd{color:#8fd0a8}
 .board{display:flex;flex-direction:column;flex:1;min-height:0}
+.recs{margin-top:calc(1.6*var(--u))}
+.recrow{display:grid;grid-template-columns:1fr auto;gap:0 calc(1*var(--u));padding:calc(.5*var(--u)) 0;border-bottom:1px solid var(--rule)}
+.recrow .rc{font:400 calc(1.5*var(--u))/1.2 "IM Fell English SC",Georgia,serif}
+.recrow b{font:700 calc(1.8*var(--u))/1 "Alegreya Sans SC",sans-serif;grid-row:span 2;align-self:center}
+.recrow b.under{color:#ff8a7a}
+.recrow .rh{font-size:calc(1.15*var(--u));color:var(--muted)}
+.recrow.on .rc{color:var(--brass)}
 /* board */
 .board h1{margin-bottom:calc(.6*var(--u))}
 .rows{display:grid;gap:calc(.9*var(--u));margin-top:calc(2*var(--u))}
@@ -152,6 +159,23 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
   function course(){ var cs = window.COURSES || []; return cs.filter(function(c){ return c.id === S.course; })[0] || cs[0]; }
   function recKey(){ return "foreunder.quiz.record." + course().id + "." + S.holes; }
   function record(){ try { var r = JSON.parse(PQ.store(recKey()) || "null"); return r && typeof r.par === "number" ? r : null; } catch(e) { return null; } }
+  // Every course record set on this TV: [course, holes, record], newest first.
+  function allRecords(){
+    var out = [];
+    (window.COURSES || []).forEach(function(c){ [9, 18, 72].forEach(function(h){
+      try { var r = JSON.parse(PQ.store("foreunder.quiz.record." + c.id + "." + h) || "null"); if (r && typeof r.par === "number") out.push([c, h, r]); } catch(e) {}
+    }); });
+    return out.sort(function(a, b){ return (Date.parse(b[2].date) || 0) - (Date.parse(a[2].date) || 0); });
+  }
+  function lenName(h){ return h === 72 ? "72 holes" : h === 9 ? "front nine" : "18 holes"; }
+  function recordsPanel(max){
+    var rs = allRecords();
+    if (!rs.length) return el("div",{class:"recs"}, el("div",{class:"k",text:"course records"}), el("p",{class:"empty",text:"No records yet. The first finished round sets one."}));
+    return el("div",{class:"recs"}, el("div",{class:"k",text:"course records"}), rs.slice(0, max || 8).map(function(x){
+      var on = x[0].id === course().id && x[1] === S.holes;
+      return el("div",{class:"recrow" + (on ? " on" : "")}, el("span",{class:"rc",text: x[0].name + " \u00b7 " + lenName(x[1])}), el("b",{class:parClass(x[2].par),text:fmtPar(x[2].par)}), el("span",{class:"rh",text: x[2].name + " (" + x[2].pts.toLocaleString() + ") \u00b7 " + x[2].date}));
+    }));
+  }
   function recordText(){
     var r = record(), len = course().name + ", " + (S.holes === 72 ? "72 holes" : S.holes + " holes");
     return r ? "Course record (" + len + "): " + fmtPar(r.par) + " \u00b7 " + r.name + " (" + r.pts.toLocaleString() + " pts) \u00b7 " + r.date : "Course record (" + len + "): open \u2014 set it tonight";
@@ -260,7 +284,8 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
       snow: S.phase === "reveal" || S.phase === "question" ? Object.keys(S.knocked || {}) : [],
       rec: (function(){ var r = record(); return r ? [r.par, r.name, r.pts, r.date] : null; })(), newRec: !!S.newRecord,
       players: players, ans: ans, playing: activeTeams().length,
-      course: course().id, courseName: course().name, courses: S.phase === "lobby" ? (window.COURSES || []).map(function(c){ return [c.id, c.name, c.tour, c.pars.reduce(function(a, b){ return a + b; }, 0)]; }) : undefined,
+      course: course().id, courseName: course().name,
+      recs: S.phase === "lobby" || S.phase === "final" ? allRecords().map(function(x){ return [x[0].id, x[1], x[2].par, x[2].name, x[2].pts, x[2].date, x[0].name]; }) : undefined, courses: S.phase === "lobby" ? (window.COURSES || []).map(function(c){ return [c.id, c.name, c.tour, c.pars.reduce(function(a, b){ return a + b; }, 0)]; }) : undefined,
       preset: S.preset, diff: S.diff, cats: S.phase === "lobby" ? activeCats() : undefined, all: S.phase === "lobby" ? allCats() : undefined, bank: S.phase === "lobby" ? selCount() : undefined
     };
   }
@@ -459,6 +484,7 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
       el("div",{class:"teams"}, el("h2",{text: S.mode === "teams" ? "Teams" : "Players"}),
         st.length ? el("div",{class:"tlist"}, st.map(function(t){ var m = membersOf(t.id); return el("div",{class:"team"}, el("b",{text:t.name}), S.mode === "teams" ? el("span",{text:m.join(", ")}) : null); }))
           : el("p",{class:"empty",text:"Nobody yet. Be the first."}),
+        recordsPanel(6),
         el("div",{class:"rules",text:"Scored like golf: right answer is a birdie, wrong is a bogey, no answer is par. Leave a knocked-out answer sitting there and it's a double bogey. Par 3s are easy, par 4s normal, par 5s hard. Lowest score wins; points (up to 1,000 a hole, faster pays more) break ties. Two wrong answers drop out as the clock runs. Last hole doubles points."}),
         el("p",{class:"credit",text: selCount().toLocaleString() + " questions ready for this game" + (window.OTDB && OTDB.busy() ? " (still downloading more)" : "") + ". Many from Open Trivia DB (opentdb.com), CC BY-SA 4.0."}))
     );
@@ -571,6 +597,7 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
       final && S.newRecord ? el("div",null, el("span",{class:"rec new",text:"New course record: " + fmtPar(top.par || 0)})) : null,
       el("div",{style:"margin-top:calc(1.4*var(--u))"}, golfBoard(final ? 8 : 10)),
       el("div",{class:"rec",text:recordText()}),
+      final ? recordsPanel(5) : null,
       el("div",{class:"note",text: final ? "Quizmaster: tap Play again on your phone, or press OK." : "Back to the tee in a moment\u2026"})
     );
   }
