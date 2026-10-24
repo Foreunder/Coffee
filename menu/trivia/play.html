@@ -131,7 +131,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
       mine: a ? { choice: a[0], by: a[1], ok: d.phase === "reveal" ? !!a[2] : null } : null,
       gained: d.phase === "reveal" && a && a[2] ? (a[3] || 0) : 0, secs: d.secs || 30, max: d.max || 1000, min: d.min || 100,
       rank: rank, score: team ? team.score : 0, par: team ? team.par : 0, net: team ? team.net : 0, myHcp: team ? team.hcp : 0, teams: teams, playing: d.playing, nxt: d.nxt || null, snow: !!(tid && (d.snow || []).indexOf(tid) !== -1), rec: d.rec || null, newRec: !!d.newRec,
-      preset: d.preset || "pub", hcp: !!d.hcp, sound: d.sound !== false, prof: d.prof || (V && V.prof) || {}, course: d.course || "", recs: d.recs || (V && V.recs) || [], courseName: d.courseName || "", courses: d.courses || [], diff: d.diff || "mixed", bank: d.bank || 0, cats: d.cats || [], all: d.all || [],
+      preset: d.preset || "pub", hcp: !!d.hcp, back: !!d.back, off: d.off || 0, plen: d.plen || 18, sound: d.sound !== false, prof: d.prof || (V && V.prof) || {}, course: d.course || "", recs: d.recs || (V && V.recs) || [], courseName: d.courseName || "", courses: d.courses || [], diff: d.diff || "mixed", bank: d.bank || 0, cats: d.cats || [], all: d.all || [],
       answered: Object.keys(d.ans || {}).length, players: Object.keys(d.players || {}).length
     };
   }
@@ -238,7 +238,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
   function questionScreen(){
     var q = V.q, rev = V.phase === "reveal", mine = V.mine;
     var colors = ["var(--A)","var(--B)","var(--C)","var(--D)"];
-    var out = [el("div",{class:"qmeta"}, el("span",{text:"hole " + (V.i + 1) + " of " + V.total + (q.par ? " · par " + q.par : "") + " · " + q.cat + (q.dbl ? " · double points" : "")}), el("span",null, rev ? null : el("span",{class:"worth",id:"worth"}), " ", el("span",{class:"clock",id:"clock"}))),
+    var out = [el("div",{class:"qmeta"}, el("span",{text:"hole " + ((V.i + V.off) % V.plen + 1) + (V.off ? " (" + (V.i + 1) + " of " + V.total + ")" : " of " + V.total) + (q.par ? " · par " + q.par : "") + " · " + q.cat + (q.dbl ? " · double points" : "")}), el("span",null, rev ? null : el("span",{class:"worth",id:"worth"}), " ", el("span",{class:"clock",id:"clock"}))),
       el("div",{class:"timer"}, el("i",{id:"bar"})),
       el("p",{class:"qtext",text:q.text}),
       el("div",{class:"ans"}, q.opts.map(function(o, k){
@@ -281,13 +281,13 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
   function recList(){
     if (!V.recs || !V.recs.length) return null;
     return el("div",{class:"gbp"}, el("div",{class:"gbp-h",text:"Course Records"}), V.recs.slice(0, 10).map(function(r){
-      return el("div",{class:"gr rr"}, el("span",{class:"n",text: r[6] + " \u00b7 " + (r[1] === 72 ? "72" : r[1] === 9 ? "front 9" : "18")}), el("span",{class:"tp " + (r[2] < 0 ? "under" : ""),text:fmtPar(r[2])}), el("span",{class:"pt",text: r[3]}));
+      return el("div",{class:"gr rr"}, el("span",{class:"n",text: r[6] + " \u00b7 " + (r[1] === "72" ? "72" : r[1] === "9" ? "front 9" : r[1] === "9b" ? "back 9" : "18")}), el("span",{class:"tp " + (r[2] < 0 ? "under" : ""),text:fmtPar(r[2])}), el("span",{class:"pt",text: r[3]}));
     }));
   }
   function countScreen(){
     var n = V.nxt;
     return [header(),
-      el("div",{class:"cd"}, el("div",{class:"k",style:"margin:0",text: n ? "hole " + n.n + " of " + V.total + " \u00b7 par " + n.par + (n.dbl ? " \u00b7 double points" : "") : "get ready"}),
+      el("div",{class:"cd"}, el("div",{class:"k",style:"margin:0",text: n ? "hole " + ((n.n - 1 + V.off) % V.plen + 1) + (V.off ? " (" + n.n + " of " + V.total + ")" : " of " + V.total) + " \u00b7 par " + n.par + (n.dbl ? " \u00b7 double points" : "") : "get ready"}),
         el("div",{class:"cnum",id:"cnum"}),
         V.rank ? el("p",{class:"muted",text:"You're " + ordinal(V.rank) + " at " + fmtPar(V.par) + " (" + V.score.toLocaleString() + " pts)."}) : null),
       golfRows(10),
@@ -337,7 +337,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
       body.push(el("div",{class:"chips"},
         el("button",{type:"button",class:"chip" + (V.mode === "teams" ? " on" : ""),onclick:function(){ send({ t:"qm", cmd:"mode", mode:"teams" }); }}, "teams"),
         el("button",{type:"button",class:"chip" + (V.mode === "solo" ? " on" : ""),onclick:function(){ send({ t:"qm", cmd:"mode", mode:"solo" }); }}, "solo")));
-      body.push(el("div",{class:"chips",style:"margin-top:8px"}, [[9,"front nine"],[18,"18 holes"],[72,"72 \u00b7 full tournament"]].map(function(n){ return el("button",{type:"button",class:"chip" + (V.holes === n[0] ? " on" : ""),onclick:function(){ send({ t:"qm", cmd:"holes", holes:n[0] }); }}, n[1]); })));
+      body.push(el("div",{class:"chips",style:"margin-top:8px"}, [[9,"front nine",false],[9,"back nine",true],[18,"18 holes",false],[72,"72 \u00b7 full tournament",false]].map(function(n){ return el("button",{type:"button",class:"chip" + (V.holes === n[0] && (n[0] !== 9 || V.back === n[2]) ? " on" : ""),onclick:function(){ send({ t:"qm", cmd:"holes", holes:n[0], back:n[2] }); }}, n[1]); })));
       body.push(el("button",{class:"btn",type:"button",disabled: V.playing && V.cats.length ? null : "",onclick:function(){ send({ t:"qm", cmd:"start" }); }}, !V.cats.length ? "pick at least one category" : V.playing ? "start the game" : "waiting for players"));
     } else if (p === "final"){
       body.push(el("button",{class:"btn",type:"button",onclick:function(){ send({ t:"qm", cmd:"again" }); }}, "play again"));
