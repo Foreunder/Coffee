@@ -77,6 +77,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
 .row b{font:400 20px/1 "IM Fell English SC",Georgia,serif;color:var(--brass)}
 .row .n{font:400 19px/1.1 "IM Fell English SC",Georgia,serif}
 .row .m{font-size:13px;color:var(--muted)}
+.sel{width:100%;background:var(--panel);color:var(--ink);border:1px solid var(--rule);border-radius:10px;padding:12px;font:17px/1.2 "Alegreya",Georgia,serif;min-height:48px}
 .seg{display:flex;margin:14px 0 4px;border:1.5px solid var(--rule);border-radius:999px;padding:3px}
 .seg button{flex:1;border:0;background:transparent;color:var(--muted);font:600 14px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.12em;text-transform:lowercase;border-radius:999px;padding:11px;min-height:42px;cursor:pointer}
 .seg button.on{background:var(--brass);color:#1a1408}
@@ -125,7 +126,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
       mine: a ? { choice: a[0], by: a[1], ok: d.phase === "reveal" ? !!a[2] : null } : null,
       gained: d.phase === "reveal" && a && a[2] ? (a[3] || 0) : 0, secs: d.secs || 30, max: d.max || 1000, min: d.min || 100,
       rank: rank, score: team ? team.score : 0, par: team ? team.par : 0, teams: teams, playing: d.playing, nxt: d.nxt || null, snow: !!(tid && (d.snow || []).indexOf(tid) !== -1), rec: d.rec || null, newRec: !!d.newRec,
-      preset: d.preset || "pub", diff: d.diff || "mixed", bank: d.bank || 0, cats: d.cats || [], all: d.all || [],
+      preset: d.preset || "pub", course: d.course || "", courseName: d.courseName || "", courses: d.courses || [], diff: d.diff || "mixed", bank: d.bank || 0, cats: d.cats || [], all: d.all || [],
       answered: Object.keys(d.ans || {}).length, players: Object.keys(d.players || {}).length
     };
   }
@@ -292,13 +293,18 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
       if (V.preset === "pick") body.push(el("div",{class:"chips",style:"margin-top:8px"}, V.all.map(function(c){
         return el("button",{type:"button",class:"chip" + (V.cats.indexOf(c) !== -1 ? " on" : ""),onclick:function(){ send({ t:"qm", cmd:"cat", cat:c }); var at = V.cats.indexOf(c); if (at === -1) V.cats.push(c); else V.cats.splice(at, 1); render(); }}, c); })));
       else body.push(el("p",{class:"muted",style:"margin:8px 0 0;font-size:14px",text: V.cats.join(" · ")}));
-      body.push(el("span",{class:"k",text:"difficulty"}), el("div",{class:"chips"}, ["easy", "mixed", "hard"].map(function(x){
-        return el("button",{type:"button",class:"chip" + (V.diff === x ? " on" : ""),onclick:function(){ send({ t:"qm", cmd:"diff", diff:x }); V.diff = x; render(); }}, x); })));
+      // Course: par 3 = easy, par 4 = normal, par 5 = hard, hole by hole like the real card.
+      var sel = el("select",{class:"sel",onchange:function(e){ send({ t:"qm", cmd:"course", course:e.target.value }); V.course = e.target.value; }},
+        [["house","Foreunder"],["masters","The Masters"],["open","The Open Championship"],["usopen","U.S. Open"]].map(function(g){
+          var cs = V.courses.filter(function(c){ return c[2] === g[0]; });
+          return cs.length ? el("optgroup",{label:g[1]}, cs.map(function(c){ return el("option",{value:c[0],selected: c[0] === V.course ? "" : null}, c[1] + " (par " + c[3] + ")"); })) : null;
+        }));
+      body.push(el("span",{class:"k",text:"course \u00b7 par 3 easy, 4 normal, 5 hard"}), sel);
       body.push(el("span",{class:"k",text:"teams & length"}));
       body.push(el("div",{class:"chips"},
         el("button",{type:"button",class:"chip" + (V.mode === "teams" ? " on" : ""),onclick:function(){ send({ t:"qm", cmd:"mode", mode:"teams" }); }}, "teams"),
         el("button",{type:"button",class:"chip" + (V.mode === "solo" ? " on" : ""),onclick:function(){ send({ t:"qm", cmd:"mode", mode:"solo" }); }}, "solo")));
-      body.push(el("div",{class:"chips",style:"margin-top:8px"}, [[9,"9 holes"],[18,"18 holes"],[72,"72 \u00b7 full tournament"]].map(function(n){ return el("button",{type:"button",class:"chip" + (V.holes === n[0] ? " on" : ""),onclick:function(){ send({ t:"qm", cmd:"holes", holes:n[0] }); }}, n[1]); })));
+      body.push(el("div",{class:"chips",style:"margin-top:8px"}, [[9,"front nine"],[18,"18 holes"],[72,"72 \u00b7 full tournament"]].map(function(n){ return el("button",{type:"button",class:"chip" + (V.holes === n[0] ? " on" : ""),onclick:function(){ send({ t:"qm", cmd:"holes", holes:n[0] }); }}, n[1]); })));
       body.push(el("button",{class:"btn",type:"button",disabled: V.playing && V.cats.length ? null : "",onclick:function(){ send({ t:"qm", cmd:"start" }); }}, !V.cats.length ? "pick at least one category" : V.playing ? "start the game" : "waiting for players"));
     } else if (p === "final"){
       body.push(el("button",{class:"btn",type:"button",onclick:function(){ send({ t:"qm", cmd:"again" }); }}, "play again"));
