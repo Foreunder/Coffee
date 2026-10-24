@@ -191,7 +191,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
   function codeScreen(){
     var inp = el("input",{type:"text",class:"code",maxlength:"4",autocapitalize:"characters",autocomplete:"off",placeholder:"ABCD",value:room});
     var off = status === "nogame";
-    return [header(), off ? el("div",{class:"card"}, el("div",{class:"big",text:"No game on the TV yet."}), el("p",{class:"muted",text:"Ask Jamey to start the pub quiz, then tap below. Or type the room code from the TV."}), el("button",{class:"btn",type:"button",onclick:function(){ status = ""; findGame(); }}, "check again")) : el("p",{text: finding ? "Looking for the game on the TV…" : "Type the 4-letter room code on the TV."}), inp,
+    return [header(), off ? el("div",{class:"card"}, el("div",{class:"big",text:"No game on the TV yet."}), el("p",{class:"muted",text:"Ask Jamey to start the pub quiz, then tap below. Or type the room code from the TV."}), el("p",{class:"muted"}, "No game? ", el("a",{href:"range.html",style:"color:var(--brass)",text:"Hit the range"}), " and practice on your own."), el("button",{class:"btn",type:"button",onclick:function(){ status = ""; findGame(); }}, "check again")) : el("p",{text: finding ? "Looking for the game on the TV…" : "Type the 4-letter room code on the TV."}), inp,
       el("button",{class:"btn",type:"button",onclick:function(){ room = inp.value.toUpperCase().replace(/[^A-Z]/g,"").slice(0,4); if (room.length === 4){ status = ""; history.replaceState(null, "", "?room=" + room + (PQ.qs.get("relay") ? "&relay=" + encodeURIComponent(PQ.qs.get("relay")) : "")); connect(); } }}, "join the game")];
   }
   function joinScreen(){
@@ -219,6 +219,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
       el("div",{class:"big",text:"You're in, " + V.me.name + "."}),
       V.mode === "teams" ? el("p",null, "Team ", el("b",{text:V.me.team}), V.me.mates.length > 1 ? " with " + V.me.mates.filter(function(n){ return n !== V.me.name; }).join(", ") : ". Get others to pick it on their phones.") : null,
       el("p",{class:"muted",text:"Watch the TV. The questions show up there, and you answer here."}),
+      el("p",{class:"muted",style:"font-size:14px"}, "Waiting on the first tee? ", el("a",{href:"range.html",style:"color:var(--brass)",text:"Hit the range"}), " for practice questions."),
       el("p",{class:"muted",style:"font-size:14px",text:"Scored like golf: right = birdie, wrong = bogey, no answer = par. If your answer gets knocked out, pick again or it's a double bogey. Par 3 = easy, par 4 = normal, par 5 = hard. Lowest score wins."}),
       el("p",{class:"rec",text:recLine()})),
       el("button",{class:"btn ghost",type:"button",onclick:function(){ PQ.store("foreunder.quiz.joined",""); V.me.team = null; pending.newTeam = false; render(); }}, V.mode === "teams" ? "switch team" : "change name")];

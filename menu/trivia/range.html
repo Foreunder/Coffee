@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0f1c16">
+<title>The Range · Foreunder Coffee House</title>
+<link rel="icon" href="../icon.png">
+<link rel="apple-touch-icon" href="../icon.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=IM+Fell+English:ital@0;1&family=Alegreya:ital,wght@0,400;0,500;1,400&family=Alegreya+Sans+SC:wght@500;700&display=swap">
+<style>
+:root{--ground:#0f1c16;--panel:#16271f;--ink:#f0e7d3;--muted:#b9ad90;--brass:#c9a24f;--oxblood:#8a2a35;--rule:rgba(201,162,79,.28);--A:#c9a24f;--B:#a8424f;--C:#4f8a6a;--D:#5a7499}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--ground);color:var(--ink);font:17px/1.45 "Alegreya",Georgia,serif;-webkit-font-smoothing:antialiased}
+.band{height:18px;background:repeating-linear-gradient(45deg,rgba(0,0,0,.22) 0 1px,transparent 1px 3px),repeating-linear-gradient(90deg,transparent 0 10px,rgba(122,36,48,.78) 10px 17px,transparent 17px 19px,rgba(201,162,79,.9) 19px 20px,transparent 20px 22px,rgba(122,36,48,.78) 22px 29px,transparent 29px 38px,rgba(5,10,8,.55) 38px 46px,transparent 46px 48px),repeating-linear-gradient(0deg,transparent 0 10px,rgba(122,36,48,.78) 10px 17px,transparent 17px 19px,rgba(201,162,79,.9) 19px 20px,transparent 20px 22px,rgba(122,36,48,.78) 22px 29px,transparent 29px 38px,rgba(5,10,8,.55) 38px 46px,transparent 46px 48px),#1b3a2a;box-shadow:inset 0 -1px 0 rgba(201,162,79,.55)}
+main{max-width:520px;margin:0 auto;padding:14px 16px calc(40px + env(safe-area-inset-bottom))}
+.top{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.top img{height:54px;width:auto}
+.top h1{font:400 28px/1 "IM Fell English SC",Georgia,serif;letter-spacing:.03em;margin:0}
+.top .sub{font:500 12px/1.2 "Alegreya Sans SC",sans-serif;letter-spacing:.14em;color:var(--brass);margin-top:4px}
+.k{display:block;font:500 13px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.14em;text-transform:lowercase;color:var(--brass);margin:16px 0 8px}
+.bag{display:grid;gap:10px}
+.club{display:grid;grid-template-columns:52px 1fr auto;align-items:center;gap:12px;width:100%;text-align:left;background:var(--panel);border:2px solid var(--rule);border-radius:14px;padding:12px 14px;color:var(--ink);cursor:pointer}
+.club.on{border-color:var(--brass);background:rgba(201,162,79,.14)}
+.club svg{width:52px;height:52px}
+.club b{display:block;font:400 22px/1.1 "IM Fell English SC",Georgia,serif}
+.club span{display:block;font:500 13px/1.3 "Alegreya Sans SC",sans-serif;letter-spacing:.06em;color:var(--muted)}
+.club i{font:700 15px/1 "Alegreya Sans SC",sans-serif;font-style:normal;color:var(--brass);text-align:right}
+.btn{display:block;width:100%;margin-top:16px;border:0;background:var(--brass);color:#1a1408;font:700 15px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.14em;text-transform:lowercase;padding:16px;border-radius:999px;min-height:54px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--brass);border:1.5px solid var(--brass)}
+.meta{display:flex;justify-content:space-between;font:500 13px/1 "Alegreya Sans SC",sans-serif;letter-spacing:.12em;text-transform:lowercase;color:var(--brass);margin-top:6px}
+.balls{display:flex;gap:5px;margin:10px 0 4px}
+.balls i{flex:1;height:8px;border-radius:99px;background:rgba(201,162,79,.15)}
+.balls i.hit{background:#5fae80}.balls i.miss{background:var(--oxblood)}.balls i.now{background:var(--brass)}
+.qtext{font:400 23px/1.25 "IM Fell English",Georgia,serif;margin:12px 0 14px}
+.ans{display:grid;gap:10px}
+.a{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--panel);border:2.5px solid var(--c);border-radius:14px;padding:12px 14px;min-height:62px;color:var(--ink);font:500 18px/1.2 "Alegreya",Georgia,serif;cursor:pointer}
+.a .L{flex:none;display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--c);color:#14110a;font:700 18px/1 "Alegreya Sans SC",sans-serif}
+.a.win{background:var(--c);color:#14110a}.a.win .L{background:var(--ink)}
+.a.was{border-style:dashed;opacity:.8}.a.dim{opacity:.3}
+.res{text-align:center;padding:14px 6px 2px}
+.res .big{font:400 34px/1.1 "IM Fell English SC",Georgia,serif;color:#8fd0a8}
+.res.bad .big{color:#e7a3a3}
+.fact{font:italic 16px/1.4 "IM Fell English",Georgia,serif;color:var(--brass);margin-top:10px}
+.card{background:#f4eedb;color:#151515;border:4px solid #1b3a2a;outline:2px solid var(--brass);border-radius:6px;margin-top:14px;overflow:hidden}
+.card h3{margin:0;background:#1b3a2a;color:#f4eedb;text-align:center;font:400 19px/1 "IM Fell English SC",Georgia,serif;letter-spacing:.25em;padding:8px 0;border-bottom:2px solid var(--brass)}
+.card .r{display:grid;grid-template-columns:1fr auto auto;gap:10px;padding:9px 12px;border-bottom:1px solid rgba(27,58,42,.2);font:700 15px/1.1 "Alegreya Sans SC",sans-serif;align-items:center}
+.card .r:last-child{border-bottom:0}
+.card .r em{font:500 13px/1 "Alegreya",Georgia,serif;font-style:normal;color:#5b5446}
+.muted{color:var(--muted)}
+.note{font-size:13px;color:var(--muted);margin-top:18px;text-align:center}
+a{color:var(--brass)}
+</style>
+</head>
+<body>
+<div class="band"></div>
+<main id="app"></main>
+<script src="questions.js"></script>
+<script>
+(function(){
+  // The Range: solo practice on your phone, no TV. Pick a hickory club for the difficulty:
+  // Play Club (driver) = hard, Mashie (5-iron) = normal, Putting Cleek (putter) = easy.
+  // Questions come from Open Trivia DB (opentdb.com, CC BY-SA 4.0) by difficulty, topped up with house questions.
+  var app = document.getElementById("app");
+  var CLUBS = [
+    { id: "play", name: "Play Club", now: "driver", level: "hard", hit: "Split the fairway!", miss: ["Into the gorse.", "Out of bounds.", "Snap hook."] },
+    { id: "mashie", name: "Mashie", now: "5-iron", level: "medium", hit: "Pin high!", miss: ["Thinned it.", "Short-sided.", "In the pot bunker."] },
+    { id: "cleek", name: "Putting Cleek", now: "putter", level: "easy", hit: "Holed it!", miss: ["Lipped out.", "Three-jacked.", "Never up, never in."] }
+  ];
+  var BUCKET = 10, LETTERS = ["A","B","C","D"], colors = ["var(--A)","var(--B)","var(--C)","var(--D)"];
+  function store(k, v){ try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch(e) { return null; } }
+  var stats = {}; try { stats = JSON.parse(store("foreunder.range.stats") || "{}") || {}; } catch(e) { stats = {}; }
+  var R = { club: store("foreunder.range.club") || "mashie", phase: "bag", q: null, pick: null, balls: [], queue: [], loading: false, err: "" };
+  var seen = {}; try { (JSON.parse(store("foreunder.range.seen") || "[]")).forEach(function(k){ seen[k] = 1; }); } catch(e) {}
+  function club(){ return CLUBS.filter(function(c){ return c.id === R.club; })[0] || CLUBS[1]; }
+  function el(tag, attrs){
+    var e = document.createElement(tag); attrs = attrs || {};
+    for (var k in attrs){ var v = attrs[k]; if (v == null || v === false) continue;
+      if (k === "text") e.textContent = v; else if (k === "html") e.innerHTML = v; else if (k.slice(0,2) === "on") e.addEventListener(k.slice(2), v); else e.setAttribute(k, v); }
+    for (var i = 2; i < arguments.length; i++){ var c = arguments[i]; if (c == null || c === false) continue;
+      (Array.isArray(c) ? c : [c]).forEach(function(x){ if (x != null && x !== false) e.append(x.nodeType ? x : document.createTextNode(x)); }); }
+    return e;
+  }
+  function shuffle(a){ a = a.slice(); for (var i = a.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function key(q){ return q.q.toLowerCase().slice(0, 60); }
+  function dec(s){ try { return decodeURIComponent(s); } catch(e) { return s; } }
+  // Simple line drawings of each hickory club head.
+  var ICON = {
+    play: '<svg viewBox="0 0 52 52"><path d="M40 4 L22 34" stroke="#c9a24f" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M22 32 C14 32 6 36 6 42 C6 47 14 48 24 46 C30 45 30 38 26 34 Z" fill="#7a4a2a" stroke="#c9a24f" stroke-width="1.5"/></svg>',
+    mashie: '<svg viewBox="0 0 52 52"><path d="M40 4 L26 36" stroke="#c9a24f" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M26 34 L8 40 C6 44 8 47 12 47 L30 42 C31 39 30 36 26 34 Z" fill="#b9b3a3" stroke="#c9a24f" stroke-width="1.5"/></svg>',
+    cleek: '<svg viewBox="0 0 52 52"><path d="M40 4 L28 38" stroke="#c9a24f" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M28 36 L8 38 L8 44 L30 43 Z" fill="#b9b3a3" stroke="#c9a24f" stroke-width="1.5"/></svg>'
+  };
+
+  // ---- questions ----
+  function house(level){
+    // Our own questions are untagged; they count as Mashie (normal) shots.
+    return level === "medium" ? (window.QUIZ || []).map(function(q){ return { c: q.c, q: q.q, a: q.a, f: q.f || "" }; }) : [];
+  }
+  function fetchLevel(level){
+    return fetch("https://opentdb.com/api.php?amount=20&type=multiple&encode=url3986&difficulty=" + level, { cache: "no-store" })
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        return (d.results || []).map(function(r){ return { c: dec(r.category).replace(/^Entertainment: |^Science: /, ""), q: dec(r.question), a: [dec(r.correct_answer)].concat(r.incorrect_answers.map(dec)), f: "" }; });
+      }).catch(function(){ return []; });
+  }
+  function fill(){
+    if (R.loading) return Promise.resolve();
+    var c = club(); R.loading = true;
+    return fetchLevel(c.level).then(function(list){
+      var pool = list.concat(c.level === "medium" ? shuffle(house("medium")).slice(0, 10) : []);
+      pool = shuffle(pool).filter(function(q){ return !seen[key(q)]; });
+      if (!pool.length && c.level === "medium") pool = shuffle(house("medium"));
+      R.queue = R.queue.concat(pool); R.loading = false;
+      if (!R.queue.length) R.err = "Couldn't get questions for the " + c.name + ". Check your signal and try again.";
+    });
+  }
+  function nextBall(){
+    R.pick = null;
+    if (R.balls.length >= BUCKET){ R.phase = "done"; return render(); }
+    var go = function(){
+      var q = R.queue.shift();
+      if (!q){ R.phase = "bag"; return render(); }
+      seen[key(q)] = 1; store("foreunder.range.seen", JSON.stringify(Object.keys(seen).slice(-2000)));
+      var order = shuffle([0, 1, 2, 3]);
+      R.q = { c: q.c, q: q.q, f: q.f, opts: order.map(function(k){ return q.a[k]; }), correct: order.indexOf(0) };
+      R.phase = "swing"; render();
+      if (R.queue.length < 4) fill();
+    };
+    if (R.queue.length) go(); else { R.phase = "loading"; render(); fill().then(go); }
+  }
+  function swing(k){
+    if (R.pick !== null) return;
+    R.pick = k; var ok = k === R.q.correct, c = club();
+    R.balls.push(ok);
+    var s = stats[c.id] = stats[c.id] || { hit: 0, tot: 0, best: 0, run: 0 };
+    s.tot++; if (ok){ s.hit++; s.run++; s.best = Math.max(s.best, s.run); } else s.run = 0;
+    store("foreunder.range.stats", JSON.stringify(stats));
+    R.phase = "result"; render();
+  }
+
+  // ---- screens ----
+  function header(){ return el("div",{class:"top"}, el("img",{src:"../crest-sm.png",alt:""}), el("div",null, el("h1",{text:"The Range"}), el("div",{class:"sub",text:"practice questions \u00b7 hickory bag"}))); }
+  function bagScreen(){
+    return [header(),
+      el("p",{class:"muted",style:"margin:4px 0 0",text:"Pick a club and hit a bucket of " + BUCKET + ". Nothing counts but your own pride."}),
+      el("span",{class:"k",text:"your bag"}),
+      el("div",{class:"bag"}, CLUBS.map(function(c){
+        var s = stats[c.id];
+        return el("button",{type:"button",class:"club" + (R.club === c.id ? " on" : ""),onclick:function(){ R.club = c.id; store("foreunder.range.club", c.id); R.queue = []; render(); }},
+          el("span",{html:ICON[c.id]}), el("div",null, el("b",{text:c.name}), el("span",{text:"the " + c.now + " \u00b7 " + (c.level === "hard" ? "hard" : c.level === "easy" ? "easy" : "normal") + " questions"})),
+          el("i",{text: s && s.tot ? Math.round(100 * s.hit / s.tot) + "%" : ""}));
+      })),
+      R.err ? el("p",{class:"muted",style:"color:#e7a3a3",text:R.err}) : null,
+      el("button",{class:"btn",type:"button",onclick:function(){ R.err = ""; R.balls = []; nextBall(); }}, "hit a bucket with the " + club().name),
+      statsCard(),
+      el("p",{class:"note"}, el("a",{href:"play.html",text:"Join the pub quiz on the TV"}), " \u00b7 questions from ", el("a",{href:"https://opentdb.com",text:"Open Trivia DB"}), " (CC BY-SA 4.0)")];
+  }
+  function ballsBar(){ var out = []; for (var i = 0; i < BUCKET; i++) out.push(el("i",{class: i < R.balls.length ? (R.balls[i] ? "hit" : "miss") : i === R.balls.length ? "now" : ""})); return el("div",{class:"balls"}, out); }
+  function swingScreen(){
+    var q = R.q, done = R.phase === "result", c = club(), ok = done && R.pick === q.correct;
+    var out = [header(),
+      el("div",{class:"meta"}, el("span",{text:c.name + " \u00b7 ball " + Math.min(BUCKET, R.balls.length + (done ? 0 : 1)) + " of " + BUCKET}), el("span",{text:q.c})),
+      ballsBar(),
+      el("p",{class:"qtext",text:q.q}),
+      el("div",{class:"ans"}, q.opts.map(function(o, k){
+        var cls = "a" + (done ? (k === q.correct ? " win" : k === R.pick ? " was" : " dim") : "");
+        return el("button",{type:"button",class:cls,style:"--c:" + colors[k],onclick: done ? null : function(){ swing(k); }}, el("span",{class:"L",text:LETTERS[k]}), el("span",{text:o}));
+      }))];
+    if (done){
+      out.push(el("div",{class:"res" + (ok ? "" : " bad")}, el("div",{class:"big",text: ok ? c.hit : c.miss[Math.floor(Math.random() * c.miss.length)]}),
+        ok ? null : el("div",{class:"muted",text:"It was " + LETTERS[q.correct] + ", " + q.opts[q.correct] + "."})));
+      if (q.f) out.push(el("p",{class:"fact",text:q.f}));
+      out.push(el("button",{class:"btn",type:"button",onclick:nextBall}, R.balls.length >= BUCKET ? "see the bucket" : "next ball"));
+      out.push(el("button",{class:"btn ghost",type:"button",onclick:function(){ R.phase = "bag"; render(); }}, "change clubs"));
+    }
+    return out;
+  }
+  function doneScreen(){
+    var hits = R.balls.filter(Boolean).length, c = club();
+    var verdict = hits >= 9 ? "Tour-ready." : hits >= 7 ? "Dialed in." : hits >= 5 ? "Decent session." : hits >= 3 ? "Keep grinding." : "Back to lessons.";
+    return [header(), el("div",{class:"res"}, el("div",{class:"big",style:"color:var(--brass)",text: hits + " of " + BUCKET}), el("div",{class:"muted",text: c.name + " \u00b7 " + verdict})), ballsBar(),
+      el("button",{class:"btn",type:"button",onclick:function(){ R.balls = []; nextBall(); }}, "another bucket"),
+      el("button",{class:"btn ghost",type:"button",onclick:function(){ R.phase = "bag"; render(); }}, "change clubs"),
+      statsCard()];
+  }
+  function statsCard(){
+    var any = CLUBS.some(function(c){ return stats[c.id] && stats[c.id].tot; });
+    if (!any) return null;
+    return el("div",{class:"card"}, el("h3",{text:"Range Card"}), CLUBS.map(function(c){
+      var s = stats[c.id] || { hit: 0, tot: 0, best: 0 };
+      return el("div",{class:"r"}, el("span",{text:c.name}), el("em",{text: s.hit + " of " + s.tot + " \u00b7 best run " + (s.best || 0)}), el("span",{text: s.tot ? Math.round(100 * s.hit / s.tot) + "%" : "\u2014"}));
+    }));
+  }
+  function render(){
+    var parts = R.phase === "bag" ? bagScreen() : R.phase === "loading" ? [header(), el("p",{class:"muted",text:"Teeing up a bucket\u2026"})] : R.phase === "done" ? doneScreen() : swingScreen();
+    app.replaceChildren.apply(app, parts.filter(Boolean));
+    window.scrollTo(0, 0);
+  }
+  render();
+})();
+</script>
+</body>
+</html>
