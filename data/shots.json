@@ -1007,5 +1007,19 @@
     "drink": "Espresso (photo)",
     "session": "Evening (GaggiMate shot #15, 7:26 PM, 'Foreunder HOB Ethiopian' profile, 94°C, BBW 40 g)",
     "notes": "Grind 10 repeat. 34.5s, 1:2.22, peak 9.9 bar, avg pump flow 2.8 ml/s, 96.0 ml pumped, avg temp 97.1°C. Evening set ranged 24.7-34.7 s at the same grind."
+  },
+  {
+    "n": 71,
+    "date": "2026-10-24",
+    "bean": "Hill of Beans India Monsooned Malabar",
+    "dose": 18.1,
+    "yield": 35.6,
+    "time": 28.5,
+    "grind": 6,
+    "estimated": false,
+    "taste": "Not recorded",
+    "drink": "Milk drink (latte art photo)",
+    "session": "Afternoon (GaggiMate shot #28, 3:09 PM, 'Foreunder - India Monsooned' profile, 93°C, BBW)",
+    "notes": "Grind 6 (Malabar was dialed at 7.5 on 10/13). 28.5s, 1:1.97, peak 10.2 bar, avg pump flow 3.0 ml/s, 85.2 ml pumped, avg temp 95.9°C (set 93; same late climb)."
   }
 ]
