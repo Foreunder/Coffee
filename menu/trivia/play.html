@@ -131,7 +131,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
       mine: a ? { choice: a[0], by: a[1], ok: d.phase === "reveal" ? !!a[2] : null } : null,
       gained: d.phase === "reveal" && a && a[2] ? (a[3] || 0) : 0, secs: d.secs || 30, max: d.max || 1000, min: d.min || 100,
       rank: rank, score: team ? team.score : 0, par: team ? team.par : 0, net: team ? team.net : 0, myHcp: team ? team.hcp : 0, teams: teams, playing: d.playing, nxt: d.nxt || null, snow: !!(tid && (d.snow || []).indexOf(tid) !== -1), rec: d.rec || null, newRec: !!d.newRec,
-      preset: d.preset || "pub", hcp: !!d.hcp, back: !!d.back, off: d.off || 0, plen: d.plen || 18, sound: d.sound !== false, prof: d.prof || (V && V.prof) || {}, course: d.course || "", recs: d.recs || (V && V.recs) || [], courseName: d.courseName || "", courses: d.courses || [], diff: d.diff || "mixed", bank: d.bank || 0, cats: d.cats || [], all: d.all || [],
+      preset: d.preset || "pub", hcp: !!d.hcp, range: !!d.range, club: d.club || "mix", back: !!d.back, off: d.off || 0, plen: d.plen || 18, sound: d.sound !== false, prof: d.prof || (V && V.prof) || {}, course: d.course || "", recs: d.recs || (V && V.recs) || [], courseName: d.courseName || "", courses: d.courses || [], diff: d.diff || "mixed", bank: d.bank || 0, cats: d.cats || [], all: d.all || [],
       answered: Object.keys(d.ans || {}).length, players: Object.keys(d.players || {}).length
     };
   }
@@ -331,8 +331,11 @@ input.code{text-transform:uppercase;letter-spacing:.3em;font:400 30px/1 "IM Fell
         el("button",{type:"button",class:"chip" + (V.sound ? " on" : ""),onclick:function(){ send({ t:"qm", cmd:"sound", on:true }); V.sound = true; render(); }}, "on"),
         el("button",{type:"button",class:"chip" + (!V.sound ? " on" : ""),onclick:function(){ send({ t:"qm", cmd:"sound", on:false }); V.sound = false; render(); }}, "off")));
       body.push(el("span",{class:"k",text:"event"}), el("div",{class:"chips"},
-        el("button",{type:"button",class:"chip" + (!V.hcp ? " on" : ""),onclick:function(){ send({ t:"qm", cmd:"hcp", on:false }); V.hcp = false; render(); }}, "scratch"),
-        el("button",{type:"button",class:"chip" + (V.hcp ? " on" : ""),onclick:function(){ send({ t:"qm", cmd:"hcp", on:true }); V.hcp = true; render(); }}, "handicap (net)")));
+        el("button",{type:"button",class:"chip" + (!V.hcp && !V.range ? " on" : ""),onclick:function(){ send({ t:"qm", cmd:"hcp", on:false }); V.hcp = false; V.range = false; render(); }}, "scratch"),
+        el("button",{type:"button",class:"chip" + (V.hcp ? " on" : ""),onclick:function(){ send({ t:"qm", cmd:"hcp", on:true }); V.hcp = true; V.range = false; render(); }}, "handicap (net)"),
+        el("button",{type:"button",class:"chip" + (V.range ? " on" : ""),onclick:function(){ send({ t:"qm", cmd:"range", on:true }); V.range = true; V.hcp = false; render(); }}, "the range (practice)")));
+      if (V.range) body.push(el("span",{class:"k",text:"club \u00b7 sets the question difficulty"}), el("div",{class:"chips"}, [["mix","full bag"],["brassie","Brassie \u00b7 hard"],["mashie","Mashie-Niblick \u00b7 normal"],["cleek","Putting Cleek \u00b7 easy"]].map(function(c){
+        return el("button",{type:"button",class:"chip" + (V.club === c[0] ? " on" : ""),onclick:function(){ send({ t:"qm", cmd:"club", club:c[0] }); V.club = c[0]; render(); }}, c[1]); })));
       body.push(el("span",{class:"k",text:"teams & length"}));
       body.push(el("div",{class:"chips"},
         el("button",{type:"button",class:"chip" + (V.mode === "teams" ? " on" : ""),onclick:function(){ send({ t:"qm", cmd:"mode", mode:"teams" }); }}, "teams"),

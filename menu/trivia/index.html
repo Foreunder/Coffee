@@ -177,7 +177,7 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
   function OFF(){ return S.holes === 9 && S.back ? 9 : 0; }
 
   // ---- game state (lives only on the TV) ----
-  var S = { phase: "boot", mode: PQ.store("foreunder.quiz.mode") === "solo" ? "solo" : "teams", holes: HOLE_OPTS.indexOf(Number(PQ.store("foreunder.quiz.holes"))) !== -1 ? Number(PQ.store("foreunder.quiz.holes")) : 9, preset: PQ.store("foreunder.quiz.preset") || "pub", course: PQ.store("foreunder.quiz.course") || "foreunder", hcp: PQ.store("foreunder.quiz.hcp") === "1", back: PQ.store("foreunder.quiz.back") === "1", diff: PQ.store("foreunder.quiz.diff") || "mixed", cats: storedCats(), qs: [], i: -1, teams: {}, players: {}, answers: {}, gone: [], endsAt: 0, qStart: 0, room: "", err: "" };
+  var S = { phase: "boot", mode: PQ.store("foreunder.quiz.mode") === "solo" ? "solo" : "teams", holes: HOLE_OPTS.indexOf(Number(PQ.store("foreunder.quiz.holes"))) !== -1 ? Number(PQ.store("foreunder.quiz.holes")) : 9, preset: PQ.store("foreunder.quiz.preset") || "pub", course: PQ.store("foreunder.quiz.course") || "foreunder", hcp: PQ.store("foreunder.quiz.hcp") === "1", back: PQ.store("foreunder.quiz.back") === "1", range: PQ.store("foreunder.quiz.range") === "1", club: PQ.store("foreunder.quiz.club") || "mix", diff: PQ.store("foreunder.quiz.diff") || "mixed", cats: storedCats(), qs: [], i: -1, teams: {}, players: {}, answers: {}, gone: [], endsAt: 0, qStart: 0, room: "", err: "" };
   var timer = null, elimTimers = [];
   // ---- sound: golf call-outs + effects (sounds.js); every call-out also flashes on screen ----
   var calloutTimer = null;
@@ -266,6 +266,7 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
   }
   // Finished rounds wait in a queue until the sheet confirms them, so a Wi-Fi blip loses nothing.
   function queueRound(){
+    if (S.range) return; // practice: nothing counts
     var st = standings(); if (!st.length) return;
     var q = []; try { q = JSON.parse(PQ.store("foreunder.quiz.pending") || "[]"); } catch(e) {}
     // History is per player: in team mode each player gets the team's score.
@@ -367,7 +368,8 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
     // Fill the course hole by hole with the next question at that hole's par (nearest par if one runs out).
     var out = [];
     for (var h = 0; h < n && dealt.length; h++){
-      var want = parFor(h);
+      // On the range the club decides the shot: Brassie = hard (5), Mashie-Niblick = normal (4), Putting Cleek = easy (3).
+      var want = S.range ? (S.club === "brassie" ? 5 : S.club === "mashie" ? 4 : S.club === "cleek" ? 3 : [4, 3, 5][h % 3]) : parFor(h);
       var tries = [want, 4, want === 5 ? 3 : 5], at = -1;
       for (var t = 0; t < tries.length && at === -1; t++){ for (var j = 0; j < dealt.length; j++){ if (qPar(dealt[j]) === tries[t]){ at = j; break; } } }
       if (at === -1) at = 0;
@@ -412,7 +414,7 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
       correct: S.phase === "reveal" ? q.correct : null,
       secs: Q_SECONDS, max: MAX_PTS, min: MIN_PTS,
       teams: standings().map(function(x){ return [x.id, x.name, x.score, x.par || 0, S.hcp ? (S.phase === "lobby" ? teamHcp(x) : (x.hcp || 0)) : 0, net(x)]; }),
-      hcp: S.hcp, sound: SFX.on(), back: S.back, off: OFF(), plen: course().pars.length,
+      hcp: S.hcp, range: S.range, club: S.club, sound: SFX.on(), back: S.back, off: OFF(), plen: course().pars.length,
       prof: S.phase === "lobby" || S.phase === "final" ? (function(){ var o = {}; Object.keys(S.players).forEach(function(k){ var p = S.players[k]; if (p.name){ var f = profile(p.name); o[k] = [f.idx, f.rounds, f.wins, f.best ? f.best.par : null, f.best ? f.best.holes : null]; } }); return o; })() : undefined,
       nxt: S.phase === "count" && S.qs[S.i + 1] ? { n: S.i + 2, par: S.qs[S.i + 1].par, dbl: isDouble(S.i + 1) } : null,
       snow: S.phase === "reveal" || S.phase === "question" ? Object.keys(S.knocked || {}) : [],
@@ -493,7 +495,9 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
     }
     else if (cmd === "course" && S.phase === "lobby" && (window.COURSES || []).some(function(c){ return c.id === d.course; })){ S.course = d.course; PQ.store("foreunder.quiz.course", d.course); }
     else if (cmd === "sound"){ SFX.on(!!d.on); if (d.on) SFX.say("Sound on. Play away."); }
-    else if (cmd === "hcp" && S.phase === "lobby"){ S.hcp = !!d.on; PQ.store("foreunder.quiz.hcp", S.hcp ? "1" : ""); }
+    else if (cmd === "hcp" && S.phase === "lobby"){ S.hcp = !!d.on; S.range = false; PQ.store("foreunder.quiz.hcp", S.hcp ? "1" : ""); PQ.store("foreunder.quiz.range", ""); }
+    else if (cmd === "range" && S.phase === "lobby"){ S.range = !!d.on; if (S.range) S.hcp = false; PQ.store("foreunder.quiz.range", S.range ? "1" : ""); PQ.store("foreunder.quiz.hcp", S.hcp ? "1" : ""); }
+    else if (cmd === "club" && S.phase === "lobby" && ["mix", "brassie", "mashie", "cleek"].indexOf(d.club) !== -1){ S.club = d.club; PQ.store("foreunder.quiz.club", d.club); }
     else if (cmd === "diff" && S.phase === "lobby" && ["easy", "mixed", "hard"].indexOf(d.diff) !== -1){ S.diff = d.diff; PQ.store("foreunder.quiz.diff", d.diff); }
     else if (cmd === "start" && S.phase === "lobby") start();
     else if (cmd === "next") next();
@@ -568,7 +572,7 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
     clearTimeout(timer); clearElims(); S.phase = "final"; S.endsAt = 0;
     // Course records are always gross (scratch), whatever the event.
     var lead = standings().slice().sort(function(a, b){ return (a.par || 0) - (b.par || 0) || b.score - a.score; })[0], r = record();
-    if (lead && S.i >= S.qs.length - 1 && (!r || lead.par < r.par || (lead.par === r.par && lead.score > r.pts))){
+    if (lead && !S.range && S.i >= S.qs.length - 1 && (!r || lead.par < r.par || (lead.par === r.par && lead.score > r.pts))){
       var dt = new Date();
       PQ.store(recKey(), JSON.stringify({ par: lead.par, pts: lead.score, name: lead.name, date: dt.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) }));
       S.newRecord = true;
@@ -627,7 +631,8 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
     return d;
   }
   // ---- TV remote: up/down picks a setting, left/right changes it, OK starts (or changes the picked setting) ----
-  var focusI = 6;
+  var focusI = -1;
+  var CLUB_NAME = { mix: "full bag (mixed)", brassie: "Brassie \u00b7 hard", mashie: "Mashie-Niblick \u00b7 normal", cleek: "Putting Cleek \u00b7 easy" };
   function ctls(){
     var cs = window.COURSES || [], ci = Math.max(0, cs.findIndex(function(c){ return c.id === course().id; }));
     var presets = ["pub", "foreunder"];
@@ -639,10 +644,13 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
           var tours = ["house", "masters", "open", "usopen"], ti = tours.indexOf(course().tour), nt = tours[(ti + (d || 1) + tours.length) % tours.length];
           var n = cs.filter(function(c){ return c.tour === nt; })[0]; if (n) command("course", { course: n.id }); } },
       { label: "length", val: S.holes === 72 ? "72 holes \u00b7 full tournament" : lenName(lenKey()), step: function(d){ var i = LENS.map(function(x){ return x[0]; }).indexOf(lenKey()), n = LENS[(i + (d || 1) + LENS.length) % LENS.length]; command("holes", { holes: n[1], back: n[2] }); } },
-      { label: "event", val: S.hcp ? "handicap (net)" : "scratch", step: function(){ command("hcp", { on: !S.hcp }); } },
+      { label: "event", val: S.range ? "the range \u00b7 practice, nothing counts" : S.hcp ? "handicap (net)" : "scratch", step: function(d){
+          var ev = S.range ? 2 : S.hcp ? 1 : 0, n = (ev + (d || 1) + 3) % 3;
+          if (n === 2) command("range", { on: true }); else command("hcp", { on: n === 1 }); } },
+      S.range ? { label: "club", val: CLUB_NAME[S.club], step: function(d){ var o = ["mix", "brassie", "mashie", "cleek"], i = o.indexOf(S.club); command("club", { club: o[(i + (d || 1) + 4) % 4] }); } } : null,
       { label: "sound", val: SFX.on() ? "on" : "off", step: function(){ SFX.on(!SFX.on()); } },
-      { label: "", val: "start the game", start: true }
-    ];
+      { label: "", val: S.range ? "head to the range" : "start the game", start: true }
+    ].filter(Boolean);
   }
   // Full-screen course picker: every course on one screen, arrows to move, OK to pick, Back to close.
   var picker = false, pickI = 0, PICK_COLS = 4;
@@ -659,7 +667,7 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
       })));
   }
   function remoteControls(){
-    var list = ctls(); focusI = Math.min(focusI, list.length - 1);
+    var list = ctls(); if (focusI < 0) focusI = list.length - 1; focusI = Math.min(focusI, list.length - 1);
     return el("div",{class:"ctls"}, list.map(function(c, i){
       return el("div",{class:"ctl" + (i === focusI ? " on" : "") + (c.start ? " go" : ""),onclick:function(){ focusI = i; if (c.start) start(); else { c.step(1); render(); } }},
         c.label ? el("span",{class:"cl",text:c.label}) : null, el("span",{class:"cv",text: (c.start ? "" : "\u25c0 ") + c.val + (c.start ? "" : " \u25b6")}));
@@ -801,7 +809,7 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
     var tie = final && st[1] && net(st[1]) === net(top) && (st[1].par || 0) === (top.par || 0) && st[1].score === top.score;
     var label = final ? "final round" : (S.holes === 72 ? "after hole " + (S.i + 1) + " \u00b7 round " + Math.ceil((S.i + 1) / 18) : "the turn \u00b7 after hole " + (S.i + 1));
     return el("div",{class:"board"},
-      el("div",{class:"k",text: label + (S.hcp ? " \u00b7 handicap event" : " \u00b7 scratch")}),
+      el("div",{class:"k",text: label + (S.range ? " \u00b7 the range (practice)" : S.hcp ? " \u00b7 handicap event" : " \u00b7 scratch")}),
       final && top ? el("div",{class:"winner",text: top.name + " wins at " + (S.hcp ? "net " + fmtPar(net(top)) : fmtPar(top.par || 0)) + "!"}) : el("h1",{text:"The Leaderboard"}),
       final && S.newRecord ? el("div",null, el("span",{class:"rec new",text:"New course record: " + (record() ? fmtPar(record().par) + " \u00b7 " + record().name : "")})) : null,
       el("div",{style:"margin-top:calc(1.4*var(--u))"}, golfBoard(final ? 8 : 10)),
@@ -828,7 +836,7 @@ h1{font:400 calc(4.6*var(--u))/1 "IM Fell English SC",Georgia,serif;letter-spaci
     }
     if (arrow && S.phase === "lobby"){
       e.preventDefault(); if (!soundArmed){ soundArmed = true; SFX.unlock(); }
-      var list = ctls();
+      var list = ctls(); if (focusI < 0) focusI = list.length - 1;
       if (arrow === "up") focusI = (focusI - 1 + list.length) % list.length;
       else if (arrow === "down") focusI = (focusI + 1) % list.length;
       else if (!list[focusI].start){ list[focusI].step(arrow === "left" ? -1 : 1); SFX.fx.tick(); }
