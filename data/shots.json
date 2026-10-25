@@ -1205,5 +1205,19 @@
     "drink": "Not recorded",
     "session": "Late evening (GaggiMate shot #32, 9:08 PM, 'Foreunder - India Monsooned' profile, 93°C, BBW 36 g)",
     "notes": "Grind 6. 29.7s, 1:2.00, peak 10.1 bar, avg pump flow 3.0 ml/s, 89.6 ml pumped, avg temp 95.7°C (target 93; climbed to ~98 mid-shot). Back in window, matching #82 (30.0s)."
+  },
+  {
+    "n": 85,
+    "date": "2026-10-24",
+    "bean": "Hill of Beans India Monsooned Malabar",
+    "dose": 18,
+    "yield": 36.1,
+    "time": 36.7,
+    "grind": 6,
+    "estimated": false,
+    "taste": "Not recorded",
+    "drink": "Not recorded",
+    "session": "Late evening (GaggiMate shot #33, 10:58 PM, 'Foreunder - India Monsooned' profile, 93°C, BBW 36 g)",
+    "notes": "Feedforward test shot 1 of 3 (Kff 0.5, changed from 0.735 at 10:38 PM). 36.7s, 1:2.01, peak 10.1 bar, avg pump flow 2.8 ml/s, 101.7 ml pumped, avg temp 95.4°C — still climbed to ~98 mid-shot, barely lower than #83/#84 (95.7-96.2). Slow like #83 (37.0s); both were first pulls after ~2 hr gaps, while #84 (6 min after #83) ran 29.7s. Pulled ~8 min before the controller handshake failure (Legacy/0.0.0)."
   }
 ]
