@@ -1233,5 +1233,19 @@
     "drink": "Not recorded",
     "session": "Morning (GaggiMate shot #34, 7:13 AM, 'Foreunder - India Monsooned PI' profile, 93°C, BBW 36 g)",
     "notes": "Last dose of Malabar bag 1 (bought 9/22). First shot on the new preinfusion profile (3 bar 8 s PI → 9 bar, 36 g) and first after the clean controller reflash; first pull after the overnight gap (bellows purged before grinding). 25.7s total incl. 8 s PI, 1:2.01. PI held ~3.3 bar, flow fell to ~0 as the puck saturated, first drips ~7 s, then clean step to ~9 bar. Temp flat at 93 through PI, climbed to ~96.5 by the end. Feedforward 0.735 (baseline). Ran fast, not slow like #83/#85."
+  },
+  {
+    "n": 87,
+    "date": "2026-10-25",
+    "bean": "Hill of Beans India Monsooned Malabar",
+    "dose": 18,
+    "yield": 35.8,
+    "time": 35.2,
+    "grind": 6,
+    "estimated": false,
+    "taste": "Not recorded",
+    "drink": "Milk drink (photo)",
+    "session": "Morning (GaggiMate shot #35, 7:26 AM, 'Foreunder - India Monsooned PI' profile, 93°C, BBW 36 g)",
+    "notes": "First shot from Malabar bag 2 (bought 10/17, opened 10/25). Preinfusion profile (3 bar 8 s → 9 bar). 35.2s total incl. 8 s PI (~27 s after PI), 1:1.99, peak 9.1 bar, avg pump flow 2.1 ml/s, 74.1 ml pumped, avg temp 95.7°C (climbed to ~97 mid-shot). First drips ~9 s. Ran ~9.5 s slower than #86 (last of bag 1) at the same grind, as expected from fresher beans. Visibly richer crema."
   }
 ]
