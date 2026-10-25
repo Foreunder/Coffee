@@ -1345,5 +1345,19 @@
     "drink": "Not recorded (Kayla's)",
     "session": "Evening (GaggiMate shot #43, 6:40 PM, 'Foreunder - India Monsooned PI', 93°C, BBW)",
     "notes": "Bag 2, PI profile. Dose field 17.8 g (first grounds-out reading after the 18 g beans-in dose). Short ratio: 29.6 g out, 1:1.66. 24.5s total incl. 8 s PI, peak 9.1 bar, avg pump flow 2.8 ml/s, 69.6 ml pumped. Ran cool: avg temp 91.3°C (started ~90.5, dipped to ~89.5, ended ~93.5), vs 93 set. Kayla: best India Monsooned shot she has had — shorter ratio + cooler temp suits her sweeter preference."
+  },
+  {
+    "n": 95,
+    "date": "2026-10-25",
+    "bean": "Hill of Beans India Monsooned Malabar",
+    "dose": 17.9,
+    "yield": 34.8,
+    "time": 29.0,
+    "grind": 6,
+    "estimated": false,
+    "taste": "Not recorded",
+    "drink": "Not recorded",
+    "session": "Evening (GaggiMate shot #44, 6:44 PM, 'Foreunder - India Monsooned PI', 93°C, BBW)",
+    "notes": "Bag 2, PI profile. Dose field 17.9 g (grounds out after 18 g beans in; second reading after #94's 17.8). 29.0s total incl. 8 s PI, 34.8 g out (1:1.94, ~1 g short of the 36 g target), peak 9.1 bar, avg pump flow 2.5 ml/s, 73.7 ml pumped, avg temp 94.7°C (normal climb to ~97)."
   }
 ]
