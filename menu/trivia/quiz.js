@@ -32,9 +32,9 @@ window.PQ = (function(){
   function topic(room, dir){ return BASE + "-" + String(room).toLowerCase() + "-" + dir; }
 
   // ---- one shared broker connection per page ----
-  var client = null, bi = 0, up = false, handlers = {}, statusFns = [], failTimer = null;
+  var client = null, bi = 0, up = false, handlers = {}, statusFns = [], failTimer = null, lastError = null;
   function isRetained(t){ return /-tv$/.test(t) || /-live$/.test(t); }
-  function setUp(v){ up = v; statusFns.forEach(function(f){ try { f(v); } catch(e) {} }); }
+  function setUp(v){ up = v; if (v) lastError = null; statusFns.forEach(function(f){ try { f(v); } catch(e) {} }); }
   function connect(){
     if (client) return client;
     client = mqtt.connect(BROKERS[bi], { clientId: "fu" + Math.random().toString(36).slice(2, 12), clean: true, keepalive: 30, reconnectPeriod: 2000, connectTimeout: 8000, protocolVersion: 4 });
@@ -46,7 +46,7 @@ window.PQ = (function(){
     });
     client.on("offline", function(){ setUp(false); });
     client.on("close", function(){ if (up) setUp(false); });
-    client.on("error", function(){});
+    client.on("error", function(err){ lastError = err && err.message || "broker error"; });
     client.on("message", function(t, buf, pkt){
       var env; try { env = JSON.parse(String(buf)); } catch(e) { return; }
       if (!env || typeof env.d !== "object" || !env.d) return;
@@ -76,8 +76,18 @@ window.PQ = (function(){
   function publish(t, obj){
     var c = connect();
     return new Promise(function(res, rej){
-      if (!c.connected) return rej(new Error("offline"));
-      c.publish(t, JSON.stringify({ d: obj, ts: Date.now() / 1000 }), { qos: 1, retain: isRetained(t) }, function(err){ err ? rej(err) : res(); });
+      if (!c.connected){
+        // Force a reconnect attempt on publish failure
+        try { c.reconnect(); } catch(e) {}
+        return rej(new Error("offline"));
+      }
+      c.publish(t, JSON.stringify({ d: obj, ts: Date.now() / 1000 }), { qos: 1, retain: isRetained(t) }, function(err){
+        if (err){
+          lastError = err.message || "publish failed";
+          try { c.reconnect(); } catch(e) {}
+          rej(err);
+        } else res();
+      });
     });
   }
 
@@ -116,6 +126,9 @@ window.PQ = (function(){
     publish: publish,
     subscribe: subscribe,
     latest: latest,
+    isUp: function(){ return up; },
+    lastError: function(){ return lastError; },
+    forceReconnect: function(){ if (client) { try { client.end(true); } catch(e) {} client = null; } connect(); },
     pid: function(){
       var p = store("foreunder.quiz.pid");
       if (!p){ p = Math.random().toString(36).slice(2, 10); store("foreunder.quiz.pid", p); }
