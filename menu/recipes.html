@@ -60,6 +60,11 @@ dl.kv dd{margin:0}
 .bar i{display:block;height:100%;background:var(--brass)}
 .bar.low i{background:var(--oxblood)}
 .tag.reorder{background:var(--oxblood);color:var(--ink)}
+.grinds{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0 4px}
+.grinds div{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:12px 8px;text-align:center}
+.grinds b{display:block;font:400 44px/1 "IM Fell English SC",Georgia,serif;color:var(--brass)}
+.grinds span{display:block;font:500 13px/1.3 "Alegreya Sans SC",sans-serif;letter-spacing:.1em;text-transform:lowercase;margin-top:6px}
+.grinds small{display:block;color:var(--muted);font-size:13px;margin-top:2px}
 .foot{color:var(--muted);font-size:14px;border-top:1px solid var(--rule);margin-top:32px;padding-top:12px}
 @media print{
   :root{--ground:#fff;--panel:#fff;--ink:#111;--muted:#444;--brass:#6b4e12;--rule:#bbb}
@@ -76,6 +81,11 @@ dl.kv dd{margin:0}
     <img src="crest-sm.png" alt="">
     <div><h1>Bar Recipes</h1><p class="kicker">How we make every drink, and where each coffee is dialed.</p></div>
   </header>
+  <div class="grinds" aria-label="Grind settings">
+    <div><b>13.5</b><span>Brazil</span><small>stop 36 g</small></div>
+    <div><b>10</b><span>Ethiopian</span><small>stop 40 g</small></div>
+    <div><b>6</b><span>Malabar</span><small>stop 36 g</small></div>
+  </div>
   <nav class="jump"><a href="#machine">machine</a><a href="#coach">dial-in coach</a><a href="#coffees">coffees</a><a href="#drinks">drinks</a><a href="#seasonal">seasonal</a><a href="#dessert">dessert</a><a href="#milk">milk</a></nav>
 
   <h2 id="machine">The Machine</h2>
@@ -83,9 +93,9 @@ dl.kv dd{margin:0}
   <div class="card"><dl class="kv">
     <dt>Dose</dt><dd>18 g, Creamore 18 g basket</dd>
     <dt>Yield</dt><dd>36 g (1:2), brew-by-weight on the BOOKOO</dd>
-    <dt>Time</dt><dd>About 26–30 s. Jamey's sweet spot is about 28 s.</dd>
-    <dt>Profile</dt><dd>Foreunder profile on GaggiMate</dd>
-    <dt>Brew temp</dt><dd>93 °C (offset 8 is calibration, leave it)</dd>
+    <dt>Time</dt><dd>About 32–37 s including the 8 s preinfusion. The first shot after the machine sits or after a bean switch runs long; judge on the second.</dd>
+    <dt>Profile</dt><dd>Each coffee has its own Foreunder profile on GaggiMate: 3 bar 8 s preinfusion, 3 s ramp to 9 bar, stop by weight</dd>
+    <dt>Brew temp</dt><dd>92 °C preinfusion, 90 °C brew, for every coffee. The drop offsets the machine's climb during the shot. Offset 8 is calibration, leave it.</dd>
     <dt>Warm-up</dt><dd>At least 20 minutes with the portafilter locked in the group. A cold portafilter or machine runs slow: +7 s on 10/12.</dd>
     <dt>Prep</dt><dd>WDT, distribute, tamp level, puck screen</dd>
     <dt>Grinder</dt><dd>DF64. Lower number is finer and slower. One step moves the shot about 2–4 s; the coach below uses each coffee's own history.</dd>
