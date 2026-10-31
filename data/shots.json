@@ -1415,5 +1415,47 @@
     "drink": "Not recorded",
     "session": "Evening (GaggiMate shot #48, 8:18 PM, 'Foreunder HOB Ethiopian PI' profile, 94°C, BBW 40 g)",
     "notes": "Ethiopian PI profile. 27.2s total incl. 8 s PI, 1:2.22, peak 9.1 bar, avg pump flow 2.8 ml/s, 76.8 ml pumped, avg temp 95.8°C. Identical time to #98 — tightest back-to-back pair logged."
+  },
+  {
+    "n": 100,
+    "date": "2026-10-29",
+    "bean": "Hill of Beans Ethiopian Yirgacheffe 'Kochere'",
+    "dose": 18,
+    "time": 26.2,
+    "grind": 10,
+    "estimated": false,
+    "taste": "Grassy, black licorice; didn't want another cup (Jamey)",
+    "drink": "Not recorded",
+    "session": "Evening (GaggiMate shot #49, 7:56 PM, 'Foreunder HOB Ethiopian PI' profile, set 92°C but Phase 2 still 94°C, BBW 40 g)",
+    "notes": "Profile temp lowered to 92°C but Phase 2 stayed at 94°C, so not a true 92 test. 26.2s incl. 8 s PI, 1:2.22, peak 9.1 bar, avg pump flow 2.8 ml/s, 74.4 ml pumped, avg temp 94.1°C, climbed to ~97°C late.",
+    "yield": 40.0
+  },
+  {
+    "n": 101,
+    "date": "2026-10-29",
+    "bean": "Hill of Beans Ethiopian Yirgacheffe 'Kochere'",
+    "dose": 18,
+    "time": 26.5,
+    "grind": 10,
+    "estimated": false,
+    "taste": "Grassy, black licorice; didn't want another cup (Jamey)",
+    "drink": "Not recorded",
+    "session": "Evening (GaggiMate shot #50, 7:59 PM, 'Foreunder HOB Ethiopian PI' profile, Phase 2 still 94°C, BBW 40 g)",
+    "notes": "Same as #100. 26.5s incl. 8 s PI, 1:2.26, peak 9.1 bar, avg pump flow 2.8 ml/s, 73.6 ml pumped, avg temp 93.7°C, climbed to ~97°C late.",
+    "yield": 40.6
+  },
+  {
+    "n": 102,
+    "date": "2026-10-29",
+    "bean": "Hill of Beans Ethiopian Yirgacheffe 'Kochere'",
+    "dose": 18,
+    "time": 29.5,
+    "grind": 10,
+    "estimated": false,
+    "taste": "Grassy/licorice basically gone; thicker and creamy (Jamey)",
+    "drink": "Not recorded",
+    "session": "Evening (GaggiMate shot #51, 8:17 PM, 'Foreunder HOB Ethiopian PI' profile, 92°C both phases, BBW 40 g)",
+    "notes": "First true 92°C shot (Phase 2 fixed). 29.5s incl. 8 s PI, 1:2.17, peak 9.1 bar, avg pump flow 2.5 ml/s, 73.9 ml pumped, avg temp 93.4°C, peaked ~95°C. Heat confirmed as cause; Kochere recipe = 92°C both phases, grind 10, 18→40.",
+    "yield": 39.1
   }
 ]
