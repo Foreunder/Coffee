@@ -32,7 +32,7 @@ window.FOREUNDER = {
       expect: "The roaster's flagship, years in the making. A traditional Northern Italian-style blend: balanced enough to drink straight, bold enough for a latte or cappuccino, rich and smooth with plenty of crema.",
       take: "The house espresso. Balanced straight, neither sour nor bitter, and the one I reach for most.",
       scale: { body: 4, acidity: 1, roast: 4 },
-      recipe: "18 g in · 36 g out · about 28 s", dialNote: "Grind 13 on the GaggiMate (26.2 s and 29.8 s on 10/13, both balanced)."
+      recipe: "18 g in · 36 g out · grind 13 · 92/90 °C", dialNote: "Grind 13 on the GaggiMate (26–29 s mid-October at 93 °C, creamy and nutty). Expect a little longer at 92/90."
     },
     {
       id: "malabar", score: 3, scoreNote: "Heavy, nutty and outstanding in a mocha.",
@@ -52,7 +52,7 @@ window.FOREUNDER = {
       expect: "Green coffee left open to the monsoon winds and humidity on India's Malabar coast, which swells the beans and strips out acidity. Mellow and earthy, with a heavy, syrupy body, nutty notes and a subtle sweetness.",
       take: "Thick and full of flavor, with real nuttiness. Outstanding in a mocha.",
       scale: { body: 5, acidity: 1, roast: 3 },
-      recipe: "18 g in · 36 g out · about 28 s", dialNote: "Grind 6 (28.5 s on 10/24, one of the best yet). Was grind 7 when fresher (10/12). Keep the portafilter locked in the group while the machine heats; a cold portafilter added 7 s to the first shot on 10/12."
+      recipe: "18 g in · 36 g out · grind 6.5 · 92/90 °C · about 31 s", dialNote: "Grind 6.5 since 11/1 (25.5, 37.2 and 31 s). Grind 6 ran long once the 3 s ramp went in. Earlier: grind 6 (28.5 s on 10/24, one of the best yet). Was grind 7 when fresher (10/12). Keep the portafilter locked in the group while the machine heats; a cold portafilter added 7 s to the first shot on 10/12."
     },
     {
       id: "brazil", bagArt: "photos/bag-brazil.jpg",
@@ -71,7 +71,7 @@ window.FOREUNDER = {
       elevation: "3,600–4,100 ft", cert: "Rainforest Alliance",
       expect: "A Cerrado micro-lot, naturally processed and taken to a medium roast. Sweet and balanced, with subtle nutty undertones, a silky body and low acidity. A real crowd-pleaser.",
       scale: { body: 4, acidity: 1, roast: 3 },
-      recipe: "18 g in · 36 g out · grind 13 · about 30 s", dialNote: "Dialed 10/18 at grind 13: 31 s, creamy and nutty. 14 ran 27 s, a little sweeter and drier. 12 ran 46.8 s and 11 choked at 54 s, so the window is narrow."
+      recipe: "18 g in · 36 g out · grind 13.5 · 92/90 °C · about 32–37 s", dialNote: "Grind 13.5 since 10/31. Earlier: dialed 10/18 at grind 13: 31 s, creamy and nutty. 14 ran 27 s, a little sweeter and drier. 12 ran 46.8 s and 11 choked at 54 s, so the window is narrow."
     },
     {
       id: "ethiopia-kochere", bagArt: "photos/bag-ethiopia.jpg",
@@ -90,7 +90,7 @@ window.FOREUNDER = {
       elevation: "5,900–6,500 ft", cert: "Fair Trade Certified Organic",
       expect: "Heirloom coffee from the birthplace of coffee, grown very high and fully washed. Bright, floral and complex, with crisp acidity balanced by natural sweetness. The lightest coffee on the bar.",
       scale: { body: 2, acidity: 4, roast: 2 },
-      recipe: "18 g in · 40 g out · grind 10 · 94 °C · about 30 s", dialNote: "Grind 10 at 94 °C ran 29.8 s to 39.4 g on 10/18: cleaner, fruity, tastes like dates. Grind 9 at 93 °C ran 38.5 s and came out lighter. Kealey's oat-milk latte coffee."
+      recipe: "18 g in · 40 g out · grind 10 · 92 °C · about 27–30 s", dialNote: "92 °C fixed it on 10/29: 94 °C tasted bitter, grassy and like black licorice; 92 came out thicker and creamy. Earlier: grind 10 at 94 °C ran 29.8 s to 39.4 g on 10/18: cleaner, fruity, tastes like dates. Grind 9 at 93 °C ran 38.5 s and came out lighter. Kealey's oat-milk latte coffee."
     },
     {
       id: "colombia", bagArt: "photos/bag-colombia.jpg", score: 4, scoreNote: "Friendly and sweet; better in the press than as espresso.",

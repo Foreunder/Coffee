@@ -179,6 +179,7 @@ dl.kv dd{margin:0}
     return { g: g, full: Math.round(bag.bagOz * 28.35), shots: Math.floor(g / 18) };
   }
   function leftLine(b){
+    return null; // Shot logging is off (10/28), so a computed count would be wrong. Check GaggiMate Profile Stats instead.
     if (b.status !== "bar") return null;
     var L = beansLeft(b); if (!L) return null;
     var low = L.shots <= 5;
