@@ -90,7 +90,7 @@ window.FOREUNDER = {
       elevation: "5,900–6,500 ft", cert: "Fair Trade Certified Organic",
       expect: "Heirloom coffee from the birthplace of coffee, grown very high and fully washed. Bright, floral and complex, with crisp acidity balanced by natural sweetness. The lightest coffee on the bar.",
       scale: { body: 2, acidity: 4, roast: 2 },
-      recipe: "18 g in · 40 g out · grind 9.5 · 92/90 °C · about 28–32 s", dialNote: "Grind 9.5 from 11/7 as the bag ages (grind 10 ran 25.8 s on the soft-PI profile). 92 °C fixed it on 10/29: 94 °C tasted bitter, grassy and like black licorice; 92 came out thicker and creamy. Earlier: grind 10 at 94 °C ran 29.8 s to 39.4 g on 10/18: cleaner, fruity, tastes like dates. Grind 9 at 93 °C ran 38.5 s and came out lighter. Kealey's oat-milk latte coffee."
+      recipe: "18 g in · 40 g out · grind 9 · 92/90 °C · about 32–36 s", dialNote: "Grind 9 from 11/7 as the bag ages (grind 10 ran 25.8 s on the soft-PI profile; a full step adds about 9 s on this bean). 92 °C fixed it on 10/29: 94 °C tasted bitter, grassy and like black licorice; 92 came out thicker and creamy. Earlier: grind 10 at 94 °C ran 29.8 s to 39.4 g on 10/18: cleaner, fruity, tastes like dates. Grind 9 at 93 °C ran 38.5 s and came out lighter. Kealey's oat-milk latte coffee."
     },
     {
       id: "sumatra",
