@@ -554,11 +554,11 @@ function beanCard(b){
     const more = el("details",{class:"more"}, el("summary",{text:"the details"}),
       el("div",{class:"inner"},
         facts,
-        el("div",{class:"scales"},
+        b.scale ? el("div",{class:"scales"},
           el("div",{class:"scale"}, el("span",{text:"body"}), dots(b.scale.body)),
           el("div",{class:"scale"}, el("span",{text:"acidity"}), dots(b.scale.acidity)),
           el("div",{class:"scale"}, el("span",{text:"roast"}), dots(b.scale.roast))
-        ),
+        ) : null,
         b.bestFor ? el("div",{class:"facts"}, el("div",null, el("dt",{text:"best for"}), el("dd",{text:b.bestFor.join(", ")}))) : null,
         b.recipe ? el("div",{class:"facts"}, el("div",null, el("dt",{text:"jamey's recipe"}), el("dd",{text:b.recipe}))) : null
       )
