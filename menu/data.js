@@ -13,7 +13,7 @@ window.FOREUNDER = {
   // Seasonal section heading. Swap the drinks marked section: "seasonal" when the season changes.
   season: { name: "Fall", sub: "Here for the season. Ask Jamey which one he's pouring." },
   // Shots (= drinks) left per bag. Claude updates these every time shots are pulled.
-  leftAsOf: "Nov 7, 10:40 PM",
+  leftAsOf: "Nov 8, 7:20 AM",
   decafNote: "No decaf right now. Ask Jamey and he'll sort you out.",
 
   beans: [
@@ -114,7 +114,7 @@ window.FOREUNDER = {
       recipe: "18 g in · 36 g out · grind 8.5 · 92/90 °C · about 38–45 s", dialNote: "Grind 8.5 on the standard profile, 11/7: 39.0 s to 36.2 g, great crema and full body. Mocha shots that night ran 38.2 s and 45.2 s. Lever profile at the same grind ran 54 s and tasted over-extracted by comparison. If it tastes ashy or bitter, drop the brew phase to 88 °C. Side-by-side test planned: Sumatra PI vs Sumatra Lever."
     },
     {
-      id: "honduras", left: 12, bagArt: "photos/bag-honduras.jpg",
+      id: "honduras", left: 11, bagArt: "photos/bag-honduras.jpg",
       status: "bar",
       name: "Honduras \"Manos de Mujer\"", short: "Honduras", cue: "Chocolate, citrus, smooth",
       roaster: "A Hill of Beans Coffee Roasters",
@@ -130,7 +130,7 @@ window.FOREUNDER = {
       elevation: "3,900–5,500 ft", cert: "Fair Trade Certified Organic",
       expect: "Grown high in the mountains of Marcala by the women producers of the COMSA Cooperative. A medium roast that brings out natural sweetness and balance: smooth body, deep chocolate notes and a pleasant citrus acidity.",
       scale: { body: 3, acidity: 3, roast: 3 },
-      recipe: "18 g in · 36 g out · grind 13 to start · 92/90 °C", dialNote: "New bag, not dialed yet. Start at 13."
+      recipe: "18 g in · 36 g out · grind 12 · 92/90 °C", dialNote: "Grind 13 ran fast on 11/8 (21.7 s to 35.8 g). Moved to 12; one full step runs about 9–15 s longer on Hill of Beans mediums."
     },
     {
       id: "northwest-espresso", left: 12, bagArt: "photos/bag-northwest.jpg",
