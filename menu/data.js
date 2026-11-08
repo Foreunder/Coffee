@@ -147,7 +147,7 @@ window.FOREUNDER = {
       bestFor: ["Espresso", "Milk drinks"],
       expect: "Roasted and blended in the traditional Pacific Northwest style. A low-acid, three-bean blend of a dark, medium and light roast, built to be a smooth, bold espresso that also brews a smoky, full-bodied cup.",
       scale: { body: 4, acidity: 1, roast: 4 },
-      recipe: "18 g in · 36 g out · grind 11 to start · 92/90 °C", dialNote: "Not dialed yet. Start at 11: the Honduras from the same roaster ran fast at 13 and landed at 11. About 5–6 s per grind step."
+      recipe: "18 g in · 36 g out · grind 12 to start · 92/90 °C", dialNote: "Not dialed yet. Start at 12: Rockbrook, the closest blend, dialed at 13, and this bag is fresher, so it should run a little faster. About 5–6 s per grind step."
     },
     {
       id: "colombia", bagArt: "photos/bag-colombia.jpg", score: 4, scoreNote: "Friendly and sweet; better in the press than as espresso.",
