@@ -85,15 +85,15 @@ dl.kv dd{margin:0}
     <div><h1>Bar Recipes</h1><p class="kicker">How we make every drink, and where each coffee is dialed.</p></div>
   </header>
   <div class="grinds" aria-label="Grind settings">
-    <div><b>13</b><span>Brazil</span><small>stop 36 g</small><em>~3 left</em></div>
-    <div><b>9</b><span>Ethiopian</span><small>stop 40 g</small><em>~12 left</em></div>
-    <div><b>8.5</b><span>Sumatra</span><small>stop 36 g</small><em>~14 left</em></div>
-    <div><b>13</b><span>Honduras</span><small>start · 36 g</small><em>~12 left</em></div>
-    <div><b>13</b><span>Northwest</span><small>start · 36 g</small><em>~12 left</em></div>
-    <div class="gone"><b>13</b><span>Rockbrook</span><small>36 g</small><em>out</em></div>
-    <div class="gone"><b>6.5</b><span>India Monsooned</span><small>36 g</small><em>out</em></div>
+    <div data-bean="brazil"><b>13</b><span>Brazil</span><small>stop 36 g</small><em></em></div>
+    <div data-bean="ethiopia-kochere"><b>9</b><span>Ethiopian</span><small>stop 40 g</small><em></em></div>
+    <div data-bean="sumatra"><b>8.5</b><span>Sumatra</span><small>stop 36 g</small><em></em></div>
+    <div data-bean="honduras"><b>13</b><span>Honduras</span><small>start · 36 g</small><em></em></div>
+    <div data-bean="northwest-espresso"><b>13</b><span>Northwest</span><small>start · 36 g</small><em></em></div>
+    <div class="gone" data-bean="rockbrook"><b>13</b><span>Rockbrook</span><small>36 g</small><em></em></div>
+    <div class="gone" data-bean="malabar"><b>6.5</b><span>India Monsooned</span><small>36 g</small><em></em></div>
   </div>
-  <p class="left-asof">Shots left are estimates as of Nov 7, 10:40 PM (about 25 per 16 oz bag, 12 per 8 oz). Weigh the bag and divide by 18 g for an exact count.</p>
+  <p class="left-asof" id="left-asof"></p>
   <nav class="jump"><a href="#machine">machine</a><a href="#coach">dial-in coach</a><a href="#coffees">coffees</a><a href="#drinks">drinks</a><a href="#seasonal">seasonal</a><a href="#dessert">dessert</a><a href="#milk">milk</a></nav>
 
   <h2 id="machine">The Machine</h2>
@@ -161,6 +161,15 @@ dl.kv dd{margin:0}
 <script>
 (function(){
   var M = window.FOREUNDER, SHOTS = window.SHOTS || [];
+  // Shots left on the grind tiles come from data.js (the same numbers guests see on the menu).
+  document.querySelectorAll(".grinds [data-bean]").forEach(function(t){
+    var b = M.beans.find(function(x){ return x.id === t.getAttribute("data-bean"); });
+    var em = t.querySelector("em");
+    if (!b || b.status === "out" || !b.left) { em.textContent = "out"; t.classList.add("gone"); return; }
+    em.textContent = "~" + b.left + " left";
+  });
+  var asof = document.getElementById("left-asof");
+  if (asof) asof.textContent = "Shots left as of " + (M.leftAsOf || "") + " (about 25 per 16 oz bag, 18 per 12 oz, 12 per 8 oz). Guests see the same numbers on the menu.";
   function el(tag, attrs){ var e=document.createElement(tag); attrs=attrs||{};
     for (var k in attrs){ if(k==="text") e.textContent=attrs[k]; else e.setAttribute(k,attrs[k]); }
     for (var i=2;i<arguments.length;i++){ var c=arguments[i]; if(c==null) continue; e.append(c.nodeType?c:document.createTextNode(c)); }

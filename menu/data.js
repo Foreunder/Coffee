@@ -12,11 +12,13 @@ window.FOREUNDER = {
   minutesPerDrink: 4,
   // Seasonal section heading. Swap the drinks marked section: "seasonal" when the season changes.
   season: { name: "Fall", sub: "Here for the season. Ask Jamey which one he's pouring." },
+  // Shots (= drinks) left per bag. Claude updates these every time shots are pulled.
+  leftAsOf: "Nov 7, 10:40 PM",
   decafNote: "No decaf right now. Ask Jamey and he'll sort you out.",
 
   beans: [
     {
-      id: "rockbrook", bagArt: "photos/bag-rockbrook.jpg", score: 3, scoreNote: "The house espresso. Balanced and the one I reach for most.",
+      id: "rockbrook", left: 0, bagArt: "photos/bag-rockbrook.jpg", score: 3, scoreNote: "The house espresso. Balanced and the one I reach for most.",
       status: "out",
       name: "Rockbrook Espresso", short: "Rockbrook", cue: "Rich, smooth, balanced",
       roaster: "A Hill of Beans Coffee Roasters",
@@ -35,7 +37,7 @@ window.FOREUNDER = {
       recipe: "18 g in · 36 g out · grind 13 · 92/90 °C", dialNote: "Grind 13 on the GaggiMate (26–29 s mid-October at 93 °C, creamy and nutty). Expect a little longer at 92/90."
     },
     {
-      id: "malabar", score: 3, scoreNote: "Heavy, nutty and outstanding in a mocha.",
+      id: "malabar", left: 0, score: 3, scoreNote: "Heavy, nutty and outstanding in a mocha.",
       status: "out",
       name: "India Monsooned Malabar", short: "Malabar", cue: "Heavy, nutty, earthy",
       roaster: "A Hill of Beans Coffee Roasters",
@@ -55,7 +57,7 @@ window.FOREUNDER = {
       recipe: "18 g in · 36 g out · grind 6.5 · 92/90 °C · about 31 s", dialNote: "Grind 6.5 since 11/1 (25.5, 37.2 and 31 s). Grind 6 ran long once the 3 s ramp went in. Earlier: grind 6 (28.5 s on 10/24, one of the best yet). Was grind 7 when fresher (10/12). Keep the portafilter locked in the group while the machine heats; a cold portafilter added 7 s to the first shot on 10/12."
     },
     {
-      id: "brazil", bagArt: "photos/bag-brazil.jpg",
+      id: "brazil", left: 3, bagArt: "photos/bag-brazil.jpg",
       status: "bar",
       name: "Brazil · Natural Legender Especial", short: "Brazil", cue: "Sweet, silky, nutty",
       roaster: "A Hill of Beans Coffee Roasters",
@@ -74,7 +76,7 @@ window.FOREUNDER = {
       recipe: "18 g in · 36 g out · grind 13 · 92/90 °C · about 29–31 s", dialNote: "Back to grind 13 on 11/7 as the bag ages (31.2 s; 13.5 ran 29 s). Grind 13.5 from 10/31. Earlier: dialed 10/18 at grind 13: 31 s, creamy and nutty. 14 ran 27 s, a little sweeter and drier. 12 ran 46.8 s and 11 choked at 54 s, so the window is narrow."
     },
     {
-      id: "ethiopia-kochere", bagArt: "photos/bag-ethiopia.jpg",
+      id: "ethiopia-kochere", left: 12, bagArt: "photos/bag-ethiopia.jpg",
       status: "bar",
       name: "Ethiopian Yirgacheffe 'Kochere'", short: "Ethiopia", cue: "Bright, floral, complex",
       roaster: "A Hill of Beans Coffee Roasters",
@@ -93,7 +95,7 @@ window.FOREUNDER = {
       recipe: "18 g in · 40 g out · grind 9 · 92/90 °C · about 32–36 s", dialNote: "Grind 9 from 11/7 as the bag ages (grind 10 ran 25.8 s on the soft-PI profile; a full step adds about 9 s on this bean). 92 °C fixed it on 10/29: 94 °C tasted bitter, grassy and like black licorice; 92 came out thicker and creamy. Earlier: grind 10 at 94 °C ran 29.8 s to 39.4 g on 10/18: cleaner, fruity, tastes like dates. Grind 9 at 93 °C ran 38.5 s and came out lighter. Kealey's oat-milk latte coffee."
     },
     {
-      id: "sumatra", bagArt: "photos/bag-sumatra.jpg",
+      id: "sumatra", left: 14, bagArt: "photos/bag-sumatra.jpg",
       status: "bar",
       name: "Sumatra Mandheling", short: "Sumatra", cue: "Deep, earthy, bold",
       roaster: "A Hill of Beans Coffee Roasters",
@@ -112,7 +114,7 @@ window.FOREUNDER = {
       recipe: "18 g in · 36 g out · grind 8.5 · 92/90 °C · about 38–45 s", dialNote: "Grind 8.5 on the standard profile, 11/7: 39.0 s to 36.2 g, great crema and full body. Mocha shots that night ran 38.2 s and 45.2 s. Lever profile at the same grind ran 54 s and tasted over-extracted by comparison. If it tastes ashy or bitter, drop the brew phase to 88 °C. Side-by-side test planned: Sumatra PI vs Sumatra Lever."
     },
     {
-      id: "honduras", bagArt: "photos/bag-honduras.jpg",
+      id: "honduras", left: 12, bagArt: "photos/bag-honduras.jpg",
       status: "bar",
       name: "Honduras \"Manos de Mujer\"", short: "Honduras", cue: "Chocolate, citrus, smooth",
       roaster: "A Hill of Beans Coffee Roasters",
@@ -131,7 +133,7 @@ window.FOREUNDER = {
       recipe: "18 g in · 36 g out · grind 13 to start · 92/90 °C", dialNote: "New bag, not dialed yet. Start at 13."
     },
     {
-      id: "northwest-espresso", bagArt: "photos/bag-northwest.jpg",
+      id: "northwest-espresso", left: 12, bagArt: "photos/bag-northwest.jpg",
       status: "bar",
       name: "Northwest Espresso", short: "Northwest", cue: "Smooth, bold, smoky",
       roaster: "A Hill of Beans Coffee Roasters",
