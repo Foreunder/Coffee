@@ -13,7 +13,7 @@ window.FOREUNDER = {
   // Seasonal section heading. Swap the drinks marked section: "seasonal" when the season changes.
   season: { name: "Fall", sub: "Here for the season. Ask Jamey which one he's pouring." },
   // Shots (= drinks) left per bag. Claude updates these every time shots are pulled.
-  leftAsOf: "Nov 8, 8:10 PM",
+  leftAsOf: "Nov 9, 8:30 PM",
   decafNote: "No decaf right now. Ask Jamey and he'll sort you out.",
 
   beans: [
@@ -57,8 +57,8 @@ window.FOREUNDER = {
       recipe: "18 g in · 36 g out · grind 6.5 · 92/90 °C · about 31 s", dialNote: "Grind 6.5 since 11/1 (25.5, 37.2 and 31 s). Grind 6 ran long once the 3 s ramp went in. Earlier: grind 6 (28.5 s on 10/24, one of the best yet). Was grind 7 when fresher (10/12). Keep the portafilter locked in the group while the machine heats; a cold portafilter added 7 s to the first shot on 10/12."
     },
     {
-      id: "brazil", left: 1, bagArt: "photos/bag-brazil.jpg",
-      status: "bar",
+      id: "brazil", left: 0, bagArt: "photos/bag-brazil.jpg",
+      status: "out",
       name: "Brazil · Natural Legender Especial", short: "Brazil", cue: "Sweet, silky, nutty",
       roaster: "A Hill of Beans Coffee Roasters",
       roasterCity: "Omaha, NE",
