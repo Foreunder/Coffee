@@ -60,6 +60,8 @@ h2{font:400 26px/1.15 var(--display);letter-spacing:.04em;margin:0 0 4px;text-wr
 .ontap{margin:0 0 22px}
 .ontap .label{text-align:center;margin-bottom:10px}
 .tap .tl{display:block;font:500 11px/1.3 var(--label);letter-spacing:.08em;text-transform:lowercase;color:var(--muted);margin-top:4px}
+.tap .tg{display:block;font:400 18px/1.1 var(--display);color:var(--brass);margin-top:4px}
+.grindline{font:400 26px/1.1 var(--display);color:var(--brass);margin:8px 0 4px}
 .tap .tl.low,.label.left.low{color:#d9826b}
 .label.left{margin:6px 0 2px}
 .taps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
@@ -324,7 +326,7 @@ body.table{overflow:hidden}
 <div id="app" class="wrap"></div>
 
 <script src="qrcode.js"></script>
-<script src="data.js?v=20261110"></script>
+<script src="data.js?v=20261110b"></script>
 <script src="guest.js"></script>
 <script src="../data/shots.js" onerror="window.SHOTS=[]"></script>
 <script>
@@ -523,6 +525,7 @@ function onTap(){
     el("span",{class:"tn",text:b.short || b.name}),
     el("span",{class:"tm",text:[b.roastLevel || null, b.process && b.process !== "Blended" ? b.process.replace(/^Fully /,"") : (b.origin === "Blend" ? "blend" : null)].filter(Boolean).join(" · ").toLowerCase()}),
     b.cue ? el("span",{class:"tc",text:b.cue}) : null,
+    grindText(b) ? el("span",{class:"tg",text:grindText(b)}) : null,
     leftText(b) ? el("span",{class:"tl" + (b.left <= 4 ? " low" : ""),text:leftText(b)}) : null);
   return el("div",{class:"ontap"},
     el("div",{class:"label",text:"Coffee on the bar today"}),
@@ -531,6 +534,13 @@ function onTap(){
     el("p",{class:"thint",text:"Any espresso drink works with any of these. Tap one for the full story."}));
 }
 
+// Grind + stop weight pulled from the recipe line, shown right on the coffee (11/10).
+function grindText(b){
+  if (!b.recipe) return null;
+  const g = b.recipe.match(/grind ([\d.]+)/), y = b.recipe.match(/(\d+) g out/);
+  if (!g) return null;
+  return "grind " + g[1] + (y ? " · stop " + y[1] + " g" : "");
+}
 function leftText(b){
   if (typeof b.left !== "number" || b.status === "out") return null;
   if (b.left <= 0) return "just ran out";
@@ -554,6 +564,7 @@ function beanCard(b){
       el("span",{class:"pill " + b.status,text:pillText})
     ),
     b.bagArt ? el("img",{class:"bagart",src:b.bagArt,alt:b.name + " bag art from " + b.roaster,loading:"lazy"}) : null,
+    b.status !== "out" && grindText(b) ? el("div",{class:"grindline",text:grindText(b)}) : null,
     fr ? el("div",{class:"label fresh",text:fr}) : null,
     leftText(b) ? el("div",{class:"label left" + (b.left <= 4 ? " low" : ""),text:leftText(b)}) : null,
     b.roasterNotes ? el("p",{class:"expect"}, el("span",{class:"label",text:"roaster's notes  "}), b.roasterNotes) : null,
