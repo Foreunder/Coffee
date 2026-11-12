@@ -1457,5 +1457,33 @@
     "session": "Evening (GaggiMate shot #51, 8:17 PM, 'Foreunder HOB Ethiopian PI' profile, 92°C both phases, BBW 40 g)",
     "notes": "First true 92°C shot (Phase 2 fixed). 29.5s incl. 8 s PI, 1:2.17, peak 9.1 bar, avg pump flow 2.5 ml/s, 73.9 ml pumped, avg temp 93.4°C, peaked ~95°C. Heat confirmed as cause; Kochere recipe = 92°C both phases, grind 10, 18→40.",
     "yield": 39.1
+  },
+  {
+    "n": 103,
+    "date": "2026-11-10",
+    "bean": "Hill of Beans Ethiopian Yirgacheffe 'Kochere'",
+    "dose": 18,
+    "time": null,
+    "grind": 10,
+    "estimated": true,
+    "taste": "Not recorded",
+    "drink": "Not recorded",
+    "session": "Evening (iPad could not connect to GaggiMate; no shot notes entered)",
+    "notes": "Pull 1 of 2. Logged from Jamey's report on 11/11. Recipe assumed to be the Ethiopian standard (grind 10, 18 g in, 92 °C, 40 g target); time and yield not captured. Backfill from the GaggiMate shot history if the shots are stored there.",
+    "yield": null
+  },
+  {
+    "n": 104,
+    "date": "2026-11-10",
+    "bean": "Hill of Beans Ethiopian Yirgacheffe 'Kochere'",
+    "dose": 18,
+    "time": null,
+    "grind": 10,
+    "estimated": true,
+    "taste": "Not recorded",
+    "drink": "Not recorded",
+    "session": "Evening (iPad could not connect to GaggiMate; no shot notes entered)",
+    "notes": "Pull 2 of 2. Logged from Jamey's report on 11/11. Recipe assumed to be the Ethiopian standard (grind 10, 18 g in, 92 °C, 40 g target); time and yield not captured. Backfill from the GaggiMate shot history if the shots are stored there.",
+    "yield": null
   }
 ]
