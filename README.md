@@ -14,6 +14,11 @@ The live log is the master copy; this repo is updated by Claude after each logge
 - `python3 scripts/build.py <export_dir>` rebuilds `data/` from the shot export.
 - A shot with `"ref": true` is the bean's dial-in reference shown at the top of the page.
 
+## GaggiMate userscripts (`tools/`)
+Install in Safari with the Userscripts extension; both run on `gaggimate.local`.
+- `gaggimate-fahrenheit.user.js` – shows temperatures in °F.
+- `gaggimate-autonotes.user.js` – when a shot saves, fills blank Beans, Grind and Dose In with the values from the last shot of the same profile (re-reading that shot, so corrections carry forward). Needs the GaggiMate page open on a device during the shot. Learns a profile after one shot with notes typed in.
+
 ## Foreunder Coffee House menu
 - `menu/` – guest menu: https://foreunder.github.io/Coffee/menu/ (add `?order` for the ordering version)
   - `#board` – TV menu board (drinks, dessert, coffees, QR). `tv/` and `ordertv/` are short redirects for the Fire TVs
