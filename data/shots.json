@@ -1555,5 +1555,19 @@
     "session": "Evening (GaggiMate shot #99, 9:12 PM, 'Foreunder HOB Ethiopian PI' profile, 92 °C PI / 90 °C brew, BBW 40 g)",
     "notes": "43.7s incl. PI, 1:2.21, peak 9.1 bar, avg pump flow 1.7 ml/s, 75.3 ml pumped, avg temp 91.9 °C, end temp 90.4 °C (graph falls to ~87 °C at the end). 2nd of pair ran 4.7 s slower than #108; longest Kochere pull at grind 9.",
     "yield": 39.8
+  },
+  {
+    "n": 110,
+    "date": "2026-11-14",
+    "bean": "Hill of Beans Ethiopian Yirgacheffe 'Kochere'",
+    "dose": 18,
+    "time": 33.2,
+    "grind": 9.5,
+    "estimated": false,
+    "taste": "Not recorded",
+    "drink": "Not recorded",
+    "session": "Morning (GaggiMate shot #100, 6:28 AM, 'Foreunder HOB Ethiopian PI' profile, 92 °C PI / 90 °C brew, BBW 40 g)",
+    "notes": "First pull at grind 9.5 (from 9). 33.2s incl. PI, 1:2.23, peak 9.0 bar, avg pump flow 2.1 ml/s, 70.0 ml pumped, avg temp 92.7 °C, end temp 90.6 °C. Back in range after 39-44 s at grind 9 on 11/13.",
+    "yield": 40.1
   }
 ]
