@@ -76,7 +76,7 @@ window.FOREUNDER = {
       recipe: "18 g in · 36 g out · grind 13 · 92/90 °C · about 29–31 s", dialNote: "Back to grind 13 on 11/7 as the bag ages (31.2 s; 13.5 ran 29 s). Grind 13.5 from 10/31. Earlier: dialed 10/18 at grind 13: 31 s, creamy and nutty. 14 ran 27 s, a little sweeter and drier. 12 ran 46.8 s and 11 choked at 54 s, so the window is narrow."
     },
     {
-      id: "ethiopia-kochere", left: 1, bagArt: "photos/bag-ethiopia.jpg",
+      id: "ethiopia-kochere", left: 4, bagArt: "photos/bag-ethiopia.jpg",
       status: "bar",
       name: "Ethiopian Yirgacheffe 'Kochere'", short: "Ethiopia", cue: "Bright, floral, complex",
       roaster: "A Hill of Beans Coffee Roasters",
