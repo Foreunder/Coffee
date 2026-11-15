@@ -1653,5 +1653,33 @@
     "session": "Morning (GaggiMate shot #106, 6:07 AM, 'Foreunder HOB Sumatra PI' profile, 92 °C PI / 90 °C brew, BBW 36 g)",
     "notes": "58.5s incl. PI, 1:1.98, peak 9.1 bar, avg pump flow 1.4 ml/s, 82.8 ml pumped, avg temp 91.5 °C, end temp 90.3 °C; temp sagged to ~88 °C late in the shot. ~14-20 s slower than the 11/7 Sumatra pulls at the same grind.",
     "yield": 35.7
+  },
+  {
+    "n": 117,
+    "date": "2026-11-15",
+    "bean": "Hill of Beans Sumatra Mandheling",
+    "dose": 18,
+    "time": 63.4,
+    "grind": 9.5,
+    "estimated": false,
+    "taste": "Not recorded",
+    "drink": "Not recorded",
+    "session": "Morning (GaggiMate shot #107, 8:50 AM, 'Foreunder HOB Sumatra PI' profile, 92 °C PI / 90 °C brew, BBW 36 g)",
+    "notes": "63.4s incl. PI, 1:2.00, peak 9.1 bar, avg pump flow 1.5 ml/s, 97.3 ml pumped, avg temp 92.2 °C, end temp 90.3 °C; temp sagged to ~88 °C late. Slower than #116 at grind 8.5 despite a full step coarser.",
+    "yield": 36.0
+  },
+  {
+    "n": 118,
+    "date": "2026-11-15",
+    "bean": "Hill of Beans Sumatra Mandheling",
+    "dose": 18,
+    "time": 48.9,
+    "grind": 9.5,
+    "estimated": false,
+    "taste": "Not recorded",
+    "drink": "Not recorded",
+    "session": "Morning (GaggiMate shot #108, 8:54 AM, 'Foreunder HOB Sumatra PI' profile, 92 °C PI / 90 °C brew, BBW 36 g)",
+    "notes": "48.9s incl. PI, 1:2.00, peak 9.1 bar, avg pump flow 1.5 ml/s, 74.4 ml pumped, avg temp 91.7 °C, end temp 90.4 °C; temp sagged to ~88 °C late. Still way long at grind 9.5.",
+    "yield": 36.1
   }
 ]
