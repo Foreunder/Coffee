@@ -165,6 +165,7 @@ dl.kv dd{margin:0}
   document.querySelectorAll(".grinds [data-bean]").forEach(function(t){
     var b = M.beans.find(function(x){ return x.id === t.getAttribute("data-bean"); });
     var em = t.querySelector("em");
+    var gm = b && /grind (\d+(?:\.\d+)?)/.exec(b.recipe || ""); if (gm) t.querySelector("b").textContent = gm[1]; // grind comes from the recipe line, one source of truth
     if (!b || b.status === "out" || !b.left) { em.textContent = "out"; t.classList.add("gone"); return; }
     em.textContent = "~" + b.left + " left";
   });
