@@ -1639,5 +1639,19 @@
     "session": "Evening (GaggiMate shot #105, 7:01 PM, 'Foreunder HOB Ethiopian PI' profile, 92 °C PI / 90 °C brew, BBW 40 g)",
     "notes": "40.5s incl. PI, 1:2.21, peak 9.1 bar, avg pump flow 1.7 ml/s, 69.0 ml pumped, avg temp 93.0 °C, end temp 90.5 °C. 2nd of pair ran 9 s slower than #114. Last full dose of the Kochere bag; ~4-5 g left for purging.",
     "yield": 39.7
+  },
+  {
+    "n": 116,
+    "date": "2026-11-15",
+    "bean": "Hill of Beans Sumatra Mandheling",
+    "dose": 18,
+    "time": 58.5,
+    "grind": 8.5,
+    "estimated": false,
+    "taste": "Not recorded",
+    "drink": "Not recorded",
+    "session": "Morning (GaggiMate shot #106, 6:07 AM, 'Foreunder HOB Sumatra PI' profile, 92 °C PI / 90 °C brew, BBW 36 g)",
+    "notes": "58.5s incl. PI, 1:1.98, peak 9.1 bar, avg pump flow 1.4 ml/s, 82.8 ml pumped, avg temp 91.5 °C, end temp 90.3 °C; temp sagged to ~88 °C late in the shot. ~14-20 s slower than the 11/7 Sumatra pulls at the same grind.",
+    "yield": 35.7
   }
 ]
