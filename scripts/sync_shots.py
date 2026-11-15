@@ -24,7 +24,7 @@ def main():
     if not os.path.exists(PENDING):
         sys.exit('nothing pending')
     p = json.load(open(PENDING))
-    git('pull', '-q', '--rebase', 'origin', 'main')
+    git('pull', '-q', '--rebase', '--autostash', 'origin', 'main')
 
     jp = os.path.join(REPO, 'data/shots.json')
     raw = open(jp).read()
