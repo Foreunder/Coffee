@@ -133,7 +133,7 @@ window.FOREUNDER = {
       recipe: "18 g in · 40 g out · grind 11 · 92/90 °C · about 29 s", dialNote: "Best at 40 g out: 29.2 s to 40.1 g at grind 11 on 11/8 had much better flavor, with some earthy tones. At 36 g out it ran 33.0 s. On the way there, 13 ran 21.7 s and 12 ran 28.0 s (about 5–6 s per step on this bean)."
     },
     {
-      id: "northwest-espresso", left: 12, bagArt: "photos/bag-northwest.jpg",
+      id: "northwest-espresso", left: 11, bagArt: "photos/bag-northwest.jpg",
       status: "bar",
       name: "Northwest Espresso", short: "Northwest", cue: "Smooth, bold, smoky",
       roaster: "A Hill of Beans Coffee Roasters",
@@ -147,7 +147,7 @@ window.FOREUNDER = {
       bestFor: ["Espresso", "Milk drinks"],
       expect: "Roasted and blended in the traditional Pacific Northwest style. A low-acid, three-bean blend of a dark, medium and light roast, built to be a smooth, bold espresso that also brews a smoky, full-bodied cup.",
       scale: { body: 4, acidity: 1, roast: 4 },
-      recipe: "18 g in · 36 g out · grind 12 to start · 92/90 °C", dialNote: "Not dialed yet. Start at 12: Rockbrook, the closest blend, dialed at 13, and this bag is fresher, so it should run a little faster. About 5–6 s per grind step."
+      recipe: "18 g in · 36 g out · grind 12 · 92/90 °C · about 30 s", dialNote: "Grind 12, 11/15: 30.0 s to 35.7 g on the first pull, in range. Why 12 to start: Rockbrook, the closest blend, dialed at 13, and this bag is fresher, so it should run a little faster. About 5–6 s per grind step."
     },
     {
       id: "colombia", bagArt: "photos/bag-colombia.jpg", score: 4, scoreNote: "Friendly and sweet; better in the press than as espresso.",
