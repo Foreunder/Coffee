@@ -111,7 +111,7 @@ window.FOREUNDER = {
       elevation: "3,900–4,900 ft", cert: "Fair Trade Certified Organic",
       expect: "Deep, earthy and full-bodied. The wet-hulled process unique to Indonesia gives a rustic richness and velvety mouthfeel; the dark roast brings savory, smoky undertones. Strong and low in acid.",
       scale: { body: 5, acidity: 1, roast: 5 },
-      recipe: "18 g in · 36 g out · grind 9.5 · 92/90 °C · target 28–32 s", dialNote: "Grind 8.5 ran 58.5 s on 11/15 (way too fine now); moved to 9.5. Grind 8.5 on the standard profile, 11/7: 39.0 s to 36.2 g, great crema and full body. Mocha shots that night ran 38.2 s and 45.2 s. Lever profile at the same grind ran 54 s and tasted over-extracted by comparison. If it tastes ashy or bitter, drop the brew phase to 88 °C. Side-by-side test planned: Sumatra PI vs Sumatra Lever."
+      recipe: "18 g in · 36 g out · grind 12 · 92/90 °C · target 28–32 s", dialNote: "Moved to 12 on 11/21: grind 9.5 ran 49–63 s across four shots (11/15–11/21), and 8.5 ran 58.5 s on 11/15. If 12 runs under 25 s, go to 11.5. Grind 8.5 on the standard profile, 11/7: 39.0 s to 36.2 g, great crema and full body. Mocha shots that night ran 38.2 s and 45.2 s. Lever profile at the same grind ran 54 s and tasted over-extracted by comparison. If it tastes ashy or bitter, drop the brew phase to 88 °C. Side-by-side test planned: Sumatra PI vs Sumatra Lever."
     },
     {
       id: "honduras", left: 8, bagArt: "photos/bag-honduras.jpg",
