@@ -1709,5 +1709,47 @@
     "session": "Evening (GaggiMate shot #110, 8:03 PM, 'Foreunder HOB Northwest PI' profile, 92 °C PI / 90 °C brew, BBW 36 g)",
     "notes": "31.7s incl. PI, 1:2.02, peak 9.1 bar, avg pump flow 2.1 ml/s, 66.3 ml pumped, avg temp 93.3 °C, end temp 90.6 °C. Grind 11.5 (from 12), in range.",
     "yield": 36.4
+  },
+  {
+    "n": 121,
+    "date": "2026-11-18",
+    "bean": "Hill of Beans Northwest Espresso",
+    "dose": 18,
+    "time": 38.7,
+    "grind": 11.5,
+    "estimated": false,
+    "taste": "Not recorded",
+    "drink": "Not recorded",
+    "session": "Evening (GaggiMate shot #112, 7:57 PM, 'Foreunder HOB Northwest PI' profile, 92 °C PI / 90 °C brew, BBW 36 g)",
+    "notes": "38.7s incl. PI, 1:2.01, peak 9.1 bar, avg pump flow 1.8 ml/s, 69.1 ml pumped, avg temp 92.5 °C, end temp 90.6 °C.",
+    "yield": 36.2
+  },
+  {
+    "n": 122,
+    "date": "2026-11-18",
+    "bean": "Hill of Beans Northwest Espresso",
+    "dose": 18,
+    "time": 41.9,
+    "grind": 11.5,
+    "estimated": false,
+    "taste": "Wasted, no cup",
+    "drink": "None (poured onto the drip tray)",
+    "session": "Evening (GaggiMate shot #113, 8:04 PM, 'Foreunder HOB Northwest PI' profile, stopped manually)",
+    "notes": "No cup under the portafilter, so the scale only read 2.1 g and brew-by-weight never stopped it; stopped manually at 41.9 s. 18 g dose counts against bean inventory. Peak 9.1 bar, avg pump flow 1.8 ml/s, 77.2 ml pumped, avg temp 92.7 °C.",
+    "yield": null
+  },
+  {
+    "n": 123,
+    "date": "2026-11-21",
+    "bean": "Hill of Beans Northwest Espresso",
+    "dose": 18,
+    "time": 37.2,
+    "grind": 11.5,
+    "estimated": false,
+    "taste": "Not recorded",
+    "drink": "Not recorded",
+    "session": "Morning (GaggiMate shot #114, 7:09 AM, 'Foreunder HOB Northwest PI' profile, 92 °C PI / 90 °C brew, BBW 36 g)",
+    "notes": "37.2s incl. PI, 1:2.01, peak 9.1 bar, avg pump flow 1.8 ml/s, 68.6 ml pumped, avg temp 93.1 °C, end temp 90.6 °C.",
+    "yield": 36.2
   }
 ]
