@@ -133,7 +133,7 @@ window.FOREUNDER = {
       recipe: "18 g in · 40 g out · grind 11 · 92/90 °C · about 29 s", dialNote: "Best at 40 g out: 29.2 s to 40.1 g at grind 11 on 11/8 had much better flavor, with some earthy tones. At 36 g out it ran 33.0 s. On the way there, 13 ran 21.7 s and 12 ran 28.0 s (about 5–6 s per step on this bean)."
     },
     {
-      id: "northwest-espresso", left: 7, bagArt: "photos/bag-northwest.jpg",
+      id: "northwest-espresso", left: 6, bagArt: "photos/bag-northwest.jpg",
       status: "bar",
       name: "Northwest Espresso", short: "Northwest", cue: "Smooth, bold, smoky",
       roaster: "A Hill of Beans Coffee Roasters",

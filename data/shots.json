@@ -1751,5 +1751,19 @@
     "session": "Morning (GaggiMate shot #114, 7:09 AM, 'Foreunder HOB Northwest PI' profile, 92 °C PI / 90 °C brew, BBW 36 g)",
     "notes": "37.2s incl. PI, 1:2.01, peak 9.1 bar, avg pump flow 1.8 ml/s, 68.6 ml pumped, avg temp 93.1 °C, end temp 90.6 °C.",
     "yield": 36.2
+  },
+  {
+    "n": 124,
+    "date": "2026-11-17",
+    "bean": "Hill of Beans Northwest Espresso",
+    "dose": 18,
+    "time": 30.9,
+    "grind": 11.5,
+    "estimated": false,
+    "taste": "Not recorded",
+    "drink": "Not recorded",
+    "session": "Evening (GaggiMate shot #111, 7:53 PM, 'Foreunder HOB Northwest PI' profile, 92 °C PI / 90 °C brew, BBW 36 g)",
+    "notes": "Logged late (11/21); pulled before #121. 30.9s incl. PI, 1:1.97, peak 9.1 bar, avg pump flow 2.0 ml/s, 63.4 ml pumped, avg temp 93.2 °C, end temp 90.6 °C.",
+    "yield": 35.4
   }
 ]
