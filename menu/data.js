@@ -95,7 +95,7 @@ window.FOREUNDER = {
       recipe: "18 g in · 40 g out · grind 9.5 · 92/90 °C · about 28–32 s", dialNote: "Grind 9 from 11/7 as the bag ages (grind 10 ran 25.8 s on the soft-PI profile; a full step adds about 9 s on this bean). 92 °C fixed it on 10/29: 94 °C tasted bitter, grassy and like black licorice; 92 came out thicker and creamy. Earlier: grind 10 at 94 °C ran 29.8 s to 39.4 g on 10/18: cleaner, fruity, tastes like dates. Grind 9 at 93 °C ran 38.5 s and came out lighter. Kealey's oat-milk latte coffee."
     },
     {
-      id: "sumatra", left: 7, bagArt: "photos/bag-sumatra.jpg",
+      id: "sumatra", left: 6, bagArt: "photos/bag-sumatra.jpg",
       status: "bar",
       name: "Sumatra Mandheling", short: "Sumatra", cue: "Deep, earthy, bold",
       roaster: "A Hill of Beans Coffee Roasters",
@@ -114,7 +114,7 @@ window.FOREUNDER = {
       recipe: "18 g in · 36 g out · grind 13.5 · 92/90 °C · target 28–32 s", dialNote: "Grind 14 on 11/21 ran 27.7 s and 22.5 s (a touch fast), so 13.5 is the setting. Grind 12 ran 41.7 s. Before that: grind 9.5 ran 49–63 s across four shots (11/15–11/21), and 8.5 ran 58.5 s on 11/15. Grind 8.5 on the standard profile, 11/7: 39.0 s to 36.2 g, great crema and full body. Mocha shots that night ran 38.2 s and 45.2 s. Lever profile at the same grind ran 54 s and tasted over-extracted by comparison. If it tastes ashy or bitter, drop the brew phase to 88 °C. Side-by-side test planned: Sumatra PI vs Sumatra Lever."
     },
     {
-      id: "honduras", left: 8, bagArt: "photos/bag-honduras.jpg",
+      id: "honduras", left: 7, bagArt: "photos/bag-honduras.jpg",
       status: "bar",
       name: "Honduras \"Manos de Mujer\"", short: "Honduras", cue: "Chocolate, earthy, smooth",
       roaster: "A Hill of Beans Coffee Roasters",
