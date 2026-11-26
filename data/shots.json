@@ -1877,5 +1877,47 @@
     "drink": "Not recorded",
     "session": "Evening (GaggiMate shot #122, 9:02 PM, 'Foreunder HOB Honduras PI' profile, 92 °C PI / 90 °C brew, BBW ~40 g)",
     "notes": "29.2s incl. PI, 1:2.22, peak 9.1 bar, avg pump flow 2.2 ml/s, 63.8 ml pumped, avg temp 92.2 °C, end temp 90.7 °C. Back-to-back pair within 0.5 s of #121."
+  },
+  {
+    "n": 133,
+    "date": "2026-11-25",
+    "bean": "Hill of Beans Honduras",
+    "dose": 18,
+    "time": 27.4,
+    "yield": 39.4,
+    "grind": 11,
+    "estimated": false,
+    "taste": "Not recorded",
+    "drink": "Not recorded",
+    "session": "Evening (GaggiMate shot #123, 8:40 PM, 'Foreunder HOB Honduras PI' profile, 92 °C PI / 90 °C brew, BBW ~40 g)",
+    "notes": "27.4s incl. PI, 1:2.19, peak 9.1 bar, avg pump flow 2.4 ml/s, 66.1 ml pumped, avg temp 92.5 °C, end temp 90.8 °C."
+  },
+  {
+    "n": 134,
+    "date": "2026-11-25",
+    "bean": "Hill of Beans Honduras",
+    "dose": 18,
+    "time": 23.0,
+    "yield": 40.3,
+    "grind": 11,
+    "estimated": false,
+    "taste": "Not recorded",
+    "drink": "Not recorded",
+    "session": "Evening (GaggiMate shot #124, 8:48 PM, 'Foreunder HOB Honduras PI' profile, 92 °C PI / 90 °C brew, BBW ~40 g)",
+    "notes": "23.0s incl. PI, 1:2.24, peak 9.1 bar, avg pump flow 2.9 ml/s, 65.9 ml pumped, avg temp 92.7 °C, end temp 90.8 °C. 2nd of pair ran 4.4 s faster than #133; grind 11 now running fast as the bag ages."
+  },
+  {
+    "n": 135,
+    "date": "2026-11-26",
+    "bean": "Hill of Beans Honduras",
+    "dose": 18,
+    "time": 25.2,
+    "yield": 39.8,
+    "grind": 10.25,
+    "estimated": false,
+    "taste": "Not recorded",
+    "drink": "Not recorded",
+    "session": "Morning (GaggiMate shot #125, 8:26 AM, 'Foreunder HOB Honduras PI' profile, 92 °C PI / 90 °C brew, BBW ~40 g)",
+    "notes": "Grind 10.25 (from 11). 25.2s incl. PI, 1:2.21, peak 9.1 bar, avg pump flow 2.6 ml/s, 65.1 ml pumped, avg temp 92.5 °C, end temp 90.9 °C. Still a touch fast."
   }
 ]
