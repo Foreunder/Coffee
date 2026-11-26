@@ -13,7 +13,7 @@ window.FOREUNDER = {
   // Seasonal section heading. Swap the drinks marked section: "seasonal" when the season changes.
   season: { name: "Fall", sub: "Here for the season. Ask Jamey which one he's pouring." },
   // Shots (= drinks) left per bag. Claude updates these every time shots are pulled.
-  leftAsOf: "Nov 26, 8:30 AM",
+  leftAsOf: "Nov 26, 8:40 AM",
   decafNote: "No decaf right now. Ask Jamey and he'll sort you out.",
 
   beans: [
@@ -37,8 +37,8 @@ window.FOREUNDER = {
       recipe: "18 g in · 36 g out · grind 13 · 92/90 °C", dialNote: "Grind 13 on the GaggiMate (26–29 s mid-October at 93 °C, creamy and nutty). Expect a little longer at 92/90."
     },
     {
-      id: "malabar", left: 0, score: 3, scoreNote: "Heavy, nutty and outstanding in a mocha.",
-      status: "out",
+      id: "malabar", left: 12, score: 3, scoreNote: "Heavy, nutty and outstanding in a mocha.",
+      status: "bar",
       name: "India Monsooned Malabar", short: "Malabar", cue: "Heavy, nutty, earthy",
       roaster: "A Hill of Beans Coffee Roasters",
       roasterCity: "Omaha, NE",
@@ -46,15 +46,15 @@ window.FOREUNDER = {
       origin: "India · Chikmagalur",
       process: "Monsooned",
       roastLevel: "Medium",
-      roastDate: "2026-09-22",
-      roastNote: "Roasted daily; purchase date used",
-      opened: "2026-09-22",
+      roastDate: "2026-11-25",
+      roastNote: "New 8 oz bag picked up 11/25; pickup date used until the bag date is confirmed",
+      opened: null,
       bestFor: ["Espresso", "Mochas", "Milk drinks"],
       bagArt: "photos/bag-malabar.jpg", elevation: "3,200–4,000 ft", cert: "Fair Trade Organic",
       expect: "Green coffee left open to the monsoon winds and humidity on India's Malabar coast, which swells the beans and strips out acidity. Mellow and earthy, with a heavy, syrupy body, nutty notes and a subtle sweetness.",
       take: "Thick and full of flavor, with real nuttiness. Outstanding in a mocha.",
       scale: { body: 5, acidity: 1, roast: 3 },
-      recipe: "18 g in · 36 g out · grind 6.5 · 92/90 °C · about 31 s", dialNote: "Grind 6.5 since 11/1 (25.5, 37.2 and 31 s). Grind 6 ran long once the 3 s ramp went in. Earlier: grind 6 (28.5 s on 10/24, one of the best yet). Was grind 7 when fresher (10/12). Keep the portafilter locked in the group while the machine heats; a cold portafilter added 7 s to the first shot on 10/12."
+      recipe: "18 g in · 36 g out · grind 6.5 · 92/90 °C · about 31 s", dialNote: "New 8 oz bag (11/25): start at 6.5 and correct from the first shot. A fresh bag ran grind 7 in October. Last bag: grind 6.5 since 11/1 (25.5, 37.2 and 31 s). Grind 6 ran long once the 3 s ramp went in. Earlier: grind 6 (28.5 s on 10/24, one of the best yet). Was grind 7 when fresher (10/12). Keep the portafilter locked in the group while the machine heats; a cold portafilter added 7 s to the first shot on 10/12."
     },
     {
       id: "brazil", left: 0, bagArt: "photos/bag-brazil.jpg",
@@ -148,6 +148,44 @@ window.FOREUNDER = {
       expect: "Roasted and blended in the traditional Pacific Northwest style. A low-acid, three-bean blend of a dark, medium and light roast, built to be a smooth, bold espresso that also brews a smoky, full-bodied cup.",
       scale: { body: 4, acidity: 1, roast: 4 },
       recipe: "18 g in · 36 g out · grind 11.5 · 92/90 °C · about 30–32 s", dialNote: "Grind 11.5, 11/16: 31.7 s to 36.4 g. Grind 12, 11/15: 30.0 s to 35.7 g on the first pull, in range. Why 12 to start: Rockbrook, the closest blend, dialed at 13, and this bag is fresher, so it should run a little faster. About 5–6 s per grind step."
+    },
+    {
+      id: "java-estate", left: 12,
+      status: "bar",
+      name: "Java Estate", short: "Java", cue: "Dark chocolate, warm spice, earthy",
+      roaster: "A Hill of Beans Coffee Roasters",
+      roasterCity: "Omaha, NE",
+      type: "Single origin",
+      origin: "Indonesia · Taman Dadar (Serba Usaha Cooperative)",
+      process: "Wet hulled",
+      roastLevel: "Medium-dark",
+      roastDate: "2026-11-25",
+      roastNote: "Picked up 11/25; pickup date used until the bag date is confirmed",
+      opened: null,
+      bestFor: ["Espresso", "Mochas", "Milk drinks"],
+      elevation: "3,300+ ft", cert: "Certified Organic",
+      expect: "Wet-hulled Indonesian coffee from the Serba Usaha Cooperative, roasted medium-dark. Dark chocolate, warm spice and a subtle earthy sweetness, with mild acidity and a velvety finish.",
+      scale: { body: 4, acidity: 2, roast: 4 },
+      recipe: "18 g in · 36 g out · start grind 12.5 · 92/90 °C · target 28–32 s", dialNote: "New bean. Starting at 12.5: closest match is the Sumatra (also wet hulled, ~13.5 late in its bag), roasted a step lighter so it should want a little finer. Correct from the first shot at about 5 s per grind step."
+    },
+    {
+      id: "guatemalan-medium", left: 12,
+      status: "bar",
+      name: "Guatemalan Medium", short: "Guatemalan", cue: "Rich, clean, chocolate",
+      roaster: "A Hill of Beans Coffee Roasters",
+      roasterCity: "Omaha, NE",
+      type: "Single origin",
+      origin: "Guatemala · Huehuetenango (Finca Huixoc)",
+      process: "Fully washed",
+      roastLevel: "Medium",
+      roastDate: "2026-11-25",
+      roastNote: "Picked up 11/25; pickup date used until the bag date is confirmed",
+      opened: null,
+      bestFor: ["Espresso", "Milk drinks"],
+      elevation: "4,200–5,500 ft", cert: "Fair Trade Certified Organic",
+      expect: "Strictly hard bean from the family-run Finca Huixoc in Huehuetenango, fully washed and roasted medium. A rich, clean cup with subtle chocolate undertones.",
+      scale: { body: 3, acidity: 2, roast: 3 },
+      recipe: "18 g in · 36 g out · start grind 11 · 92/90 °C · target 28–32 s", dialNote: "New bean. Starting at 11: closest match is the Honduras (also washed, medium, high grown), which dialed at 11. Correct from the first shot at about 5 s per grind step. If it tastes thin at 36 g, try 40 g like the Honduras before touching the grind."
     },
     {
       id: "colombia", bagArt: "photos/bag-colombia.jpg", score: 4, scoreNote: "Friendly and sweet; better in the press than as espresso.",
