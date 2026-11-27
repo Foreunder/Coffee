@@ -13,7 +13,7 @@ window.FOREUNDER = {
   // Seasonal section heading. Swap the drinks marked section: "seasonal" when the season changes.
   season: { name: "Fall", sub: "Here for the season. Ask Jamey which one he's pouring." },
   // Shots (= drinks) left per bag. Claude updates these every time shots are pulled.
-  leftAsOf: "Nov 27, 7:35 AM",
+  leftAsOf: "Nov 27, 8:30 AM",
   decafNote: "No decaf right now. Ask Jamey and he'll sort you out.",
 
   beans: [
@@ -111,7 +111,7 @@ window.FOREUNDER = {
       elevation: "3,900–4,900 ft", cert: "Fair Trade Certified Organic",
       expect: "Deep, earthy and full-bodied. The wet-hulled process unique to Indonesia gives a rustic richness and velvety mouthfeel; the dark roast brings savory, smoky undertones. Strong and low in acid.",
       scale: { body: 5, acidity: 1, roast: 5 },
-      recipe: "18 g in · 36 g out · grind 13.5 · 92/90 °C · target 28–32 s", dialNote: "Grind 14 on 11/21 ran 27.7 s and 22.5 s (a touch fast), so 13.5 is the setting. Grind 12 ran 41.7 s. Before that: grind 9.5 ran 49–63 s across four shots (11/15–11/21), and 8.5 ran 58.5 s on 11/15. Grind 8.5 on the standard profile, 11/7: 39.0 s to 36.2 g, great crema and full body. Mocha shots that night ran 38.2 s and 45.2 s. Lever profile at the same grind ran 54 s and tasted over-extracted by comparison. If it tastes ashy or bitter, drop the brew phase to 88 °C. Side-by-side test planned: Sumatra PI vs Sumatra Lever."
+      recipe: "18 g in · 36 g out · grind 13 · 92/90 °C · target 28–32 s", dialNote: "Grind 13 on 11/27: 32.9 s to 35.9 g, clean. The bag is drifting finer as it ages. Grind 14 on 11/21 ran 27.7 s and 22.5 s (a touch fast), so 13.5 is the setting. Grind 12 ran 41.7 s. Before that: grind 9.5 ran 49–63 s across four shots (11/15–11/21), and 8.5 ran 58.5 s on 11/15. Grind 8.5 on the standard profile, 11/7: 39.0 s to 36.2 g, great crema and full body. Mocha shots that night ran 38.2 s and 45.2 s. Lever profile at the same grind ran 54 s and tasted over-extracted by comparison. If it tastes ashy or bitter, drop the brew phase to 88 °C. Side-by-side test planned: Sumatra PI vs Sumatra Lever."
     },
     {
       id: "honduras", left: 0, bagArt: "photos/bag-honduras.jpg",
