@@ -1947,5 +1947,19 @@
     "drink": "Not recorded",
     "session": "Evening (GaggiMate shot #127, 9:56 PM, 'Foreunder HOB Honduras PI' profile, 92 °C PI / 90 °C brew, BBW ~40 g)",
     "notes": "38.4s incl. PI, 1:2.24, peak 9.1 bar, avg pump flow 1.9 ml/s, 72.0 ml pumped, avg temp 91.5 °C, end temp 90.5 °C. Same grind as #136 (27.7 s) but 10.7 s slower; pressure reached 9 bar early and flow stayed low. Near the bottom of the bag."
+  },
+  {
+    "n": 138,
+    "date": "2026-11-27",
+    "bean": "Hill of Beans Honduras + Sumatra (14 g / 4 g)",
+    "dose": 18,
+    "time": 39.2,
+    "yield": 39.9,
+    "grind": 9.5,
+    "estimated": false,
+    "taste": "Not recorded",
+    "drink": "Not recorded",
+    "session": "Morning (GaggiMate shot #128, 7:24 AM, 'Foreunder HOB Honduras PI' profile, 92 °C PI / 90 °C brew, BBW ~40 g)",
+    "notes": "End of the Honduras bag topped up with Sumatra: 14 g Honduras + 4 g Sumatra. 39.2s incl. PI, 1:2.22, peak 9.1 bar, avg pump flow 2.0 ml/s, 76.5 ml pumped, avg temp 92.8 °C, end temp 90.5 °C. Slow: Sumatra ground at the Honduras setting (9.5 vs its 13.5) plus bag-bottom fines. Honduras bag finished."
   }
 ]

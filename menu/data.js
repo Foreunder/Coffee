@@ -115,7 +115,7 @@ window.FOREUNDER = {
     },
     {
       id: "honduras", left: 0, bagArt: "photos/bag-honduras.jpg",
-      status: "bar",
+      status: "out",
       name: "Honduras \"Manos de Mujer\"", short: "Honduras", cue: "Chocolate, earthy, smooth",
       roaster: "A Hill of Beans Coffee Roasters",
       roasterCity: "Omaha, NE",
