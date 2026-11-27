@@ -13,7 +13,7 @@ window.FOREUNDER = {
   // Seasonal section heading. Swap the drinks marked section: "seasonal" when the season changes.
   season: { name: "Fall", sub: "Here for the season. Ask Jamey which one he's pouring." },
   // Shots (= drinks) left per bag. Claude updates these every time shots are pulled.
-  leftAsOf: "Nov 26, 8:40 AM",
+  leftAsOf: "Nov 26, 9:00 PM",
   decafNote: "No decaf right now. Ask Jamey and he'll sort you out.",
 
   beans: [
@@ -130,7 +130,7 @@ window.FOREUNDER = {
       elevation: "3,900–5,500 ft", cert: "Fair Trade Certified Organic",
       expect: "Grown high in the mountains of Marcala by the women producers of the COMSA Cooperative. A medium roast that brings out natural sweetness and balance: smooth body, deep chocolate notes and a pleasant citrus acidity.",
       scale: { body: 3, acidity: 3, roast: 3 },
-      recipe: "18 g in · 40 g out · grind 11 · 92/90 °C · about 29 s", dialNote: "Best at 40 g out: 29.2 s to 40.1 g at grind 11 on 11/8 had much better flavor, with some earthy tones. At 36 g out it ran 33.0 s. On the way there, 13 ran 21.7 s and 12 ran 28.0 s (about 5–6 s per step on this bean)."
+      recipe: "18 g in · 40 g out · grind 9.5 · 92/90 °C · about 28 s", dialNote: "Bag aging: grind 9.5 ran 27.7 s on 11/26 (10.25 ran 25.2 s, 11 had drifted to 23–27 s). Best at 40 g out: 29.2 s to 40.1 g at grind 11 on 11/8 had much better flavor, with some earthy tones. At 36 g out it ran 33.0 s. On the way there, 13 ran 21.7 s and 12 ran 28.0 s (about 5–6 s per step on this bean)."
     },
     {
       id: "northwest-espresso", left: 6, bagArt: "photos/bag-northwest.jpg",
