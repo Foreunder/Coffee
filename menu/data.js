@@ -13,7 +13,7 @@ window.FOREUNDER = {
   // Seasonal section heading. Swap the drinks marked section: "seasonal" when the season changes.
   season: { name: "Fall", sub: "Here for the season. Ask Jamey which one he's pouring." },
   // Shots (= drinks) left per bag. Claude updates these every time shots are pulled.
-  leftAsOf: "Nov 27, 8:30 AM",
+  leftAsOf: "Nov 27, 2:55 PM",
   decafNote: "No decaf right now. Ask Jamey and he'll sort you out.",
 
   beans: [
