@@ -114,7 +114,7 @@ window.FOREUNDER = {
       recipe: "18 g in · 36 g out · grind 13.5 · 92/90 °C · target 28–32 s", dialNote: "Grind 14 on 11/21 ran 27.7 s and 22.5 s (a touch fast), so 13.5 is the setting. Grind 12 ran 41.7 s. Before that: grind 9.5 ran 49–63 s across four shots (11/15–11/21), and 8.5 ran 58.5 s on 11/15. Grind 8.5 on the standard profile, 11/7: 39.0 s to 36.2 g, great crema and full body. Mocha shots that night ran 38.2 s and 45.2 s. Lever profile at the same grind ran 54 s and tasted over-extracted by comparison. If it tastes ashy or bitter, drop the brew phase to 88 °C. Side-by-side test planned: Sumatra PI vs Sumatra Lever."
     },
     {
-      id: "honduras", left: 2, bagArt: "photos/bag-honduras.jpg",
+      id: "honduras", left: 1, bagArt: "photos/bag-honduras.jpg",
       status: "bar",
       name: "Honduras \"Manos de Mujer\"", short: "Honduras", cue: "Chocolate, earthy, smooth",
       roaster: "A Hill of Beans Coffee Roasters",
